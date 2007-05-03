@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping default-lazy="false">
+
+	<class name="org.efs.openreports.objects.Report" table="REPORT">
+		
+		<id name="id" column="REPORT_ID" type="java.lang.Integer">            
+			<generator class="native"/>            
+        </id>
+        
+        <property name="name" column="NAME" not-null="true" unique="true"/>
+        
+        <property name="description" column="DESCRIPTION" not-null="true" unique="false"/>
+        
+        <property name="file" column="REPORT_FILE" not-null="true" unique="false"/>
+        
+        <property name="pdfExportEnabled" column="PDF_EXPORT" not-null="true" />  
+        
+        <property name="csvExportEnabled" column="CSV_EXPORT" not-null="true" /> 
+        
+        <property name="xlsExportEnabled" column="XLS_EXPORT" not-null="true" /> 
+        
+        <property name="htmlExportEnabled" column="HTML_EXPORT" not-null="true" />      
+        
+        <property name="rtfExportEnabled" column="RTF_EXPORT" not-null="true" /> 
+        
+        <property name="textExportEnabled" column="TEXT_EXPORT" not-null="true" /> 
+        
+        <property name="excelExportEnabled" column="EXCEL_EXPORT" not-null="true" /> 
+        
+        <property name="virtualizationEnabled" column="FILL_VIRTUAL" not-null="true" />        
+        
+        <property name="hidden" column="HIDDEN_REPORT" not-null="true" />
+       
+        <property name="query" column="REPORT_QUERY" type="text" /> 
+                
+        <many-to-one name="dataSource" class="org.efs.openreports.objects.ReportDataSource" column="DATASOURCE_ID"/>
+        
+        <many-to-one name="reportChart" class="org.efs.openreports.objects.ReportChart" column="CHART_ID"/>
+        
+        <list name="parameters"  table="REPORT_PARAMETER_MAP">
+    		<key column="REPORT_ID"/>
+    		<index column="MAP_ID" type="java.lang.Integer"/>
+    		<composite-element class="org.efs.openreports.objects.ReportParameterMap">
+    			<many-to-one name="reportParameter" column="PARAMETER_ID"  class="org.efs.openreports.objects.ReportParameter"/>
+        		<property name="required" column="REQUIRED" />
+        		<property name="sortOrder" column="SORT_ORDER" />        		
+        		<property name="step" column="STEP" />  
+    		</composite-element>
+		</list>
+		
+		<many-to-one name="reportExportOption" column="EXPORT_OPTION_ID" not-null="false" cascade="all"/>	
+        
+    </class>
+    
+</hibernate-mapping>

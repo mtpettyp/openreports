@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping default-lazy="false">
+
+	<class name="org.efs.openreports.objects.ReportLog" table="REPORT_LOG">
+		
+		<id name="id" column="LOG_ID" type="java.lang.Integer">            
+			<generator class="native"/>            
+        </id>
+        
+        <property name="startTime" column="START_TIME"/>
+        
+        <property name="endTime" column="END_TIME"/>
+        
+        <property name="status" column="STATUS"/>
+        
+        <property name="message" column="MESSAGE" type="text"/>
+                
+        <many-to-one name="report" class="org.efs.openreports.objects.Report" column="REPORT_ID"/>        
+        
+        <many-to-one name="user" class="org.efs.openreports.objects.ReportUser" column="USER_ID"/>        
+        
+        <many-to-one name="alert" class="org.efs.openreports.objects.ReportAlert" column="ALERT_ID"/>        
+       
+    </class>
+    
+</hibernate-mapping>

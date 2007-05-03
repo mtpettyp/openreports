@@ -1,0 +1,58 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+
+ "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+   
+    <session-factory>
+    
+		<!-- Disable the second-level cache  -->
+        <!-->property name="cache.provider_class">org.hibernate.cache.NoCacheProvider</property-->
+        
+        <!-- Enable the query cache  -->
+        <property name="cache.use_query_cache">true</property>
+
+        <!-- Echo all executed SQL to stdout -->
+        <property name="show_sql">false</property>
+    
+        <!-- mapping files -->
+        
+        <mapping resource="org/efs/openreports/objects/Report.hbm.xml"/>
+        <mapping resource="org/efs/openreports/objects/ReportDataSource.hbm.xml"/>
+        <mapping resource="org/efs/openreports/objects/ReportGroup.hbm.xml"/>
+        <mapping resource="org/efs/openreports/objects/ReportParameter.hbm.xml"/>
+        <mapping resource="org/efs/openreports/objects/ReportUser.hbm.xml"/>
+        <mapping resource="org/efs/openreports/objects/ReportLog.hbm.xml"/>
+        <mapping resource="org/efs/openreports/objects/ReportChart.hbm.xml"/>
+        <mapping resource="org/efs/openreports/objects/ReportAlert.hbm.xml"/>
+        <mapping resource="org/efs/openreports/objects/ORProperty.hbm.xml"/>
+        <mapping resource="org/efs/openreports/objects/ORTag.hbm.xml"/>
+        <mapping resource="org/efs/openreports/objects/ReportExportOption.hbm.xml"/>
+        
+        <!-- end of mapping files -->   
+        
+        <!-- cache settings -->
+        
+        <class-cache class="org.efs.openreports.objects.ORProperty" usage="nonstrict-read-write"/>    
+        <class-cache class="org.efs.openreports.objects.ORTag" usage="nonstrict-read-write"/>    
+        <class-cache class="org.efs.openreports.objects.Report" usage="nonstrict-read-write"/>
+     	<class-cache class="org.efs.openreports.objects.ReportAlert" usage="nonstrict-read-write"/>
+        <class-cache class="org.efs.openreports.objects.ReportChart" usage="nonstrict-read-write"/>
+		<class-cache class="org.efs.openreports.objects.ReportDataSource" usage="nonstrict-read-write"/>
+        <class-cache class="org.efs.openreports.objects.ReportExportOption" usage="nonstrict-read-write"/>
+        <class-cache class="org.efs.openreports.objects.ReportGroup" usage="nonstrict-read-write"/>
+        <class-cache class="org.efs.openreports.objects.ReportParameter" usage="nonstrict-read-write"/>
+        <class-cache class="org.efs.openreports.objects.ReportUser" usage="nonstrict-read-write"/>     
+     
+        <collection-cache collection="org.efs.openreports.objects.Report.parameters" usage="nonstrict-read-write"/>
+        <collection-cache collection="org.efs.openreports.objects.ReportGroup.reports" usage="nonstrict-read-write"/>          
+        <collection-cache collection="org.efs.openreports.objects.ReportUser.alerts" usage="nonstrict-read-write"/>                  
+        <collection-cache collection="org.efs.openreports.objects.ReportUser.groups" usage="nonstrict-read-write"/>          
+        
+        <!-- end of cache settings -->        
+
+    </session-factory>
+
+</hibernate-configuration>

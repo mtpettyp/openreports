@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE web-app PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN" "http://java.sun.com/dtd/web-app_2_3.dtd">
+<web-app>
+
+	<display-name>OpenReports</display-name>	
+
+	<context-param>
+		<param-name>contextFactory</param-name>
+		<param-value>
+			com.tonbeller.wcf.controller.RequestContextFactoryImpl
+		</param-value>
+	</context-param>
+
+	<filter>
+		<filter-name>struts</filter-name>
+		<filter-class>
+			org.apache.struts2.dispatcher.FilterDispatcher
+		</filter-class>
+	</filter>
+
+	<filter>
+		<filter-name>ResponseOverrideFilter</filter-name>
+		<filter-class>
+			org.displaytag.filter.ResponseOverrideFilter
+		</filter-class>
+	</filter>
+
+	<filter>
+		<filter-name>JPivotController</filter-name>
+		<filter-class>
+			com.tonbeller.wcf.controller.RequestFilter
+		</filter-class>
+		<!--
+		<init-param>
+			<param-name>indexJSP</param-name>
+			<param-value>/index.html</param-value>
+			<description>
+				forward to this page if session is new
+			</description>
+		</init-param>
+		<init-param>
+			<param-name>errorJSP</param-name>
+			<param-value>/error.jsp</param-value>
+			<description>URI of error page</description>
+		</init-param>
+		<init-param>
+			<param-name>busyJSP</param-name>
+			<param-value>/busy.jsp</param-value>
+			<description>
+				This page is displayed if a the user clicks on a query
+				before the previous query has finished
+			</description>
+		</init-param>
+		
+			<init-param>
+			<param-name>forceExtension</param-name>
+			<param-value>.faces</param-value>
+			<description>replace .jsp with .faces</description>
+			</init-param>
+		-->
+	</filter>
+
+	<filter-mapping>
+		<filter-name>JPivotController</filter-name>
+		<url-pattern>/jpivot.action</url-pattern>
+	</filter-mapping>
+	
+	<filter-mapping>
+		<filter-name>JPivotController</filter-name>
+		<url-pattern>/JPivot.jsp</url-pattern>
+	</filter-mapping>
+	
+	<filter-mapping>
+		<filter-name>ResponseOverrideFilter</filter-name>
+		<url-pattern>*.action</url-pattern>
+	</filter-mapping>
+
+	<filter-mapping>
+		<filter-name>struts</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+	<!-- resources initializer -->
+	<listener>
+		<listener-class>
+			com.tonbeller.tbutils.res.ResourcesFactoryContextListener
+		</listener-class>
+	</listener>
+
+	<listener>
+		<listener-class>
+			org.springframework.web.context.ContextLoaderListener
+		</listener-class>
+	</listener>
+
+	<servlet>
+		<servlet-name>fileServlet</servlet-name>
+		<servlet-class>
+			org.efs.openreports.dispatcher.FileDispatcher
+		</servlet-class>
+		<load-on-startup>99</load-on-startup>
+	</servlet>
+
+	<servlet>
+		<servlet-name>MondrianXmlaServlet</servlet-name>
+		<servlet-class>
+			org.efs.openreports.dispatcher.XMLADispatcher
+		</servlet-class>
+	</servlet>
+
+	<!-- jfreechart provided servlet -->
+	<servlet>
+		<servlet-name>DisplayChart</servlet-name>
+		<servlet-class>
+			org.jfree.chart.servlet.DisplayChart
+		</servlet-class>
+	</servlet>
+
+	<!-- jfreechart provided servlet -->
+	<servlet>
+		<servlet-name>GetChart</servlet-name>
+		<display-name>GetChart</display-name>
+		<description>
+			Default configuration created for servlet.
+		</description>
+		<servlet-class>
+			com.tonbeller.jpivot.chart.GetChart
+		</servlet-class>
+	</servlet>
+	<servlet>
+		<servlet-name>Print</servlet-name>
+		<display-name>Print</display-name>
+		<description>
+			Default configuration created for servlet.
+		</description>
+		<servlet-class>
+			com.tonbeller.jpivot.print.PrintServlet
+		</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>DisplayChart</servlet-name>
+		<url-pattern>/DisplayChart</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>Print</servlet-name>
+		<url-pattern>/Print</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>GetChart</servlet-name>
+		<url-pattern>/GetChart</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>fileServlet</servlet-name>
+		<url-pattern>/report-images/*</url-pattern>
+	</servlet-mapping>
+
+	<servlet-mapping>
+		<servlet-name>fileServlet</servlet-name>
+		<url-pattern>/report-files/*</url-pattern>
+	</servlet-mapping>
+
+
+	<servlet-mapping>
+		<servlet-name>MondrianXmlaServlet</servlet-name>
+		<url-pattern>/xmla</url-pattern>
+	</servlet-mapping>
+
+	<welcome-file-list>
+		<welcome-file>/Login.jsp</welcome-file>
+	</welcome-file-list>
+
+	<taglib>
+		<taglib-uri>http://www.tonbeller.com/wcf</taglib-uri>
+		<taglib-location>/WEB-INF/wcf/wcf-tags.tld</taglib-location>
+	</taglib>
+
+	<taglib>
+		<taglib-uri>http://www.tonbeller.com/jpivot</taglib-uri>
+		<taglib-location>
+			/WEB-INF/jpivot/jpivot-tags.tld
+		</taglib-location>
+	</taglib>
+
+</web-app>

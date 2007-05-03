@@ -1,0 +1,351 @@
+html {
+	overflow: -moz-scrollbars-vertical !important;
+	text-align: center;
+}
+
+body {
+	margin: 0;
+	padding: 0;
+	width: 100%;
+	font-size: 12px;
+	text-align: center;	
+	font-family: verdana;
+}
+
+a {			
+	font-size: 14px;	
+	text-decoration: none;
+	color: #000666;		
+	font-weight: bold;
+}
+
+a:hover {		
+	border-bottom: 2px solid;	
+}
+	
+form {
+	background-color: #F6F7EE;		
+	margin:0;	
+}
+
+ul {
+	list-style: none;
+}
+
+.logo{
+	font-size: 26px;		
+	color: #000666;	
+	font-style: oblique; 	
+}
+
+.menu {		
+	height: 42px;
+	background: #FFFFCC url(../images/menu-gradient.jpg) 0 0 repeat-x;	 
+	border-bottom: 1px solid;		
+	border-top: 1px solid;	
+}
+
+.important {
+	font-size:20px;
+	letter-spacing:1px;			
+	text-align: left;
+	padding: 6px;
+	padding-left: 40px;
+	width: 90%;
+	color: #314457;
+}
+
+.warning {
+	font-size:16px;
+	letter-spacing:1px;
+	border-bottom: 1px solid #999;			
+	text-align: left;
+	padding: 6px;
+	padding-left: 40px;
+	width: 90%;
+	color: red;	
+	background:url(../images/warning.gif) no-repeat 3px 0px;
+}
+
+.error {
+	color: red;	
+}
+
+.boldText {
+	font-size: 12px;
+	font-weight: bold;
+}
+
+.button-bar {
+	padding: 4px;
+	border-top: 1px solid #999;			
+	text-align: center;	
+	width: 93%;
+}
+
+a.back-link {
+	margin-top: 5px;	
+	margin-right: 5px;
+	padding-bottom: 5px;
+	padding-left: 20px;		
+	float: right;			
+	font-size: 12px;	
+	color: #336691;
+}
+
+.titlePane {	
+	background : #FFFFCC url(../images/main-gradient.jpg) 0 0 repeat-x;	
+	font-weight: bold;		
+	vertical-align: bottom;
+	border: solid 1px #000666;	
+	width: 98%;		
+	height: 22px;
+}
+
+.content {
+	width: 98%;
+	/* styling css */
+	border: 1px solid;
+	border-color: ThreeDShadow ThreeDShadow ThreeDShadow ThreeDShadow;	
+}
+
+.highlight {
+	background-color: #ececec;
+	border-bottom: 1px solid;		
+}
+
+.hidden {
+	font-size: 0;
+	color: white;
+}
+
+table{	
+	margin: 10px;
+		
+}
+table td{	
+	padding: 3px;	
+}
+
+table.displaytag {
+	border: none;
+	border-collapse: collapse;
+	text-align: left;	
+	width: 95%;
+	border-top: 1px solid black;
+}
+table.displaytag thead tr {
+	background-color: #ececec;
+	background: #FFFFCC url(../images/table-gradient.jpg) 0 0 repeat-x;
+	font-weight: bold;
+	height: 30px;
+	border-bottom: 1px solid;	
+}
+
+table.displaytag tr.even {
+	background-color: white;	
+	border-bottom: 1px solid;	
+}
+
+table.displaytag tr.triggered {	
+	
+	color: white;
+	background: #fff url(../images/red-gradient.gif) 0 0 repeat-x;
+}
+
+table.displaytag tr.triggered a {			
+	color: white;		
+}
+
+table.displaytag tr.odd {
+	background-color: white;
+	border-bottom: 1px solid;	
+}
+table.displaytag td {
+	border: none;
+	padding: 4px;	
+	font-size: 10pt;
+	border-bottom: 1px solid black;
+}
+
+table.displaytag a {		
+	font-size: 10pt;
+}
+
+table.displaytag th {
+	padding-left: 5px;
+	padding-right: 15px;
+	font-size: 10pt;
+	border-bottom: 1px solid black;
+}
+
+table.displaytag th.sorted a,table.displaytag th.sortable th.sortable-right a {
+	background-repeat: no-repeat;
+	background-position: right;
+	display: block;
+	width: 100%;
+}
+
+table.displaytag th.sortable-right {
+	text-align: right;
+}
+
+table.displaytag th.order1 a {
+	background-image: url(../images/down-arrow.png);
+}
+
+table.displaytag th.order2 a {
+	background-image: url(../images/up-arrow.png);
+}
+
+.checklist {
+    border: 1px solid #ccc;
+    list-style: none;    
+    overflow: auto;   
+    background-color: white;
+}
+
+.checklist, .checklist li {
+	margin: 0; 
+	padding: 0; 
+}
+
+.vert {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.vert li {
+	float: left;
+}
+
+#usermenu ul {
+	margin: 5px;
+}
+
+#usermenu li {
+	float: right;
+	white-space: nowrap;	
+}
+
+#usermenu ul li a:link,#usermenu ul li a:visited {
+	background-color: white;
+	display: block;
+	color: #000666;
+	padding: 5px;
+	margin: 5px;
+	margin-top: 0px;
+	text-transform: uppercase;
+	text-decoration: none;
+	letter-spacing: 2px;
+	font-family: "Trebuchet MS";
+	font-size: 12px;
+	border: 1px solid;	
+}
+
+#usermenu ul li a:hover,#usermenu ul li a:active,#usermenu ul li a.selected {
+	background-color: #ececec;	
+}
+
+.adminmenu{
+	float: left;
+	margin-left: 40px;
+	width: 30em;		
+}
+
+.adminmenu li {
+	display: block;	
+	padding: 10px;
+}
+
+.adminmenu a {	
+	font-size: 22px;
+}
+
+.alert-form {
+	background-color: white;
+	border: 0; 	
+}
+
+#tagsautocomplete {position:relative;width:55em;margin-bottom:1em;}/* set width of widget here*/
+#tagsautocomplete {z-index:9000} /* for IE z-index of absolute divs inside relative divs issue */
+#tagscontainer {position:absolute;top:1.7em;width:100%}
+#tagscontainer .yui-ac-content {position:absolute;width:100%;border:1px solid #404040;background:#fff;overflow:hidden;z-index:9050;}
+#tagscontainer .yui-ac-shadow {position:absolute;margin:.3em;width:100%;background:#a0a0a0;z-index:9049;}
+#tagscontainer ul {padding:5px 0;width:100%;}
+#tagscontainer li {padding:0 5px;cursor:default;white-space:nowrap;}
+#tagscontainer li.yui-ac-highlight {background:#FFFFCC;}
+#tagscontainer li.yui-ac-prehighlight {background:#FFFFCC;}
+
+.img-report {
+	background:url(../images/reports.gif) no-repeat 3px 3px;	
+}
+
+.img-report-small {
+	background:url(../images/report.gif) no-repeat 0px 0px;	
+}
+
+.img-param {
+	background:url(../images/parameters.gif) no-repeat 3px 3px;
+}
+
+.img-group {
+	background:url(../images/groups.gif) no-repeat 3px 3px;
+}
+
+.img-group-small {
+	background:  url(../images/groups-small.gif) 0 0 no-repeat;	
+}
+
+.img-user {
+	background:url(../images/user.gif) no-repeat 3px 3px;
+}
+
+.img-log {
+	background:url(../images/log.gif) no-repeat 3px 3px;
+}
+
+.img-ds {
+	background:url(../images/ds.gif) no-repeat 3px 3px;
+}
+
+.img-settings {
+	background:url(../images/settings.gif) no-repeat 3px 3px;
+}
+
+.img-chart {
+	background:url(../images/chart.gif) no-repeat 3px 3px;
+}
+
+.img-schedule {
+	background:url(../images/schedule.gif) no-repeat 3px 3px;
+}
+
+.img-export {
+	background:url(../images/export.gif) no-repeat 3px 3px;
+}
+
+.img-delete {
+	background:url(../images/warning.gif) no-repeat 3px 3px;
+}
+
+.img-upload {
+	background:url(../images/upload_big.gif) no-repeat 3px 3px;
+}
+
+.img-queryreport {
+	background:url(../images/queryreport.gif) no-repeat 3px 3px;
+}
+
+.img-stats {
+	background:url(../images/stats.gif) no-repeat 3px 3px;
+}
+
+.img-alert {
+	background:url(../images/alert.gif) no-repeat 3px 3px;
+}
+
+.img-reload {
+	background:url(../images/reload.gif) no-repeat 0px 0px;
+}

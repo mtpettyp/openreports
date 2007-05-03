@@ -1,0 +1,41 @@
+#parse("Banner.vm") 
+
+#parse("Errors.vm")
+
+<a class="back-link img-report-small" href="listUsers.action">Back to Users </a>
+  
+<br/>
+
+<div align="center">	
+  
+	<div class="warning" id="important" >
+		This will delete all entries for this user in the logs.	
+	</div> 
+  
+  <br> 
+  
+  <div class="important img-delete" id="instructions" style="width: 70%;">Delete User Confirmation</div>
+   	
+  <form action="deleteUser.action" style="width: 75%;">
+  <table class="dialog" >    
+    <tr class="a">
+      <td class="boldText" width="20%">Name</td>
+      <td>$!name</td>
+    </tr>    
+  </table>
+  
+       <div class="button-bar" id="buttons">
+        <input class="standardButton" type="submit" name="submitDelete" value="Delete">
+        <input class="standardButton" type="submit" name="submitCancel" value="Cancel">
+       </div>
+     
+    <input type="hidden" name="id" value="$!id">     
+    
+  </form>
+  
+  <br> 
+</div>
+
+#parse("Footer.vm") 
+
+

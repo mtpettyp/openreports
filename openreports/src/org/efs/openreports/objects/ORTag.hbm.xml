@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping default-lazy="false">
+
+	<class name="org.efs.openreports.objects.ORTag" table="OR_TAGS">
+		
+		<id name="id" column="TAG_ID" type="java.lang.Integer">            
+			<generator class="native"/>            
+        </id>       
+                
+        <property name="objectId" column="TAGGED_OBJECT_ID" not-null="true" unique="false"/>
+        
+        <property name="objectClass" column="TAGGED_OBJECT_CLASS" not-null="true" unique="false"/>
+        
+		<property name="tag" column="TAG_VALUE" not-null="true" unique="false"/>		
+       
+    </class>
+    
+</hibernate-mapping>

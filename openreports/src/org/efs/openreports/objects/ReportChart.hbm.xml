@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping default-lazy="false">
+
+	<class name="org.efs.openreports.objects.ReportChart" table="REPORT_CHART">
+		
+		<id name="id" column="CHART_ID" type="java.lang.Integer">            
+			<generator class="native"/>            
+        </id>
+        
+        <property name="name" column="NAME" not-null="true" unique="true"/>
+        
+        <property name="description" column="DESCRIPTION" not-null="true" unique="false"/>
+        
+        <property name="query" column="CHART_QUERY" type="text" not-null="true" unique="false"/>
+        
+        <property name="chartType" column="CHART_TYPE" not-null="true"/> 
+        
+        <property name="width" column="WIDTH" not-null="true"/> 
+        
+        <property name="height" column="HEIGHT" not-null="true"/> 
+        
+        <property name="XAxisLabel" column="X_AXIS_LABEL" /> 
+        
+        <property name="YAxisLabel" column="Y_AXIS_LABEL" /> 
+        
+        <property name="showLegend" column="SHOW_LEGEND"  not-null="true" /> 
+        
+        <property name="showTitle" column="SHOW_TITLE"  not-null="true" />
+        
+        <property name="showValues" column="SHOW_VALUES"  not-null="true" />
+         
+        <property name="plotOrientation" column="PLOT_ORIENTATION" /> 
+        
+        <many-to-one name="dataSource" class="org.efs.openreports.objects.ReportDataSource" column="DATASOURCE_ID"/>          
+        
+        <many-to-one name="drillDownReport" class="org.efs.openreports.objects.Report" column="REPORT_ID"/>          
+        
+    </class>
+    
+</hibernate-mapping>

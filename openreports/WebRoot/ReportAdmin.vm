@@ -1,0 +1,87 @@
+#parse("Banner.vm") 
+
+#parse("Errors.vm")
+
+<script type="text/javascript" src="js/yui/autocomplete-min.js"></script>
+<script type="text/javascript" src="js/autocomplete-tags.js"></script>
+
+<script type="text/javascript">
+  var tagsArray = [$tags];            
+</script>
+
+<div align="center">
+
+	<br/>	
+  
+    <div id="instructions" style="width: 700px;">
+      <form action="search.action">            
+        <div id="tagsautocomplete"> 
+             <b>Select administration function below or search by tag:</b>     
+             <input id="tagsinput" name="search"> 
+             <input type="submit" value="Submit">
+             <div id="tagscontainer"></div> 
+         </div>         
+      </form>
+      <br/>
+    </div>
+				
+	<ul class="adminmenu" >	
+		<li>Report Administration</li>
+		#if ($user.reportAdmin)
+		<li class="img-report">	   	
+			<a href="listReports.action">Reports</a>         
+        </li>
+        #end          
+        #if ($user.parameterAdmin)
+        <li class="img-param">   
+        	<a href="listReportParameters.action">Parameters</a>          	
+        </li>
+        #end   
+        #if ($user.dataSourceAdmin)
+        <li class="img-ds">
+         	<a href="listDataSources.action">DataSources</a>
+        </li>
+       	#end        
+		#if ($user.alertAdmin)
+		<li class="img-report">         	
+         	<a href="listAlerts.action">Alerts</a>         
+        </li>	
+        #end       
+        #if ($user.chartAdmin)
+        <li class="img-chart"> 
+        	<a href="listCharts.action">Charts</a>         	
+        </li>
+        #end              
+    </ul>   
+    
+    <ul class="adminmenu">
+        <li>Security Administration</li>
+        #if ($user.groupAdmin)
+        <li class="img-group">  	
+         	<a href="listGroups.action">Groups</a>           	
+        </li>
+        #end
+       	#if ($user.rootAdmin)
+        <li class="img-user">         
+         	<a href="listUsers.action">Users</a>         
+        </li>
+        #end    
+	</ul>        
+	
+    <ul class="adminmenu">   
+    	<li>General Administration</li>       	
+       	#if ($user.rootAdmin)
+       	<li class="img-settings">
+         	<a href="editProperties.action">Settings</a>
+        </li>
+        #end
+        #if ($user.logViewer)
+        <li class="img-log">
+         	<a href="viewReportLogs.action">View Logs</a>
+        </li>
+        #end   
+     </ul>       	
+                  
+</div>
+
+

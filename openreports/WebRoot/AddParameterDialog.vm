@@ -1,0 +1,95 @@
+<div id="parameterDialog">
+	<div class="hd">Please enter Parameter information</div>
+	<div class="bd">
+		
+    <form action="addParameterDialog.action" name="paramForm" method="post" ">  
+  
+    <table class="dialog" >
+      <tr>
+        <th colspan="3">Report Parameter</th>
+      </tr>
+      <tr class="a">
+        <td class="boldText"  width="30%">Name</td>
+        <td>
+        	&nbsp;
+        </td>
+        <td><input type="text" size="60" name="name" ></td>
+      </tr>
+      <tr class="b">
+        <td class="boldText"  width="30%">Description</td>
+        <td>
+        	&nbsp;
+        </td>
+        <td><input type="text" size="60" name="description" ></td>
+      </tr>
+      <tr class="a">
+        <td class="boldText" >Required</td>
+        <td>
+        	&nbsp;
+        </td>
+        <td><input type="checkbox" name="required" value="true" #if ($required == true) CHECKED #end></td>
+      </tr>
+      <tr class="a">
+        <td class="boldText"  width="20%">Class</td>
+        <td>
+        	<img id="class" src="images/help.gif" title="#parse("tooltips/parameter-class.html")">				        
+        </td>
+        <td>
+          <select name="className">
+            #foreach ($classNameValue in $classNames)
+            <option value="$classNameValue" #if ($classNameValue == $className) SELECTED #end >$classNameValue</option>
+            #end
+          </select>
+        </td>
+      </tr>
+      <tr class="b">
+        <td class="boldText"  width="20%">Type</td>
+        <td>
+        	<img id="type" src="images/help.gif" title="#parse("tooltips/parameter-type.html")">				        
+        </td>
+        <td>
+          <select name="type" onchange="enableFields();">
+            #foreach ($typeValue in $types)
+            <option value="$typeValue" #if ($typeValue == $type) SELECTED #end >$typeValue</option>
+            #end
+          </select>
+        </td>
+      </tr>
+      <tr id="multipleSelectId" class="a">     
+        <td class="boldText" >Multiple Select</td>
+        <td>
+        	<img id="multiselect" src="images/help.gif" title="#parse("tooltips/parameter-multiselect.html")">				                 
+        </td>
+        <td><input type="checkbox" name="multipleSelect" value="true" #if ($multipleSelect == true) CHECKED #end></td>
+      </tr>
+      <tr id="paramData" class="b">
+        <td class="boldText" >Data</td>
+        <td>
+        	<img id="data" src="images/help.gif" title="#parse("tooltips/parameter-data.html")">				        
+        </td>
+        <td><textarea rows="3" cols="45" name="data">$!data</textarea></td>
+      </tr>    
+      <tr id="paramDataSourceId" class="a">
+        <td  class="boldText"  width="20%">DataSource</td>
+        <td>
+        	<img id="datasource" src="images/help.gif" title="#parse("tooltips/parameter-datasource.html")">				        
+        </td>
+        <td>
+          <select name="dataSourceId" id="datasourceSelect">
+            <option value="-1" SELECTED>(none)</option>
+            #foreach ($dataSource in $dataSources)
+            <option value="$dataSource.id" #if ($dataSource.id == $dataSourceId) SELECTED #end >$dataSource.name</option>
+            #end
+          </select>         
+        </td>
+      </tr>      
+      </table>  
+   
+      <input type="hidden" name="id" value="0">
+      <input type="hidden" name="command" value="add">
+      <input type="hidden" name="submitOk" value="Ok">
+  
+  </form>
+
+</div>
+</div>		

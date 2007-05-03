@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping default-lazy="false">
+
+	<class name="org.efs.openreports.objects.ReportParameter" table="REPORT_PARAMETER">
+		
+		<id name="id" column="PARAMETER_ID" type="java.lang.Integer">            
+			<generator class="native"/>            
+        </id>
+        
+        <property name="name" column="NAME" not-null="true" unique="true"/>
+        
+        <property name="type" column="TYPE" not-null="true" unique="false"/>
+        
+        <property name="className" column="CLASSNAME" not-null="true" unique="false"/>
+        
+        <property name="data" column="DATA" type="text" not-null="false" unique="false"/>
+        
+        <many-to-one name="dataSource" class="org.efs.openreports.objects.ReportDataSource" column="DATASOURCE_ID"/>
+        
+        <property name="description" column="DESCRIPTION" not-null="false" unique="false"/>
+        
+        <property name="required" column="REQUIRED" not-null="false" unique="false"/>
+        
+        <property name="multipleSelect" column="MULTI_SELECT" not-null="false" unique="false"/>
+        
+    </class>
+    
+</hibernate-mapping>

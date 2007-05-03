@@ -1,0 +1,31 @@
+#parse("Banner.vm") 
+
+#if (!$report.displayInline)
+
+	<table>
+  	<tr>
+  		<td>
+		  <div class="breadCrumbs" id="breadCrumbs">
+		  	<a href="reportGroup.action">Back to Report Groups...</a> |		  
+		  	<a href="reportList.action">Back to Report List...</a>
+		  </div>
+		</td>
+	</tr>
+	</table>	
+	
+#end
+
+#parse("Errors.vm") 
+
+<div align="center">
+ 
+$html
+   
+</div>
+
+#parse("Footer.vm")
+
+
+
+
+	

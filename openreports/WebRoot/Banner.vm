@@ -1,0 +1,84 @@
+<html>
+
+<head>
+  <meta HTTP-EQUIV="Pragma" CONTENT="public">
+  <meta HTTP-EQUIV="Cache-Control" CONTENT="max-age=0">
+  <title>OpenReports</title>
+  <link rel="stylesheet" type="text/css" href="css/yui/reset-fonts-grids.css" />
+  <link href="css/openreports.css" rel="stylesheet" type="text/css">
+  <!-- YUI Dependencies -->
+  <script type="text/javascript" src="js/yui/yahoo-min.js"></script>
+  <script type="text/javascript" src="js/yui/dom-min.js"></script>
+  <script type="text/javascript" src="js/yui/event-min.js"></script>
+  <script type="text/javascript" src="js/yui/animation-min.js"></script>
+  <script type="text/javascript" src="js/yui/dragdrop-min.js"></script>
+  <script type="text/javascript" src="js/yui/connection-min.js"></script>
+  <script type="text/javascript" src="js/yui/container-min.js"></script>
+  <script type="text/javascript" src="js/yui/element-beta-min.js"></script>
+  <script type="text/javascript" src="js/yui/tabview-min.js"></script>
+  <link rel="stylesheet" type="text/css" href="css/yui/container.css" />
+  <link rel="stylesheet" type="text/css" href="css/yui/tabview.css">
+  <link rel="stylesheet" type="text/css" href="css/yui/border_tabs.css">
+  <!-- End YUI Dependencies -->
+  <script type="text/javascript" src="js/highlight.js"></script>
+</head>
+
+<body>
+
+#if (!$report.displayInline)
+
+<div class="menu"> 
+
+	<div>
+		<ul class="vert">
+			<li>
+				<img style="padding: 5px;" src="images/logo.gif"/>				
+			</li>
+			<li class="logo">
+				OpenReports			
+			</li>
+		</ul>
+	</div>   
+	
+	<div id="usermenu">	    
+  		<ul class="vert">   		 
+          <li>
+          	<a href="logout.action">Logoff</a>          
+          </li>
+          <li>
+          	<a href="userAdmin.action" #if ($request.session.getAttribute('breadcrumbs').startsWith('userAdmin')) class="selected" #end>
+          		Preferences
+          	</a>             
+          </li> 
+          #if ($user.adminUser)
+          	<li>
+            	<a href="reportAdmin.action" #if ($request.session.getAttribute('breadcrumbs').startsWith('reportAdmin')) class="selected" #end>
+            		Administration
+            	</a>
+            </li>
+          #end  
+          #if ($user.scheduler)
+          <li>
+          	<a href="listScheduledReports.action" #if ($request.session.getAttribute('breadcrumbs').startsWith('listScheduledReports')) class="selected" #end>
+          		Scheduled Reports
+          	</a> 
+          </li> 
+          #end
+          <li>
+          	<a href="reportGroup.action" #if ($request.session.getAttribute('breadcrumbs').startsWith('reportGroup')) class="selected" #end>
+          		Reports
+          	</a> 
+          </li>
+          #if ($user.dashboardUser) 
+          <li>
+          	<a href="dashboard.action" #if ($request.session.getAttribute('breadcrumbs').startsWith('dashboard')) class="selected" #end>
+          		Dashboard
+          	</a>          
+          </li>
+          #end       
+        </ul>
+    </div>    
+    
+</div> 
+
+#end

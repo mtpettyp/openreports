@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping default-lazy="false">
+
+	<class name="org.efs.openreports.objects.ReportExportOption" table="REPORT_EXPORT_OPTIONS">
+		
+		<id name="id" column="EXPORT_OPTION_ID" type="java.lang.Integer">            
+			<generator class="native"/>            
+        </id>
+        
+        <property name="xlsRemoveEmptySpaceBetweenRows" column="XLS_REMOVE_EMPTY_SPACE" not-null="true" />
+        
+        <property name="xlsOnePagePerSheet" column="XLS_ONE_PAGE_PER_SHEET" not-null="true" /> 
+        
+        <property name="xlsAutoDetectCellType" column="XLS_AUTO_DETECT_CELL" not-null="true" />
+        
+        <property name="xlsWhitePageBackground" column="XLS_WHITE_BACKGROUND" not-null="true" /> 
+             
+        <property name="htmlRemoveEmptySpaceBetweenRows" column="HTML_REMOVE_EMPTY_SPACE" not-null="true" />
+        
+        <property name="htmlWhitePageBackground" column="HTML_WHITE_BACKGROUND" not-null="true" /> 
+        
+        <property name="htmlUsingImagesToAlign" column="HTML_USE_IMAGES" not-null="true" />
+        
+        <property name="htmlWrapBreakWord" column="HTML_WRAP_BREAK" not-null="true" />      
+	 
+    </class>
+    
+</hibernate-mapping>

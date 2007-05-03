@@ -1,0 +1,94 @@
+<script language="JavaScript" src="js/date-picker.js"></script>
+
+#parse("Banner.vm") 
+
+<div align="center">  
+
+#if (!$report.displayInline)  
+  <a class="back-link img-report-small" href="reportList.action">Back to Reports </a>
+  <a class="back-link img-group-small" href="reportGroup.action">Back to Groups </a>  
+
+#end
+	
+  <br/>  	
+
+  <br/>
+  
+  <div class="img-param important" id="instructions" style="width: 70%;">
+	  	 Parameters for: $report.name 
+  </div>  
+  
+  <form action="reportDetail.action" name="reportDetail" method="post" style="width: 75%;" >  
+  
+  	
+  
+  <table class="dialog"> 
+    #foreach ($reportParameterMap in $reportParameters)
+    <tr>
+      <td class="boldText" id="$reportParameterMap.reportParameter.description" >      	
+      	  $reportParameterMap.reportParameter.description     	 
+      	  #if ($reportParameterMap.isRequired())
+      	    *
+      	  #end            	
+      </td>     
+      #if ($reportParameterMap.reportParameter.type == "Text")
+      <td id="$reportParameterMap.reportParameter.name">
+        <input type="text" name="$reportParameterMap.reportParameter.name" length="50">       
+      </td>
+      #end      
+      #if ($reportParameterMap.reportParameter.type == "Date")
+      <td id="$reportParameterMap.reportParameter.name">
+        <input type="text" name="$reportParameterMap.reportParameter.name" #if ($reportParameterMap.isRequired()) value="$defaultDate" #end length="50">
+        <a href="javascript:show_calendar('reportDetail.$reportParameterMap.reportParameter.name','','','$dateFormat');"
+           onmouseover="window.status='Date Picker';return true;"
+           onmouseout="window.status='';return true;"><img border="none" src="images/icon_calendar.gif"/></a>
+      </td>
+      #end
+      #if ($reportParameterMap.reportParameter.type == "Boolean" )
+      <td id="$reportParameterMap.reportParameter.name">       
+        <select id="$reportParameterMap.reportParameter.name" name="$reportParameterMap.reportParameter.name">
+          #foreach ($value in $reportParameterMap.reportParameter.values)
+            <option value="$value.id">$value.description</option>
+          #end
+        </select>
+      </td>
+      #end      
+      #if ($reportParameterMap.reportParameter.type == "Query" || $reportParameterMap.reportParameter.type == "List")
+      <td id="$reportParameterMap.reportParameter.name">
+       #if ($reportParameterMap.reportParameter.isMultipleSelect())
+        <select id="$reportParameterMap.reportParameter.name" name="$reportParameterMap.reportParameter.name" size="4" multiple>
+        #else
+        <select id="$reportParameterMap.reportParameter.name" name="$reportParameterMap.reportParameter.name">
+        #end  
+		  #if (!$reportParameterMap.isRequired())  
+		    <option value="" SELECTED>(None)</option>
+		  #end 		  
+          #foreach ($value in $reportParameterMap.reportParameter.values)
+            <option value="$value.id">$value.description</option>
+          #end
+        </select>
+      </td>
+      #end      
+    </tr>      
+    #end   
+    <tr>   
+ </table>
+ 
+  
+  
+ #parse("Errors.vm")   
+    
+	<div class="button-bar" id="buttons" >
+	   <input class="standardButton" type="submit" value="Ok" name="submitType">        
+       <input type="hidden" name="reportId" value="$reportId">        
+       <input type="hidden" name="step" value="$step">      
+       <input type="hidden" name="displayInline" value="$displayInline">
+	</div>  
+  
+  </form>  
+  
+  <div class="importantSmall">* Indicates required parameters</div>
+ 
+</div>
+
+#parse("Footer.vm") 

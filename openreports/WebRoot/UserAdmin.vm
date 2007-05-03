@@ -1,0 +1,168 @@
+#parse("Banner.vm") 
+
+<script type="text/javascript">
+  var userAdminReportTabs = new YAHOO.widget.TabView("userAdminReportTabs");
+</script>
+
+<style>
+  .yui-navset ul {
+    padding-right: 450px;
+  }
+</style>
+
+<div align="center">
+
+<br/>
+
+<div id="userAdminReportTabs" class="yui-navset" style="width: 800px;">
+  <ul class="yui-nav">
+    <li class="selected"><a href="preferences"><em>Preferences</em></a></li>
+    #if ($user.alertUser)
+    <li><a href="alerts"><em>Alerts</em></a></li>
+    #end
+  </ul>            
+  <div class="yui-content">
+  
+    <div id="preferences">
+ 
+    #parse("Errors.vm")
+  
+    <form action="userAdmin.action">
+  
+    <table class="dialog">
+      <tr class="a">
+        <td class="boldText">Name</td>
+        <td><input type="text" size="60" name="name" value="$!name"></td>
+      </tr>
+      <tr class="b">
+        <td class="boldText">Password</td>
+        <td><input type="password" size="60" name="password" value="$!password"></td>
+      </tr>    
+      <tr class="a">
+        <td class="boldText">Confirm Password</td>
+        <td><input type="password" size="60" name="passwordConfirm" value="$!passwordConfirm"></td>
+      </tr>      
+      <tr class="b">
+        <td class="boldText">Email Address</td>
+        <td><input type="text" size="60" name="email" value="$!email"></td>
+      </tr>  
+      #if ($user.dashboardUser)
+      <tr>
+    	<td class="boldText">Dashboard Report</td>
+    	<td>
+   	     <select name="reportId">    
+   	      <option value="-1">(None)</option>     
+          #foreach ($report in $reports)
+          <option value="$report.id" #if ($reportId == $report.id) SELECTED #end >$report.name &nbsp;</option>
+          #end
+        </select>   	    
+   	   </td>  
+   	  </tr>
+   	  #end   	    
+      <tr>
+        <td align="center" class="dialogButtons" colspan="2">
+        <hr>       
+      	<input class="standardButton" type="submit" name="submitType" value="Ok">       
+        </td>
+      </tr>   
+    </table>
+    
+    </form>  
+    
+    </div>
+  
+    #if ($user.alertUser)
+  
+    <div id="alerts"> 
+  
+    <table class="dialog">
+      <tr>
+        <th colspan="2">Alert</th>
+        <th>Operator&nbsp;</th>     
+        <th>Limit</th>     
+        <th>Report</th>   
+        <th colspan="2">&nbsp;</th>
+      </tr>      
+      #foreach ($alert in $user.alerts)
+      <form action="userAdminAlerts.action" class="alert-form" >
+      <tr class="a">   	 
+   	    <td colspan="2">
+   	      $alert.alert.name   	
+   	    </td>     	     	      	  
+   	    <td>
+   	      <select name="alertOperator">         
+          #foreach ($operator in $operators)
+          <option value="$operator" #if ($alert.operator == $operator) SELECTED #end >$operator &nbsp;</option>
+          #end
+          </select>   	    
+   	    </td>  
+   	    <td>
+   	      <input type="text" size="6" name="alertLimit" value="$alert.limit">   	    
+   	    </td>  
+   	    <td>
+   	      <select name="reportId">    
+   	      <option value="-1">(None)</option>     
+          #foreach ($report in $reports)
+          <option value="$report.id" #if ($alert.report.id == $report.id) SELECTED #end >$report.name &nbsp;</option>
+          #end
+          </select>   	    
+   	    </td>  
+   	    <td class="dialogButtons">
+   	  	 <input class="standardButton" type="submit" name="submitUpdate" value="Update">
+   	    </td> 
+   	    <td class="dialogButtons">
+   	  	 <input class="standardButton" type="submit" name="submitDelete" value="Delete">
+   	    </td> 
+      </tr>   
+      <input type="hidden" name="id" value="$!id">
+      <input type="hidden" name="alertId" value="$velocityCount"/>
+    </form>
+    #end     
+    <form action="userAdminAlerts.action" class="alert-form">          
+    <tr class="a">
+      <td colspan="2">
+        <select name="alertId">           
+          #foreach ($alert in $alerts)
+            <option value="$alert.id">$alert.name
+          #end
+        </select>
+      </td>   
+      <td>
+   	      <select name="alertOperator">         
+          #foreach ($operator in $operators)
+          <option value="$operator">$operator &nbsp;</option>
+          #end
+        </select>   	    
+   	  </td>  
+   	  <td>
+   	    <input type="text" size="6" name="alertLimit" value="0">   	    
+   	  </td>  
+   	  <td>
+   	     <select name="reportId">    
+   	      <option value="-1">(None)</option>     
+          #foreach ($report in $reports)
+          <option value="$report.id">$report.name &nbsp;</option>
+          #end
+        </select>   	    
+   	  </td>     
+      <td class="dialogButtons">
+      	<input class="standardButton" type="submit" name="submitAdd" value="Add">
+      </td>             
+    </tr> 
+  	<input type="hidden" name="id" value="$!id"> 
+  	<input type="hidden" name="command" value="$!command"> 
+  	</form>  
+    
+    </table>
+  
+    </div>
+  
+    #end
+  
+  </div>
+  
+</div>
+ 
+
+#parse("Footer.vm") 
+

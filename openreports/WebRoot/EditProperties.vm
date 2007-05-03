@@ -1,0 +1,169 @@
+#parse("Banner.vm") 
+
+<script type="text/javascript">
+  var settingsTabs = new YAHOO.widget.TabView("settingsTabs");
+</script>
+
+<div align="center">
+   
+  <br>
+  
+  <div id="settingsTabs" class="yui-navset" style="width: 800px;">
+  <ul class="yui-nav">
+    <li class="selected"><a href="settings"><em>General Settings</em></a></li>    
+    <li><a href="cleanup"><em>Image Cleanup</em></a></li>    
+  </ul>            
+  <div class="yui-content">
+  
+    <div id="settings"> 
+
+    #parse("Errors.vm")  
+  
+  <form action="editProperties.action" method="post">
+  <table class="dialog" >   
+    <tr>
+      <td class="boldText">Base Directory</td>
+      <td>      
+      	<img id="baseDir" src="images/help.gif" title="#parse("tooltips/properties-basedirectory.html")">      
+      </td>
+      <td>
+		<input type="text" size="60" name="baseDirectory" value="$!baseDirectory"><br/>
+	  </td>
+	</tr>	
+	 <tr>
+      <td class="boldText">Report Generation Directory</td>
+      <td>      
+      	<img id="reportGenDir" src="images/help.gif" title="#parse("tooltips/properties-report-generation.html")">   
+      </td>
+      <td>
+		<input type="text" size="60" name="reportGenerationDirectory" value="$!reportGenerationDirectory"><br/>
+	  </td>
+	</tr>	
+    <tr>
+      <td class="boldText">Temp Directory</td>      
+      <td>
+      	<img id="tempDir" src="images/help.gif" title="#parse("tooltips/properties-tempdirectory.html")">   
+      </td>
+      <td>
+		<input type="text" size="60" name="tempDirectory" value="$!tempDirectory"><br/>
+	  </td>
+	</tr>	
+    <tr>
+      <td class="boldText">Date Format</td>
+      <td>
+      	&nbsp;
+      </td>
+      <td><input type="text" size="60" name="dateFormat" value="$!dateFormat"></td>
+    </tr>    
+    <tr>
+      <td class="boldText">QueryReport MaxRows</td>
+      <td>
+      	<img id="maxrows" src="images/help.gif" title="#parse("tooltips/properties-maxrows.html")">   
+      </td>
+      <td><input type="text" size="60" name="maxRows" value="$!maxRows"></td>
+    </tr>  
+    <tr><td colspan="3"><hr/></td></tr>  
+	<tr>
+      <td class="boldText">Mail SMTP Host</td>
+      <td>
+      	<img id="mailhost" src="images/help.gif" title="#parse("tooltips/properties-mailhost.html")">   
+      </td>
+      <td>
+		<input type="text" size="60" name="mailHost" value="$!mailHost">		
+	  </td>
+    </tr>
+    <tr>
+      <td class="boldText">Use Mail Authenticator</td>
+      <td>
+      	<img id="mailauthenticator" src="images/help.gif" title="#parse("tooltips/properties-mailauthenticator.html")">   
+      </td>
+      <td>
+		<input type="checkbox" name="mailAuthenticatorUsed" value="true" #if ($mailAuthenticatorUsed == true) CHECKED #end>		
+	  </td>
+    </tr>
+	<tr>
+      <td class="boldText">Mail Authenticator UserName</td>
+      <td>
+      	&nbsp;
+      </td>
+      <td><input type="text" size="60" name="mailUser" value="$!mailUser"></td>
+    </tr>
+	<tr>
+      <td class="boldText">Mail Authenticator Password</td>
+      <td>
+      	&nbsp;
+      </td>
+      <td><input type="password" size="60" name="mailPassword" value="$!mailPassword"></td>
+    </tr>     
+    <tr><td colspan="3"><hr/></td></tr>  
+    <tr>
+      <td class="boldText">XMLA URI</td>
+      <td>
+        &nbsp;
+      </td>
+      <td><input type="text" size="60" name="xmlaUri" value="$!xmlaUri"></td>
+    </tr>     
+    <tr>
+      <td class="boldText">XMLA DataSource</td>
+      <td>
+        &nbsp;
+      </td>
+      <td><input type="text" size="60" name="xmlaDataSource" value="$!xmlaDataSource"></td>
+    </tr>     
+    <tr>
+      <td class="boldText">XMLA Catalog</td>
+      <td>
+        &nbsp;
+      </td>
+      <td><input type="text" size="60" name="xmlaCatalog" value="$!xmlaCatalog"></td>
+    </tr>     
+    <tr><td colspan="4"><hr></td></tr> 
+    <tr>
+      <td align="center" class="dialogButtons" colspan="3">      	
+      	<input class="standardButton" type="submit" name="submitType" value="Submit">     	
+      </td>
+    </tr>    
+   </table>
+  </form> 
+  
+</div>
+
+<div id="cleanup">
+
+<form action="imageCleanup.action" method="post">
+  <table class="dialog" >   
+    <tr>
+      <td colspan="3">
+      The image temporary directory is: 
+      <br/><br/>
+      <strong>$imageTempDirectory</strong>
+      <br/><br/>
+      This directory contains <strong>$numberOfFiles</strong> files using <strong>$directorySize</strong> of space.
+      </td>
+	</tr>	    
+    <tr><td colspan="4"><hr></td></tr> 
+    <tr>
+      <td align="center" class="dialogButtons" colspan="3">      	
+      	<input class="standardButton" type="submit" name="submitType" value="Cleanup">     	
+      </td>
+    </tr>    
+   </table>
+  </form> 
+  
+</div>
+
+</div>
+
+</div>
+
+#parse("Footer.vm") 
+
+<script type="text/javascript">
+  var baseDirTooltip = new YAHOO.widget.Tooltip("baseDirTooltip", { context:"baseDir" } );
+  var reportGenDirTooltip = new YAHOO.widget.Tooltip("reportGenDirTooltip", { context:"reportGenDir" } );
+  var tempDirTooltip = new YAHOO.widget.Tooltip("tempDirTooltip", { context:"tempDir" } );
+  var maxrowsTooltip = new YAHOO.widget.Tooltip("maxrowsTooltip", { context:"maxrows" } );  
+  var mailhostTooltip = new YAHOO.widget.Tooltip("mailhostTooltip", { context:"mailhost" } );
+  var mailauthenticatorTooltip = new YAHOO.widget.Tooltip("mailauthenticatorTooltip", { context:"mailauthenticator" } );
+</script>
+

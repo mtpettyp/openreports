@@ -1,0 +1,26 @@
+#parse("Banner.vm") 
+
+<br/>
+
+<table align="center" width="90%">
+  <tr>
+    <td>
+      <ul class="errorList">
+        <li>
+    	 	This functionality is not supported in this version of OpenReports.     	 	
+        </li>
+        <li>    	 	
+    	 	Please contact your administrator.
+        </li>
+      </ul>
+    </td>      
+  </tr>
+</table>
+
+<br>
+	
+  
+
+#parse("Footer.vm") 
+
+

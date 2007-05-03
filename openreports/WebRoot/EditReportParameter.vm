@@ -1,0 +1,147 @@
+#parse("Banner.vm") 
+
+<script type="text/javascript" src="js/add-datasource.js"></script>
+
+<a class="back-link img-report-small" href="listReportParameters.action">Back to Parameters </a>
+ 
+<br/>
+
+<div align="center">
+  
+	<div class="important img-param" id="instructions" style="width: 70%;">
+		   #if ($command == "add")
+		   	Add Report Parameter
+		   #end
+		   #if ($command != "add")
+		   	Selected Report Parameter: $name
+		   #end
+	</div>
+  
+  <form action="editReportParameter.action" name="paramForm" method="post" style="width: 75%;">  
+  
+  <table class="dialog" >   
+    <tr class="a">
+      <td class="boldText"  width="30%">Name</td>
+      <td>
+      	&nbsp;
+      </td>
+      <td><input type="text" size="60" name="name" value="$!name"></td>
+    </tr>
+    <tr class="b">
+      <td class="boldText"  width="30%">Description</td>
+      <td>
+      	&nbsp;
+      </td>
+      <td><input type="text" size="60" name="description" value="$!description"></td>
+    </tr>
+    <tr class="a">
+      <td class="boldText" >Required</td>
+      <td>
+      	&nbsp;
+      </td>
+      <td><input type="checkbox" name="required" value="true" #if ($required == true) CHECKED #end></td>
+    </tr>
+    <tr class="a">
+      <td class="boldText"  width="20%">Class</td>
+      <td>
+      	<img id="class" src="images/help.gif" title="#parse("tooltips/parameter-class.html")">				        
+      </td>
+      <td>
+        <select name="className">
+          #foreach ($classNameValue in $classNames)
+          <option value="$classNameValue" #if ($classNameValue == $className) SELECTED #end >$classNameValue</option>
+          #end
+        </select>
+      </td>
+    </tr>
+    <tr class="b">
+      <td class="boldText"  width="20%">Type</td>
+      <td>
+      	<img id="type" src="images/help.gif" title="#parse("tooltips/parameter-type.html")">				        
+      </td>
+      <td>
+        <select name="type" onchange="enableFields();">
+          #foreach ($typeValue in $types)
+          <option value="$typeValue" #if ($typeValue == $type) SELECTED #end >$typeValue</option>
+          #end
+        </select>
+      </td>
+    </tr>
+    <tr id="multipleSelectId" class="a">     
+      <td class="boldText" >Multiple Select</td>
+      <td>
+      	<img id="multiselect" src="images/help.gif" title="#parse("tooltips/parameter-multiselect.html")">				                 
+      </td>
+      <td><input type="checkbox" name="multipleSelect" value="true" #if ($multipleSelect == true) CHECKED #end></td>
+    </tr>
+    <tr id="paramData" class="b">
+      <td class="boldText" >Data</td>
+      <td>
+      	<img id="data" src="images/help.gif" title="#parse("tooltips/parameter-data.html")">				        
+      </td>
+      <td><textarea rows="3" cols="45" name="data">$!data</textarea></td>
+    </tr>    
+    <tr id="paramDataSourceId" class="a">
+      <td  class="boldText"  width="20%">DataSource</td>
+      <td>
+      	<img id="datasource" src="images/help.gif" title="#parse("tooltips/parameter-datasource.html")">				        
+      </td>
+      <td>
+        <select name="dataSourceId" id="datasourceSelect">
+          <option value="-1" SELECTED>(none)</option>
+          #foreach ($dataSource in $dataSources)
+          <option value="$dataSource.id" #if ($dataSource.id == $dataSourceId) SELECTED #end >$dataSource.name</option>
+          #end
+        </select>
+        <input type="button" id="showAddDataSource" value="Add DataSource">
+      </td>
+    </tr>      
+    </table>
+    
+   #parse("Errors.vm")
+   <div id="response" class="error"></div>
+   
+   <div class="button-bar" id="buttons" >
+        <input class="standardButton" type="submit" name="submitOk" value="Save">
+        <input class="standardButton" type="submit" name="submitDuplicate" value="Duplicate">
+        <input class="standardButton" type="submit" name="submitValidate" value="Validate">
+   </div>
+   
+  <input type="hidden" name="id" value="$!id">
+  <input type="hidden" name="command" value="$!command"></th>
+  
+  </form>
+  <br>   
+  #if ($parameterValues)
+  <table class="dialog" >
+  	<tr>
+  	  <th colspan="2">Parameter Values</th>
+  	</tr>
+  	<tr>
+  	  <th>ID</th>
+  	  <th>Description</th>
+  	</tr>
+  	#foreach($parameterValue in $parameterValues)
+  	<tr class="b">
+  	  <td>$parameterValue.id</td>
+  	  <td>$parameterValue.description</td>
+  	</tr>
+  	#end  	
+  </table>
+  #end
+ 
+</div>
+<br>
+
+#parse("AddDataSourceDialog.vm")
+
+#parse("Footer.vm") 
+
+<script type="text/javascript">
+  var classTooltip = new YAHOO.widget.Tooltip("classTooltip", { context:"class" } );
+  var typeTooltip = new YAHOO.widget.Tooltip("typeTooltip", { context:"type" } );
+  var multiselectTooltip = new YAHOO.widget.Tooltip("multiselectTooltip", { context:"multiselect" } );
+  var dataTooltip = new YAHOO.widget.Tooltip("dataTooltip", { context:"data" } );
+  var datasourceTooltip = new YAHOO.widget.Tooltip("datasourceTooltip", { context:"datasource" } );
+</script>
+

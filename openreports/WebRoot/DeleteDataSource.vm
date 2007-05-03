@@ -1,0 +1,35 @@
+#parse("Banner.vm") 
+
+#parse("Errors.vm")
+
+<a class="back-link img-report-small" href="listDataSources.action">Back to DataSources </a>
+ 
+<br/>
+
+<div align="center">
+
+   	<div class="important img-delete" id="instructions" style="width: 70%;">Delete DataSource Confirmation</div>
+   
+  <form action="deleteDataSource.action" style="width: 75%;" >
+  
+  <table class="dialog" >   
+    <tr class="a">
+      <td class="boldText">Name</td>
+      <td>$!name</td>
+    </tr>   
+    </table>
+  
+      	<div class="button-bar" id="buttons">
+	        <input class="standardButton" type="submit" name="submitDelete" value="Delete">
+    	    <input class="standardButton" type="submit" name="submitCancel" value="Cancel">
+    	</div>
+   
+    <input type="hidden" name="id" value="$!id">     
+  
+  </form>
+  <br> 
+</div>
+
+#parse("Footer.vm") 
+
+

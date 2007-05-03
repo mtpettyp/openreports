@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping default-lazy="false">
+
+	<class name="org.efs.openreports.objects.ReportUser" table="REPORT_USER">
+		
+		<id name="id" column="REPORTUSER_ID" type="java.lang.Integer">            
+			<generator class="native"/>            
+        </id>
+        
+        <property name="name" column="NAME" not-null="true" unique="true"/>
+        
+		<property name="password" column="PASSWORD" not-null="true" unique="false"/>
+		
+        <!--property name="password" column="PASSWORD" type="org.efs.openreports.util.EncryptedStringUserType" not-null="true" unique="false"/-->
+                      
+        <property name="externalId" column="EXTERNAL_ID"/> 
+        
+        <property name="email" column="EMAIL_ADDRESS"/>    
+        
+        <property name="pdfExportType" column="PDF_EXPORT_TYPE" not-null="true"/>     
+        
+        <list name="groups" table="USER_GROUP_MAP">
+    		<key column="USER_ID"/>    		
+    		<index column="MAP_ID" type="java.lang.Integer"/>         		
+    		<many-to-many column="GROUP_ID" class="org.efs.openreports.objects.ReportGroup"/>  
+		</list>
+		
+		<list name="alerts" table="USER_ALERT_MAP">
+    		<key column="USER_ID"/>    		
+    		<index column="MAP_ID" type="java.lang.Integer"/>         		
+    		<composite-element class="org.efs.openreports.objects.ReportUserAlert">
+    			<many-to-one name="alert" column="ALERT_ID"  class="org.efs.openreports.objects.ReportAlert"/>
+    			<many-to-one name="report" column="REPORT_ID"  class="org.efs.openreports.objects.Report"/>        	
+        		<property name="limit" column="ALERT_LIMIT" />
+        		<property name="operator" column="ALERT_OPERATOR" />            		
+    		</composite-element>
+		</list>	
+		
+		<set name="roles" table="USER_SECURITY">
+    		<key column="USER_ID"/>
+		    <element column="ROLE_NAME" type="string"/>
+		</set>		
+		
+		<many-to-one name="defaultReport" class="org.efs.openreports.objects.Report" column="DEFAULT_REPORT_ID"/>   	
+           
+    </class>
+    
+</hibernate-mapping>

@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping default-lazy="false">
+
+	<class name="org.efs.openreports.objects.ReportDataSource" table="REPORT_DATASOURCE">
+		
+		<id name="id" column="DATASOURCE_ID" type="java.lang.Integer">            
+			<generator class="native"/>            
+        </id>
+        
+        <property name="name" column="NAME" not-null="true" unique="true"/>       
+        
+        <property name="driverClassName" column="DRIVER" not-null="false"/>       
+        
+        <property name="url" column="URL" not-null="true"/>  
+        
+        <property name="username" column="USERNAME" not-null="false"/> 
+        
+        <property name="password" column="PASSWORD" not-null="false"/> 
+        
+        <property name="maxIdle" column="MAX_IDLE" not-null="false"/> 
+        
+        <property name="maxActive" column="MAX_ACTIVE" not-null="false"/> 
+        
+        <property name="maxWait" column="MAX_WAIT" not-null="false"/>  
+        
+        <property name="validationQuery" column="VALIDATION_QUERY" not-null="false"/> 
+        
+        <property name="jndi" column="JNDI"/> 
+              
+    </class>
+    
+</hibernate-mapping>

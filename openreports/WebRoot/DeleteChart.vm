@@ -1,0 +1,38 @@
+#parse("Banner.vm") 
+
+#parse("Errors.vm")
+
+<a class="back-link img-report-small" href="listCharts.action">Back to Charts </a>
+ 
+<br/>
+
+<div align="center">
+  
+	<div class="important img-chart" id="instructions" style="width: 70%;">Delete Chart Confirmation</div>
+     
+  <form action="deleteChart.action" style="width: 75%;">
+  
+  <table class="dialog" >   
+    <tr class="a">
+      <td class="boldText" width="20%">Name</td>
+      <td>$!name</td>
+    </tr>
+    <tr class="b">
+      <td class="boldText">Description</td>
+      <td>$!description</td>
+    </tr>   
+   </table>
+  
+      <div class="button-bar" id="buttons">
+        <input class="standardButton" type="submit" name="submitDelete" value="Delete">
+        <input class="standardButton" type="submit" name="submitCancel" value="Cancel">
+      </div>     
+    <input type="hidden" name="id" value="$!id">     
+   
+  </form>
+  <br> 
+</div>
+
+#parse("Footer.vm") 
+
+

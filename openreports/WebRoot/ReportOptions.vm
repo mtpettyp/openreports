@@ -1,0 +1,109 @@
+<script language="JavaScript" type="text/JavaScript">
+
+function setDefaultExportType()
+{
+	if (optionsForm.exportType.length)
+   	{
+ 		optionsForm.exportType[0].checked=true
+ 	}
+ 	else
+ 	{
+ 	    optionsForm.exportType.checked=true
+ 	}
+}
+
+function setBlankTarget()
+{	
+	optionsForm.target="_blank";		
+}
+
+function setNoTarget()
+{
+	optionsForm.target="";		
+}
+</script>
+
+#parse("Banner.vm") 	
+
+#parse("Errors.vm")
+
+<div align="center">
+
+  <a class="back-link img-report-small" href="reportList.action">Back to Reports</a>
+  <a class="back-link img-group-small" href="reportGroup.action">Back to Groups</a>
+  
+  <br/><br/>
+	
+  <div class="img-export important" id="instructions" style="width: 70%;">
+	  Export Options for: $report.name
+  </div>
+  
+  <form action="reportOptions.action" name="optionsForm" style="width: 75%;">    
+		  
+  <table class="dialog" >    
+    <tr>
+      <td class="boldText">Export Type</td>   
+      #if ($report.pdfExportEnabled)
+      <td>
+       <input type="radio" name="exportType" value="0">PDF
+      </td>
+      #end
+      #if ($report.htmlExportEnabled)
+      <td>
+        <input type="radio" name="exportType" value="2">HTML
+      </td>
+      #end
+      #if ($report.csvExportEnabled)
+      <td>
+        <input type="radio" name="exportType" value="3">CSV      
+      </td>
+      #end
+      #if ($report.xlsExportEnabled || $report.jXLSReport)
+      <td>
+        <input type="radio" name="exportType" value="1">XLS
+      </td>
+      #end 
+      #if ($report.rtfExportEnabled)
+      <td>
+        <input type="radio" name="exportType" value="5">RTF
+      </td>
+      #end 
+       #if ($report.textExportEnabled)
+      <td>
+        <input type="radio" name="exportType" value="6">Text
+      </td>
+      #end 
+       #if ($report.excelExportEnabled)
+      <td>
+        <input type="radio" name="exportType" value="7">Excel
+      </td>
+      #end 
+      #if ($report.jasperReport)
+	  <td>
+        <input type="radio" name="exportType" value="4">Image
+      </td>  
+      #end
+      <script language="JavaScript" type="text/JavaScript">
+        setDefaultExportType()
+	  </script>    
+    </tr>
+    <tr>
+  </table>
+  
+  <br>
+  
+  <div id="buttons" class="button-bar">  
+    
+        <input type="submit" onClick="setNoTarget()" class="standardButton" name="submitRun" value="Run">
+        <input type="submit" onClick="setBlankTarget()" class="standardButton" name="submitRun" value="Run in New Window">
+        #if ($user.scheduler)
+  		  <input type="submit" onClick="setNoTarget()" class="standardButton" name="submitSchedule" value="Schedule">
+		#end          	
+  </div>
+       
+  </form>   
+  
+</div>
+
+#parse("Footer.vm") 
+

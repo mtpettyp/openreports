@@ -1,0 +1,148 @@
+<div id="chartDialog">
+	<div class="hd">Please enter Chart information</div>
+	<div class="bd">
+		
+    <form action="addChartDialog.action" name="chartForm" method="post"> 
+    
+    <table class="dialog" >    
+      <tr class="a">
+        <td class="boldText" width="30%">Name</td>
+        <td>
+        	&nbsp;
+        </td>
+        <td><input type="text" size="60" name="name" ></td>
+      </tr>
+      <tr class="b">
+        <td class="boldText" width="30%">Description</td>
+        <td>
+        	&nbsp;
+        </td>
+        <td><input type="text" size="60" name="description" ></td>
+      </tr>    
+      <tr class="a">
+        <td class="boldText" width="30%">Chart Type</td>
+        <td>
+        	&nbsp;
+        </td>
+        <td>
+          <select name="chartType" onchange="enableFields()">
+            <option value="0" #if ($chartType == 0) SELECTED #end>Bar</option>
+            <option value="1" #if ($chartType == 1) SELECTED #end>Pie</option>
+            <option value="2" #if ($chartType == 2) SELECTED #end>XY</option>
+    	  <option value="3" #if ($chartType == 3) SELECTED #end>Time</option>
+    	  <option value="4" #if ($chartType == 4) SELECTED #end>Ring</option>		 
+          </select>
+        </td>
+      </tr>
+      <tr class="b">
+        <td class="boldText" width="30%">Width</td>
+        <td>
+        		&nbsp;        
+        </td>
+        <td><input type="text" size="60" name="width" value="$!width"></td>
+      </tr>    
+      <tr class="a">
+        <td class="boldText" width="30%">Height</td>
+        <td>
+        		&nbsp;
+        </td>
+        <td><input type="text" size="60" name="height" value="$!height"></td>
+      </tr>  
+      <tr>
+        <td class="boldText" width="30%">Show Title</td>
+        <td>
+        		&nbsp;
+        </td>
+        <td>  
+        	<input type="checkbox" name="showTitle" value="true" #if ($showTitle == true) CHECKED #end>   	   
+        </td>
+      </tr>    
+      <tr>
+        <td class="boldText" width="30%">Show Legend</td>
+        <td>
+        		&nbsp;
+        </td>
+        <td>  
+        	<input type="checkbox" name="showLegend" value="true" #if ($showLegend == true) CHECKED #end>   	   
+        </td>
+      </tr>      
+      <tr>
+        <td class="boldText" width="30%">Show Values</td>
+        <td>
+          <img  id="values" src="images/help.gif" title="#parse("tooltips/chart-values.html")">      	         
+        </td>
+        <td>  
+        	<input type="checkbox" name="showValues" value="true" #if ($showValues == true) CHECKED #end>   	   
+        </td>
+      </tr>     
+      <tr id="xLabel" class="b">
+        <td class="boldText" width="30%">X Axis Label</td>
+        <td>
+        	<img  id="xlabel" src="images/help.gif" title="#parse("tooltips/chart-xlabel.html")">
+        </td>
+        <td><input type="text" size="60" name="xAxisLabel" value="$!xAxisLabel"></td>
+      </tr>    
+      <tr id="yLabel" class="a">
+        <td class="boldText" width="30%">Y Axis Label</td>
+        <td>
+        	<img id="ylabel" src="images/help.gif" title="#parse("tooltips/chart-ylabel.html")">
+        </td>
+        <td><input type="text" size="60" name="yAxisLabel" value="$!yAxisLabel"></td>
+      </tr>        
+      <tr>
+        <td class="boldText" width="30%">Plot Orientation</td>
+        <td>
+        	<img id="plotorientation" src="images/help.gif" title="#parse("tooltips/chart-plotorientation.html")">
+        </td>
+        <td>
+        	<select name="orientation">
+        		<option value="1" #if ($orientation == 1) SELECTED #end>Horizontal</option>
+        		<option value="2" #if ($orientation == 2) SELECTED #end>Vertical</option>      	
+        	</select>
+        </td>
+      </tr>      
+      <tr class="b">
+        <td class="boldText" >Query</td>
+        <td>
+        	<img id="query" src="images/help.gif" title="#parse("tooltips/chart-query.html")">
+        </td>
+        <td><textarea rows="3" cols="45" name="query"></textarea></td>
+      </tr>    
+      <tr class="a">
+        <td class="boldText" width="20%">DataSource</td>
+        <td>
+        	&nbsp;
+        </td>
+        <td>
+          <select name="dataSourceId" id="datasourceSelect">
+            <option value="-1" SELECTED>(none)</option>
+            #foreach ($dataSource in $dataSources)
+            <option value="$dataSource.id" #if ($dataSource.id == $dataSourceId) SELECTED #end >$dataSource.name</option>
+            #end
+          </select>          
+        </td>
+      </tr>       
+      <tr class="a">
+        <td class="boldText" width="20%">DrillDown Report</td>
+        <td>
+        	&nbsp;
+        </td>
+        <td>
+          <select name="reportId">
+            <option value="-1" SELECTED>(none)</option>
+            #foreach ($report in $reports)
+            <option value="$report.id" #if ($report.id == $reportId) SELECTED #end >$report.name</option>
+            #end
+          </select>
+        </td>
+      </tr>    
+     </table>    
+      
+    <input type="hidden" name="id" value="0">
+    <input type="hidden" name="command" value="add">
+    <input type="hidden" name="submitOk" value="Ok"> 
+    
+    </form>
+
+</div>
+</div>		

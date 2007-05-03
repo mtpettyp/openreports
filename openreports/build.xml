@@ -1,0 +1,160 @@
+<project name="openreports" default="war" basedir=".">
+
+	<property name="src" value="src" />
+	<property name="lib" value="lib" />
+	<property name="docs" value="docs" />
+	<property name="deploy" value="deploy" />
+	<property name="WebRoot" value="WebRoot" />
+	<property name="web-inf" value="${WebRoot}/WEB-INF" />
+	<property name="web-inf.classes" value="${web-inf}/classes" />
+	<property name="web-inf.lib" value="${web-inf}/lib" />
+	<property name="distribution" value="\openreports" />
+	<property name="version" value="2.2.0" />
+
+	<target name="compile">
+
+		<delete failonerror="false" includeemptydirs="true">
+			<fileset dir="${web-inf.classes}" />
+		</delete>
+
+		<delete failonerror="false">
+			<fileset dir="${web-inf.lib}">
+				<include name="openreports-*.jar" />
+			</fileset>
+		</delete>
+
+		<mkdir dir="${web-inf.classes}" />
+
+		<javac srcdir="${src}" destdir="${web-inf.classes}" debug="on">
+			<classpath>
+				<fileset dir="${web-inf.lib}">
+					<include name="**/*.jar" />
+				</fileset>
+				<fileset dir="${lib}">
+					<include name="**/*.jar" />
+				</fileset>
+			</classpath>
+		</javac>
+
+		<copy todir="${web-inf.classes}">
+			<fileset dir="${src}">
+				<include name="**/*.properties" />
+				<include name="**/*.xml" />
+			</fileset>
+		</copy>
+
+	</target>
+
+	<target name="jar" depends="compile">
+
+		<jar destfile="${web-inf.lib}/openreports-${version}.jar" basedir="${web-inf.classes}" />
+
+	</target>
+
+	<target name="war" depends="jar">
+
+		<war destfile="${deploy}/openreports.war" webxml="${web-inf}/web.xml">
+
+			<fileset dir="${WebRoot}">						
+				<include name="src/**" />				
+				<include name="**/*.vm" />
+				<include name="**/*.js" />
+				<include name="**/*.jsp" />
+				<include name="**/*.html" />
+				<include name="**/*.css" />
+				<include name="**/*.gif" />
+				<include name="**/*.jpg" />
+				<include name="**/*.png" />				
+			</fileset>
+
+			<lib dir="${web-inf.lib}" />
+
+		</war>
+
+	</target>
+	
+	<target name="war-services" depends="jar">
+
+			<war destfile="${deploy}/openreports-services.war" webxml="${web-inf}/web-services.xml">
+
+				<fileset dir="${WebRoot}">					
+					<include name="**/applicationContext.xml" />
+				</fileset>
+
+				<lib dir="${web-inf.lib}" />
+
+			</war>
+
+		</target>
+
+	<target name="schemaExporter" depends="jar">
+
+		<java classname="org.efs.openreports.util.schema.SchemaExporter" failonerror="true" fork="true">
+			<classpath>
+				<fileset dir="${web-inf.lib}" />
+			</classpath>
+		</java>
+
+	</target>
+
+	<target name="schemaUpdater" depends="jar">
+
+		<java classname="org.efs.openreports.util.schema.SchemaUpdater" failonerror="true" fork="true">
+			<classpath>
+				<fileset dir="${web-inf.lib}" />
+			</classpath>
+		</java>
+
+	</target>
+
+	<target name="schemaGenerator" depends="jar">
+
+		<java classname="org.efs.openreports.util.schema.SchemaGenerator" failonerror="true" fork="true">
+			<classpath>
+				<fileset dir="${web-inf.lib}" />
+			</classpath>
+		</java>
+
+	</target>
+
+	<target name="createDistribution">
+
+		<delete failonerror="false" includeemptydirs="true">
+			<fileset dir="${distribution}" />
+		</delete>
+
+		<mkdir dir="${distribution}" />
+
+		<copy todir="${distribution}">
+			<fileset dir=".">
+				<filename name="**/**" />
+			</fileset>
+		</copy>
+
+	</target>
+	
+	<target name="javadoc" >
+			<delete dir="${docs}/api" />
+			<mkdir dir="${docs}/api" />
+			<javadoc destdir="${docs}/api" 
+		                 windowtitle="OpenReports (version ${version})"		               
+		                 use="yes"
+		                 linksource="yes"
+		                 splitindex="yes">
+				<classpath>
+					<fileset dir="${web-inf.lib}">
+						<include name="**/*.jar" />
+					</fileset>
+					<fileset dir="${lib}">
+						<include name="**/*.jar" />
+					</fileset>
+					<pathelement location="${build}"/>
+				</classpath>
+				<packageset dir="${src}" defaultexcludes="yes">
+					<include name="org/efs/openreports/services/**"/>		
+					<include name="org/efs/openreports/engine/**"/>	
+				</packageset>
+			</javadoc>
+		</target>
+
+</project>
