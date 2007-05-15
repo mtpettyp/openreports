@@ -25,7 +25,8 @@
   
   <display:table name="reportGroups" class="displayTag" sort="list" requestURI="listGroups.action" decorator="org.efs.openreports.util.HRefColumnDecorator"> 	      
     <display:column property="name" href="editGroup.action?command=edit" paramId="id" paramProperty="id" title="Name" sortable="true" headerClass="sortable"/>    	     	      	     
-    <display:column property="description" title="Description" sortable="true" headerClass="sortable"/>  	     	        	     	     
+    <display:column property="description" title="Description" sortable="true" headerClass="sortable"/>  	     	        	 
+    <display:column property="usersLink" title="" href="editGroupUsers.action" paramId="id" paramProperty="id"/>  	     	         	     
     <display:column property="removeLink" title="" href="deleteGroup.action" paramId="id" paramProperty="id"/>  	     	     
   </display:table>    
   <br>

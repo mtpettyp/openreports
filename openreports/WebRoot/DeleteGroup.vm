@@ -1,7 +1,5 @@
 #parse("Banner.vm") 
 
-#parse("Errors.vm")
-
 <a class="back-link img-report-small" href="listGroups.action">Back to Groups </a>
  
 <br/>
@@ -34,6 +32,9 @@
    
   </form>
   <br> 
+  
+  #parse("Errors.vm")
+  
 </div>
 
 

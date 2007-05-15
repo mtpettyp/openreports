@@ -1,0 +1,48 @@
+#parse("Banner.vm") 
+
+#parse("Errors.vm")
+
+<a class="back-link img-report-small" href="listGrous.action">Back to Groups </a>
+ 
+<br/><br/>
+
+<div align="center">   
+
+	<div class="important img-group" id="instructions" style="width: 70%;">Group Users: $!group.name</div></td>
+ 
+  <form action="editGroupUsers.action" style="width: 75%;">  
+  
+  <br>
+  
+  <table class="dialog">
+    #foreach ($user in $users)
+    <tr class="a">
+      <td class="boldText" width="90%" >$user.name</td>
+      <td width="10%">
+        <input type="checkbox" name="userIds" value="$user.id"
+          #foreach ($userForGroup in $usersForGroup)
+            #if ($user.id == $userForGroup.id)
+              CHECKED
+            #end
+          #end
+        >
+      </td>
+    </tr>
+    #end   
+    </table>
+    
+    <br>
+    
+   
+    <div class="button-bar" id="buttons">
+    	<input class="standardButton" type="submit" name="submitType" value="Ok">
+    </div>
+    
+    <input type="hidden" name="id" value="$!id">
+  
+  	</form>
+  	
+  <br/> 
+</div>
+
+#parse("Footer.vm") 

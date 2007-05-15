@@ -11,7 +11,7 @@
   <div id="settingsTabs" class="yui-navset" style="width: 800px;">
   <ul class="yui-nav">
     <li class="selected"><a href="settings"><em>General Settings</em></a></li>    
-    <li><a href="cleanup"><em>Image Cleanup</em></a></li>    
+    <li><a href="cleanup"><em>Temp File Cleanup</em></a></li>    
   </ul>            
   <div class="yui-content">
   
@@ -134,9 +134,9 @@
   <table class="dialog" >   
     <tr>
       <td colspan="3">
-      The image temporary directory is: 
+      The temporary directory is: 
       <br/><br/>
-      <strong>$imageTempDirectory</strong>
+      <strong>$tempDirectory</strong>
       <br/><br/>
       This directory contains <strong>$numberOfFiles</strong> files using <strong>$directorySize</strong> of space.
       </td>

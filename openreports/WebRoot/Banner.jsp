@@ -27,6 +27,8 @@
 
 <body>
 
+<s:if test="report == null || !report.isDisplayInline()">
+
 <div class="menu"> 
 
 	<div>
@@ -81,3 +83,5 @@
     </s:if>    
     
 </div> 
+
+</s:if>

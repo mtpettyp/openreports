@@ -25,8 +25,6 @@ function setNoTarget()
 
 #parse("Banner.vm") 	
 
-#parse("Errors.vm")
-
 <div align="center">
 
   <a class="back-link img-report-small" href="reportList.action">Back to Reports</a>
@@ -85,8 +83,14 @@ function setNoTarget()
       #end
       <script language="JavaScript" type="text/JavaScript">
         setDefaultExportType()
-	  </script>    
+	  </script>        
     </tr>
+    <tr>
+      <td class="boldText">Email/File Description <font color="red">*</font></td>
+      <td colspan="8">
+         <input type="text" name="description" size="50" >         
+      </td>
+    </tr>   
     <tr>
   </table>
   
@@ -99,9 +103,21 @@ function setNoTarget()
         #if ($user.scheduler)
   		  <input type="submit" onClick="setNoTarget()" class="standardButton" name="submitSchedule" value="Schedule">
 		#end          	
+        <input type="submit" onClick="setNoTarget()" class="standardButton" name="submitRunToEmail" value="Send to Email">    
+        <input type="submit" onClick="setNoTarget()" class="standardButton" name="submitRunToFile" value="Send to File">    
   </div>
        
   </form>   
+  
+  <br/>
+  
+  <div class="importantSmall">   
+      <font color="red">* Only applies when 'Send to Email' or 'Send to File' is clicked.</font>
+  </div>    
+  
+  <br/>
+  
+  #parse("Errors.vm")
   
 </div>
 

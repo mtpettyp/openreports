@@ -9,7 +9,7 @@
   function init() {
           
   YAHOO.or.login.dialog = new YAHOO.widget.Dialog("dialog", 
-                              { width : "475px",
+                              { width : "30em",
                                 fixedcenter : true,
                                 visible : true, 
                                 modal: true,

@@ -5,13 +5,17 @@
 
 <s:include value="Banner.jsp" />
 
+<s:if test="report == null || !report.isDisplayInline()">
+
 <a class="back-link img-report-small" href="reportList.action">Back to Reports</a>
 <a class="back-link img-group-small" href="reportGroup.action">Back to Groups</a>  	
   
-<s:actionerror/>
-  
 <br/>
 
+</s:if>
+
+<s:actionerror/>
+  
 <div align="center">
 	
   <div class="important img-queryreport" id="instructions"><s:property value="report.name"/></div>     
@@ -46,7 +50,11 @@
 
 </div>
 
+<s:if test="report == null || !report.isDisplayInline()">
+
 <s:include value="Footer.jsp" />
+
+</s:if>
 
 
 

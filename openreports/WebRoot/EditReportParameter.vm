@@ -79,7 +79,7 @@
       <td>
       	<img id="data" src="images/help.gif" title="#parse("tooltips/parameter-data.html")">				        
       </td>
-      <td><textarea rows="3" cols="45" name="data">$!data</textarea></td>
+      <td><textarea rows="5" cols="58" name="data">$!data</textarea></td>
     </tr>    
     <tr id="paramDataSourceId" class="a">
       <td  class="boldText"  width="20%">DataSource</td>

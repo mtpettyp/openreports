@@ -29,15 +29,15 @@
   <table class="dialog" >    
     <tr class="a">
       <td class="boldText" width="20%">Name</td>
-      <td><input type="text" size="60" name="name" value="$!name"></td>
+      <td colspan="2"><input type="text" size="60" name="name" value="$!name"></td>
     </tr>
     <tr class="b">
       <td class="boldText">Description</td>
-      <td><input type="text" size="60" name="description" value="$!description"></td>
+      <td colspan="2"><input type="text" size="60" name="description" value="$!description"></td>
     </tr>
     <tr>
       <td class="boldText">Tag as</td>
-      <td><input type="text" size="60" name="tags" value="$!tags"></td>
+      <td colspan="2"><input type="text" size="60" name="tags" value="$!tags"></td>
     </tr>
     <tr>
    	  <td valign="top" class="boldText">Reports</td>

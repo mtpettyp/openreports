@@ -69,12 +69,22 @@
 	</ul>        
 	
     <ul class="adminmenu">   
-    	<li>General Administration</li>       	
+    	<li>General Administration</li>    
+        #if ($user.schedulerAdmin)
+        <li class="img-schedule">
+          <a class="icon" href="schedulerAdmin.action">Scheduler</a>   
+        </li>     
+        #end      	
        	#if ($user.rootAdmin)
        	<li class="img-settings">
          	<a href="editProperties.action">Settings</a>
         </li>
         #end
+        #if ($user.logViewer)    
+        <li class="img-stats">     
+          <a class="icon" href="analyzeReportLogs.action">Statistics</a>
+        </li>
+        #end 
         #if ($user.logViewer)
         <li class="img-log">
          	<a href="viewReportLogs.action">View Logs</a>

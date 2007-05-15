@@ -6,8 +6,14 @@
 
 <s:include value="Banner.jsp" />
 
+<s:if test="report == null || !report.isDisplayInline()">
+
 <a class="back-link img-report-small" href="reportList.action">Back to Reports</a>
 <a class="back-link img-group-small" href="reportGroup.action">Back to Groups</a>   
+
+<br/>
+
+</s:if>
   
 <link rel="stylesheet" type="text/css" href="jpivot/table/mdxtable.css">
 <link rel="stylesheet" type="text/css" href="jpivot/navi/mdxnavi.css">
@@ -16,8 +22,6 @@
 <link rel="stylesheet" type="text/css" href="wcf/tree/xtree.css">
 
 <div align="center">
-
-<br/>
 
 <div class="important" style="width: 500px;">
   <s:property value="report.name"/>
@@ -127,3 +131,7 @@ Slicer:
 </form>
 
 </div>
+
+</body>
+
+</html>

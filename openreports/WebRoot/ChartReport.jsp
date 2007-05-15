@@ -3,11 +3,11 @@
 
 <s:include value="Banner.jsp" />
 
+<s:if test="report == null || !report.isDisplayInline()">
+
 <a class="back-link img-report-small" href="reportList.action">Back to Reports</a>
 <a class="back-link img-group-small" href="reportGroup.action">Back to Groups</a>  	
 <a class="back-link img-report-small"href="reportOptions.action?submitSchedule=true&exportType=4">Schedule Chart</a>  
-  
-<s:actionerror/>
   
 <br/>
 
@@ -17,11 +17,16 @@
  
 <div class="important img-chart" id="instructions"><s:property value="report.name"/></div>   
  
+</s:if>
+ 
 <s:property value="imageMap" escape="false"/>
 
 <img border="0" usemap="#chart" src="imageLoader.action?imageName=ChartImage&chartRequestId=<s:property value="chartRequestId"/>"/>	
 	
 <br/>	
+
+<s:actionerror/>
+
 <br/>
 
 <s:if test="report.reportChart.showValues">

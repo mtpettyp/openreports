@@ -107,6 +107,12 @@
         <textarea rows="2" cols="60" name="recipients">$!recipients</textarea>
       </td>
     </tr>      
+    <tr>
+      <td class="boldText">Options</td>         
+      <td colspan="6">     
+        <input type="checkbox" name="runToFile" value="true" #if ($!runToFile) CHECKED #end> Send to File 
+      </td>
+    </tr>  
   </table>
   
   #parse("Errors.vm")
