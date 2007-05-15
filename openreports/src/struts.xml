@@ -73,13 +73,13 @@
             </result>           
         </action> 
         
-        <!--action name="dashboard" class="org.efs.openreports.actions.DashboardAction">
-             <result name="input" type="velocity">
-                <param name="location">Dashboard.vm</param>
+        <action name="dashboard" class="org.efs.openreports.actions.DashboardAction">
+             <result name="input">
+                <param name="location">Dashboard.jsp</param>
             </result>  
             <interceptor-ref name="defaultStackWithSecurity"/>              
             <interceptor-ref name="dashboard"/>    
-        </action-->         
+        </action>         
         
         <action name="reportGroup" class="org.efs.openreports.actions.ReportGroupAction">
              <result name="input">
@@ -126,7 +126,10 @@
     		</result>     
     		<result name="reportSchedule" type="redirect"> 
     			<param name="location">reportSchedule.action</param> 
-    		</result>    		 
+    		</result>   
+    		<result name="generatedReports" type="redirect"> 
+    			<param name="location">listScheduledReports.action</param> 
+    		</result>  		 
         </action>
         
         <action name="reportSchedule" class="org.efs.openreports.actions.ReportScheduleAction">
@@ -162,6 +165,9 @@
     		<result name="jxlsReport" type="chain"> 
     			<param name="actionName">jxlsReport</param> 
     		</result> 		
+    		<result name="jpivot" type="redirect"> 
+    			<param name="location">jpivot.action</param> 
+    		</result>
 			<interceptor-ref name="defaultStack"/>     
         </action>
         
@@ -178,6 +184,9 @@
     		<result name="jxlsReport" type="chain"> 
     			<param name="actionName">jxlsReport</param> 
     		</result>    
+    		<result name="jpivot" type="redirect"> 
+    			<param name="location">jpivot.action</param> 
+    		</result>
         </action>				
 		
 		<action name="reportViewer" class="org.efs.openreports.actions.ReportViewerAction">                                                    						
@@ -235,16 +244,13 @@
     		</result>      		              
         </action>
         
-        <!--action name="userAdminAlerts" class="org.efs.openreports.actions.admin.EditUserAlertsAction">
-            <result name="input" type="velocity">
-                <param name="location">UserAdminAlerts.vm</param>
-            </result>
-            <result name="success" type="chain">             
+        <action name="userAdminAlerts" class="org.efs.openreports.actions.admin.EditUserAlertsAction">            
+            <result name="input" type="chain">             
     			<param name="actionName">userAdmin</param> 
     		</result>      		
     		<interceptor-ref name="defaultStackWithSecurity"/> 
             <interceptor-ref name="alertAdmin"/>                 
-        </action-->
+        </action>
         
         <action name="reportAdmin" class="org.efs.openreports.actions.admin.ReportAdminAction">
 	        <result name="success" type="velocity">
@@ -346,17 +352,25 @@
             <interceptor-ref name="rootAdmin"/>                       
         </action>
         
-        <!--action name="listAlerts" class="org.efs.openreports.actions.admin.ListAlertsAction">
-            <result name="success" type="velocity">
-                <param name="location">ListAlerts.vm</param>
+        <action name="listAlerts" class="org.efs.openreports.actions.admin.ListAlertsAction">
+            <result name="success">
+                <param name="location">ListAlerts.jsp</param>
             </result>  
             <interceptor-ref name="defaultStackWithSecurity"/>         
             <interceptor-ref name="alertAdmin"/>               
-        </action-->
+        </action>
         
         <action name="viewReportLogs" class="org.efs.openreports.actions.admin.ViewReportLogsAction">
             <result name="success" >
                 <param name="location">ViewReportLogs.jsp</param>
+            </result>   
+            <interceptor-ref name="defaultStackWithSecurity"/> 
+            <interceptor-ref name="logViewer"/>                     
+        </action>
+        
+        <action name="analyzeReportLogs" class="org.efs.openreports.actions.admin.AnalyzeReportLogsAction">
+            <result name="success">
+                <param name="location">AnalyzeReportLogs.jsp</param>
             </result>   
             <interceptor-ref name="defaultStackWithSecurity"/> 
             <interceptor-ref name="logViewer"/>                     
@@ -404,6 +418,17 @@
     		</result>    
     		<interceptor-ref name="defaultStackWithSecurity"/> 
             <interceptor-ref name="rootAdmin"/>               
+        </action>        
+         
+        <action name="editGroupUsers" class="org.efs.openreports.actions.admin.EditGroupUsersAction">
+            <result name="input" type="velocity">
+                <param name="location">EditGroupUsers.vm</param>
+            </result>  
+            <result name="success" type="redirect"> 
+    			<param name="location">listGroups.action</param> 
+    		</result>          
+    		<interceptor-ref name="defaultStackWithSecurity"/> 
+            <interceptor-ref name="groupAdmin"/>                
         </action>
         
         <action name="editReport" class="org.efs.openreports.actions.admin.EditReportAction">
@@ -436,7 +461,7 @@
             <interceptor-ref name="reportAdmin"/>                
         </action>
         
-        <!--action name="editUserAlerts" class="org.efs.openreports.actions.admin.EditUserAlertsAction">
+        <action name="editUserAlerts" class="org.efs.openreports.actions.admin.EditUserAlertsAction">
             <result name="input" type="velocity">
                 <param name="location">EditUserAlerts.vm</param>
             </result>
@@ -445,7 +470,7 @@
     		</result>  
     		<interceptor-ref name="defaultStackWithSecurity"/>     
     		<interceptor-ref name="alertAdmin"/>           
-        </action-->
+        </action>
         
         <action name="editExportOptions" class="org.efs.openreports.actions.admin.EditExportOptionsAction">
             <result name="input" type="velocity">
@@ -502,7 +527,7 @@
             <interceptor-ref name="chartAdmin"/>             
         </action>
         
-        <!--action name="editAlert" class="org.efs.openreports.actions.admin.EditAlertAction">
+        <action name="editAlert" class="org.efs.openreports.actions.admin.EditAlertAction">
             <result name="input" type="velocity">
                 <param name="location">EditAlert.vm</param>
             </result>
@@ -511,7 +536,7 @@
     		</result>     
     		<interceptor-ref name="defaultStackWithSecurity"/>    
 			<interceptor-ref name="alertAdmin"/>            
-        </action-->
+        </action>
         
         <action name="deleteDataSource" class="org.efs.openreports.actions.admin.DeleteDataSourceAction">
          	<result name="input" type="velocity">
@@ -579,7 +604,7 @@
             <interceptor-ref name="chartAdmin"/>                     
         </action> 
         
-        <!--action name="deleteAlert" class="org.efs.openreports.actions.admin.DeleteAlertAction">
+        <action name="deleteAlert" class="org.efs.openreports.actions.admin.DeleteAlertAction">
          	<result name="input" type="velocity">
                 <param name="location">DeleteAlert.vm</param>
             </result>
@@ -588,7 +613,15 @@
             </result>    
             <interceptor-ref name="defaultStackWithSecurity"/>    
             <interceptor-ref name="alertAdmin"/>                    
-        </action--> 
+        </action> 
+        
+        <action name="schedulerAdmin" class="org.efs.openreports.actions.admin.SchedulerAdminAction">
+            <result name="success">
+                <param name="location">SchedulerAdmin.jsp</param>
+            </result>   
+            <interceptor-ref name="defaultStackWithSecurity"/>                     
+            <interceptor-ref name="schedulerAdmin"/>  
+        </action>
         
         <action name="listScheduledReports" class="org.efs.openreports.actions.schedule.ListScheduledReportsAction">
             <result name="success">
@@ -608,6 +641,48 @@
             <interceptor-ref name="defaultStackWithSecurity"/>                     
             <interceptor-ref name="scheduler"/>                       
         </action>
+        
+        <action name="changeScheduleState" class="org.efs.openreports.actions.schedule.ChangeScheduleStateAction">
+         	<result name="input" type="velocity">
+                <param name="location">ChangeScheduleState.vm</param>
+            </result>
+            <result name="success" type="redirect">
+                <param name="location">schedulerAdmin.action</param>
+            </result>   
+            <interceptor-ref name="defaultStackWithSecurity"/>                     
+            <interceptor-ref name="schedulerAdmin"/>                       
+        </action>
+        
+        <action name="reportScheduleByUser" class="org.efs.openreports.actions.ReportScheduleAction">
+            <result name="input" type="velocity">
+                <param name="location">ReportSchedule.vm</param>
+            </result>     
+            <result name="success" type="redirect"> 
+    			<param name="location">schedulerAdmin.action</param> 
+    		</result>  
+    		<interceptor-ref name="defaultStackWithSecurity"/>
+            <interceptor-ref name="schedulerAdmin"/>                                
+        </action>
+        
+        <action name="deleteScheduledReportByUser" class="org.efs.openreports.actions.schedule.DeleteScheduledReportAction">
+         	<result name="input" type="velocity">
+                <param name="location">DeleteScheduledReport.vm</param>
+            </result>
+            <result name="success" type="redirect">
+                <param name="location">schedulerAdmin.action</param>
+            </result>   
+            <interceptor-ref name="defaultStackWithSecurity"/>                     
+            <interceptor-ref name="schedulerAdmin"/>                       
+        </action>      
+        
+        <action name="deleteGeneratedReport" class="org.efs.openreports.actions.admin.DeleteGeneratedReportAction">
+         	<result name="input" type="velocity">
+                <param name="location">DeleteGeneratedReport.vm</param>
+            </result>
+            <result name="success" type="redirect">
+                <param name="location">listScheduledReports.action</param>
+            </result>                                 
+        </action>     
         
     </package>  
 

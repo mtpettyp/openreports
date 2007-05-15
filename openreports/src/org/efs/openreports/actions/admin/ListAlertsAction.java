@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2003 Erik Swenson - erik@oreports.com
+ * Copyright (C) 2006 Erik Swenson - erik@oreports.com
  * 
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -19,46 +19,44 @@
 
 package org.efs.openreports.actions.admin;
 
-import org.efs.openreports.objects.ReportGroup;
-import org.efs.openreports.providers.GroupProvider;
+import java.util.List;
 
-public class DeleteGroupAction extends DeleteAction 
+import com.opensymphony.xwork2.ActionSupport;
+
+import org.efs.openreports.providers.AlertProvider;
+import org.efs.openreports.providers.ProviderException;
+
+public class ListAlertsAction extends ActionSupport  
 {	
-	private static final long serialVersionUID = -461133184936430808L;
-	
-	private GroupProvider groupProvider;
+    private static final long serialVersionUID = 6825530119216289580L;
+
+    private List reportAlerts;
+
+	private AlertProvider alertProvider;
+
+	public List getReportAlerts()
+	{		
+		return reportAlerts;		
+	}
 
 	public String execute()
-	{	
+	{
 		try
-		{
-			ReportGroup reportGroup =
-				groupProvider.getReportGroup(new Integer(id));
-			
-			name = reportGroup.getName();
-			description = reportGroup.getDescription();
-			
-			if (!submitDelete && !submitCancel)
-			{
-				return INPUT;
-			}
-			
-			if (submitDelete)
-			{
-				groupProvider.deleteReportGroup(reportGroup);
-			}
+		{			
+			reportAlerts = alertProvider.getReportAlerts();
 		}
-		catch (Exception e)
+		catch(ProviderException pe)
 		{
-			addActionError(getText(e.getMessage()));
-			return INPUT;
-		}
+			addActionError(pe.getMessage());
+			return ERROR;	
+		}	
 
 		return SUCCESS;
 	}	
 
-	public void setGroupProvider(GroupProvider groupProvider)
+	public void setAlertProvider(AlertProvider alertProvider)
 	{
-		this.groupProvider = groupProvider;
-	}	
+		this.alertProvider = alertProvider;
+	}
+
 }

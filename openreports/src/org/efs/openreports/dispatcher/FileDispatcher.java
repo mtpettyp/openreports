@@ -67,7 +67,7 @@ public class FileDispatcher extends HttpServlet
 		directoryProvider = (DirectoryProvider) appContext.getBean("directoryProvider", DirectoryProvider.class);
 				
 		imageDirectory = directoryProvider.getReportImageDirectory();
-		imageTempDirectory = directoryProvider.getReportImageTempDirectory();
+		imageTempDirectory = directoryProvider.getTempDirectory();
 		reportGenerationDirectory = directoryProvider.getReportGenerationDirectory();
 
 		super.init(servletConfig);

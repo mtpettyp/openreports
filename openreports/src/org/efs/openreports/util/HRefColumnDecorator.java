@@ -41,5 +41,10 @@ public class HRefColumnDecorator extends TableDecorator
 	public Object getAddToGroupLink()
 	{
 		return "Groups";
+	}
+	
+	public Object getUsersLink()
+	{
+		return "Users";
 	}	
 }

@@ -22,6 +22,7 @@ package org.efs.openreports.providers.persistence;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.efs.openreports.objects.ReportGroup;
 import org.efs.openreports.objects.ReportUser;
 import org.efs.openreports.providers.HibernateProvider;
 import org.efs.openreports.providers.ProviderException;
@@ -126,6 +127,37 @@ public class UserPersistenceProvider
 		finally
 		{
 			HibernateProvider.closeSession(session);
+		}
+	}
+	
+	public List getUsersForGroup(ReportGroup reportGroup) throws ProviderException
+	{
+		try
+		{
+			Session session = HibernateProvider.openSession();			
+			
+			try
+			{			
+				List list = session.createQuery(
+						"from org.efs.openreports.objects.ReportUser as reportUser "
+								+ "where ? in elements(reportUser.groups)").setEntity(0, reportGroup).list();					
+
+				if (list.size() == 0) return null;						
+
+				return list;
+			}
+			catch (HibernateException he)
+			{			
+				throw he;
+			}
+			finally
+			{
+				session.close();
+			}
+		}
+		catch (HibernateException he)
+		{
+			throw new ProviderException(he);
 		}
 	}
 }

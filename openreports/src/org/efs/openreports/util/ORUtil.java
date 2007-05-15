@@ -19,6 +19,7 @@
 
 package org.efs.openreports.util;
 
+import com.opensymphony.xwork2.ActionContext;
 import java.util.*;
 
 import org.efs.openreports.ORException;
@@ -129,7 +130,10 @@ public class ORUtil
 			int endIndex = text.indexOf("}", beginIndex);
 
 			String key = text.substring(beginIndex + 3, endIndex);
-			String value = parameters.get(key).toString();
+			String value = key;
+			
+			if (parameters.get(key) != null)
+			value = parameters.get(key).toString();
 
 			text = text.substring(0, beginIndex) + value
 					+ text.substring(endIndex + 1, text.length());
@@ -137,5 +141,21 @@ public class ORUtil
 
 		return text;
 	}
+    
+    /*
+     * All JPivot objects must be removed from session each time a new JPivot report is run.
+     */
+    public static void resetOlapContext(ActionContext context)
+    {
+        Iterator i = context.getSession().keySet().iterator();
+        while(i.hasNext())
+        {
+            String key = (String) i.next();
+            if (key.indexOf("tonbeller") > -1 || key.indexOf("01") > -1)
+            {                    
+                context.getSession().remove(key);               
+            }
+        }
+    }
 
 }

@@ -620,7 +620,7 @@ public class ParameterProviderImpl implements ParameterProvider
 		}
 
 		return parameters;
-	}
+	}	
 
 	public ReportParameter getReportParameter(Integer id)
 		throws ProviderException

@@ -94,7 +94,7 @@ public class BirtReportEngine extends ReportEngine
 		options.setOutputStream(out);
 			   
 		HTMLRenderContext renderContext = new HTMLRenderContext();		
-		renderContext.setImageDirectory(directoryProvider.getReportImageTempDirectory());
+		renderContext.setImageDirectory(directoryProvider.getTempDirectory());
 		renderContext.setBaseImageURL("report-images");		
 		 
 		HashMap<String,Object> contextMap = new HashMap<String,Object>();

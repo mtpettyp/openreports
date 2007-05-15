@@ -19,7 +19,10 @@
 
 package org.efs.openreports.util;
 
+import com.thoughtworks.xstream.XStream;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -39,6 +42,7 @@ import org.efs.openreports.engine.input.ReportEngineInput;
 import org.efs.openreports.engine.output.ChartEngineOutput;
 import org.efs.openreports.engine.output.JasperReportEngineOutput;
 import org.efs.openreports.engine.output.ReportEngineOutput;
+import org.efs.openreports.objects.GeneratedReport;
 import org.efs.openreports.objects.MailMessage;
 import org.efs.openreports.objects.Report;
 import org.efs.openreports.objects.ReportLog;
@@ -110,6 +114,7 @@ public class ScheduledReportJob	implements Job
 		log.debug("User: " + user.getName());		
 
 		JRVirtualizer virtualizer = null;
+        FileOutputStream file = null;
 		
 		ReportLog reportLog = new ReportLog(user, report, new Date());
 
@@ -185,36 +190,80 @@ public class ScheduledReportJob	implements Job
 			}
 			
 			ReportEngineOutput reportOutput = reportEngine.generateReport(reportInput);
-			
-			ArrayList<ByteArrayDataSource> htmlImageDataSources = new ArrayList<ByteArrayDataSource>();
- 			ByteArrayDataSource byteArrayDataSource = exportReport(reportOutput, reportSchedule, htmlImageDataSources);
+            
+            Boolean generateFile = (Boolean) reportParameters.get(ORStatics.GENERATE_FILE);
+            if (generateFile != null && generateFile.booleanValue() == true)
+            {
+                Date runDate = new Date();
+                
+                String fileName = runDate.getTime() + "-"
+                        + StringUtils.deleteWhitespace(user.getName()) + "-"
+                        + StringUtils.deleteWhitespace(report.getName());                       
+                
+                file = new FileOutputStream(directoryProvider
+                        .getReportGenerationDirectory()
+                        + fileName + reportOutput.getContentExtension());
+                
+                file.write(reportOutput.getContent());  
+                file.flush();
+                file.close();
+                
+                GeneratedReport info = new GeneratedReport();             
+                info.setParameters(reportParameters);
+                info.setReportDescription(reportSchedule.getScheduleDescription());
+                info.setReportName(report.getName());
+                info.setReportFileName(fileName + reportOutput.getContentExtension());
+                info.setRunDate(runDate);
+                info.setUserName(user.getName());
+                
+                file = new FileOutputStream(directoryProvider.getReportGenerationDirectory() + fileName + ".xml");
 
-			MailMessage mail = new MailMessage();				
-			mail.setByteArrayDataSource(byteArrayDataSource);
-			mail.addHtmlImageDataSources(htmlImageDataSources);			 
-			mail.setSender(user.getEmail());
-			mail.parseRecipients(reportSchedule.getRecipients());
-			
-			if (reportSchedule.getScheduleDescription() != null && reportSchedule.getScheduleDescription().trim().length() > 0)
-			{
-				mail.setSubject(reportSchedule.getScheduleDescription());
-			}
-			else
-			{
-				mail.setSubject(report.getName());
-			}
-			
-			if (reportSchedule.getExportType() != ReportEngine.EXPORT_HTML)
-			{
-				mail.setText(report.getName() + ": Generated on " + new Date());
-			}
-
-			mailProvider.sendMail(mail);
-
-			log.debug(
-				byteArrayDataSource.getName()
-					+ " sent to: "
-					+ mail.formatRecipients(";"));
+                XStream xStream = new XStream();
+                xStream.alias("reportGenerationInfo", GeneratedReport.class);
+                xStream.toXML(info, file);
+                
+                file.flush();
+                file.close();           
+                
+                MailMessage mail = new MailMessage();               
+                mail.setSender(user.getEmail());
+                mail.parseRecipients(reportSchedule.getRecipients());
+                mail.setText(report.getName() + ": Generated on " + new Date());
+                mail.setSubject(reportSchedule.getScheduleDescription());
+                
+                mailProvider.sendMail(mail);
+                
+                log.debug(report.getName() + " written to: " + fileName);
+            }
+            else
+            {			
+    			ArrayList<ByteArrayDataSource> htmlImageDataSources = new ArrayList<ByteArrayDataSource>();
+     			ByteArrayDataSource byteArrayDataSource = exportReport(reportOutput, reportSchedule, htmlImageDataSources);
+    
+    			MailMessage mail = new MailMessage();				
+    			mail.setByteArrayDataSource(byteArrayDataSource);
+    			mail.addHtmlImageDataSources(htmlImageDataSources);			 
+    			mail.setSender(user.getEmail());
+    			mail.parseRecipients(reportSchedule.getRecipients());
+    			
+    			if (reportSchedule.getScheduleDescription() != null && reportSchedule.getScheduleDescription().trim().length() > 0)
+    			{
+    				mail.setSubject(reportSchedule.getScheduleDescription());
+    			}
+    			else
+    			{
+    				mail.setSubject(report.getName());
+    			}
+    			
+    			if (reportSchedule.getExportType() != ReportEngine.EXPORT_HTML)
+    			{
+    				mail.setText(report.getName() + ": Generated on " + new Date());
+    			}
+    
+    			mailProvider.sendMail(mail);
+                
+                log.debug(byteArrayDataSource.getName() + " sent to: " + mail.formatRecipients(";"));
+            }		
 
 			reportLog.setEndTime(new Date());
 			reportLog.setStatus(ReportLog.STATUS_SUCCESS);
@@ -255,6 +304,19 @@ public class ScheduledReportJob	implements Job
 				reportParameters.remove(JRParameter.REPORT_VIRTUALIZER);			
 				virtualizer.cleanup();
 			}
+            
+            if (file != null)
+            {
+                try
+                {
+                    file.flush();
+                    file.close();
+                }
+                catch(IOException ioe)
+                {
+                    ioe.printStackTrace();
+                }
+            }
 		}		
 	}
 

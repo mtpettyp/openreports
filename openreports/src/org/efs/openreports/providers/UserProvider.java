@@ -21,6 +21,7 @@ package org.efs.openreports.providers;
 
 import java.util.List;
 
+import org.efs.openreports.objects.ReportGroup;
 import org.efs.openreports.objects.ReportUser;
 
 public interface UserProvider
@@ -32,4 +33,5 @@ public interface UserProvider
 		throws ProviderException;
 	public void updateUser(ReportUser user) throws ProviderException;
 	public void deleteUser(ReportUser user) throws ProviderException;
+	public List getUsersForGroup(ReportGroup reportGroup) throws ProviderException;
 }

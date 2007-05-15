@@ -22,6 +22,7 @@ package org.efs.openreports.providers.impl;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.efs.openreports.objects.ReportGroup;
 import org.efs.openreports.objects.ReportUser;
 import org.efs.openreports.providers.ProviderException;
 import org.efs.openreports.providers.UserProvider;
@@ -70,4 +71,9 @@ public class UserProviderImpl implements UserProvider
 	{
 		userPersistenceProvider.deleteUser(user);
 	}	
+	
+	public List getUsersForGroup(ReportGroup reportGroup) throws ProviderException
+	{
+		return userPersistenceProvider.getUsersForGroup(reportGroup);
+	}
 }

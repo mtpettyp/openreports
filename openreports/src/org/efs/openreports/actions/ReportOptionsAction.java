@@ -23,7 +23,6 @@ import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 
 import java.util.Date;
-import java.util.Iterator;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
@@ -31,9 +30,11 @@ import org.apache.struts2.interceptor.SessionAware;
 import org.efs.openreports.ORStatics;
 import org.efs.openreports.objects.Report;
 import org.efs.openreports.objects.ReportLog;
+import org.efs.openreports.objects.ReportSchedule;
 import org.efs.openreports.objects.ReportUser;
 import org.efs.openreports.providers.*;
 import org.efs.openreports.util.LocalStrings;
+import org.efs.openreports.util.ORUtil;
 
 public class ReportOptionsAction extends ActionSupport implements SessionAware			
 {	
@@ -44,8 +45,11 @@ public class ReportOptionsAction extends ActionSupport implements SessionAware
 	private Map<Object, Object> session;
 	
 	private String exportType;
+    private String description;
 	private boolean submitRun;
 	private boolean submitSchedule;
+    private boolean submitRunToEmail;
+    private boolean submitRunToFile;
 	private Report report;
 	
 	private SchedulerProvider schedulerProvider;
@@ -82,7 +86,7 @@ public class ReportOptionsAction extends ActionSupport implements SessionAware
 		}	
         else if (report.isJPivotReport() && !submitSchedule)
         {  
-        	resetOlapContext(ActionContext.getContext());  
+        	ORUtil.resetOlapContext(ActionContext.getContext());  
         	   
         	try
         	{
@@ -112,27 +116,55 @@ public class ReportOptionsAction extends ActionSupport implements SessionAware
 			if (submitRun)return SUCCESS;	
 			if (submitSchedule)	return ORStatics.SCHEDULE_REPORT_ACTION;			
 		}
+        
+        if (submitRunToEmail || submitRunToFile)
+        {
+            Map<String,Object> reportParameters = getReportParameterMap();
+            
+            if (submitRunToFile)
+            {
+                reportParameters.put(ORStatics.GENERATE_FILE, Boolean.TRUE);
+            }
+            
+            ReportSchedule schedule = new ReportSchedule();
+            schedule.setReport(report);
+            schedule.setUser(user);
+            schedule.setReportParameters(reportParameters);
+            schedule.setExportType(Integer.parseInt(exportType));
+            schedule.setRecipients(user.getEmail());
+            schedule.setScheduleName(report.getId() + "|" + new Date().getTime());
+            schedule.setScheduleDescription(description);               
+            schedule.setScheduleType(ReportSchedule.ONCE);
+            
+            try
+            {
+                schedulerProvider.scheduleReport(schedule);
+                
+                if (submitRunToFile)
+                {
+                    return ORStatics.GENERATED_REPORTS_ACTION;
+                }
+                else
+                {
+                    addActionError(report.getName() + " sent to " + user.getEmail());
+                }
+            }
+            catch(ProviderException pe)
+            {
+                addActionError(report.getName() + " failed: " + pe.toString());
+            }           
+        }
 
 		return INPUT;
-	}
-    	
-    /*
-     * All JPivot objects must be removed from session each time a new JPivot report is run.
-     */
-    protected void resetOlapContext(ActionContext context)
-    {
-        Iterator i = context.getSession().keySet().iterator();
-        while(i.hasNext())
-        {
-            String key = (String) i.next();
-            if (key.indexOf("tonbeller") > -1 || key.indexOf("01") > -1)
-            {                    
-                context.getSession().remove(key);
-                log.debug(key + " removed from session");
-            }
-        }
-    }
+	}    	    
 
+    @SuppressWarnings("unchecked")
+    protected Map<String,Object> getReportParameterMap()
+    {
+        Map<String,Object> reportParameters = (Map) session.get(ORStatics.REPORT_PARAMETERS);
+        return reportParameters;
+    }
+    
     @SuppressWarnings("unchecked")
 	public void setSession(Map session) 
 	{
@@ -184,4 +216,24 @@ public class ReportOptionsAction extends ActionSupport implements SessionAware
 	{
 		if (submitSchedule != null) this.submitSchedule = true;
 	}	
+    
+    public void setSubmitRunToEmail(String submitRunToEmail)
+    {
+        if (submitRunToEmail != null) this.submitRunToEmail = true;
+    }
+    
+    public void setSubmitRunToFile(String submitRunToFile)
+    {
+        if (submitRunToFile != null) this.submitRunToFile = true;
+    }
+
+    public String getDescription()
+    {
+        return description;
+    }
+
+    public void setDescription(String description)
+    {
+        this.description = description;
+    }
 }

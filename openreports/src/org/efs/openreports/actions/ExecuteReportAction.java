@@ -24,18 +24,22 @@ import java.util.*;
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 
+import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.ParameterAware;
 import org.apache.struts2.interceptor.SessionAware;
 import org.efs.openreports.ORStatics;
 import org.efs.openreports.objects.*;
 import org.efs.openreports.providers.*;
 import org.efs.openreports.util.LocalStrings;
+import org.efs.openreports.util.ORUtil;
 import org.hibernate.HibernateException;
 
 public class ExecuteReportAction extends ActionSupport implements SessionAware, ParameterAware
 {	
 	private static final long serialVersionUID = 8329253153675628544L;
 	
+    protected static Logger log = Logger.getLogger(ReportOptionsAction.class);
+    
 	private Map<Object,Object> session;
 	private Map<Object,Object> parameters;
 	
@@ -50,6 +54,7 @@ public class ExecuteReportAction extends ActionSupport implements SessionAware, 
 	private ParameterProvider parameterProvider;
 	private ReportProvider reportProvider;
 	private UserProvider userProvider;
+    private ReportLogProvider reportLogProvider;
 
 	public String execute()
 	{
@@ -140,6 +145,23 @@ public class ExecuteReportAction extends ActionSupport implements SessionAware, 
 			if (report.isQueryReport()) return ORStatics.QUERY_REPORT_ACTION;
 			if (report.isChartReport()) return ORStatics.CHART_REPORT_ACTION;
 			if (report.isJXLSReport()) return ORStatics.JXLSREPORT_ACTION;
+            
+            if (report.isJPivotReport())
+            {
+                ORUtil.resetOlapContext(ActionContext.getContext());
+
+                try 
+                {
+                    ReportLog reportLog = new ReportLog(user, report, new Date());
+                    reportLogProvider.insertReportLog(reportLog);
+                } 
+                catch (ProviderException pe) 
+                {
+                    log.warn(pe);
+                }
+
+                return ORStatics.JPIVOT_ACTION;
+            }   
 						
 			return SUCCESS;
 		}
@@ -252,4 +274,9 @@ public class ExecuteReportAction extends ActionSupport implements SessionAware, 
 	{
 		this.promptForParameters = promptForParameters;
 	}
+    
+    public void setReportLogProvider(ReportLogProvider reportLogProvider) 
+    {
+        this.reportLogProvider = reportLogProvider;
+    }
 }

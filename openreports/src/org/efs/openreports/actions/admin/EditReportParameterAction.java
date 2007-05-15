@@ -153,7 +153,7 @@ public class EditReportParameterAction extends ActionSupport
 		}
 		catch (Exception e)
 		{
-			addActionError(e.getMessage());
+			addActionError(getText(e.getMessage()));
 			return INPUT;
 		}
 	}

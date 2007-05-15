@@ -50,7 +50,6 @@ public class EditPropertiesAction extends ActionSupport
 	
 	private int numberOfFiles;
 	private String directorySize;
-	private String imageTempDirectory;
     
     private String xmlaUri;
     private String xmlaDataSource;
@@ -97,13 +96,12 @@ public class EditPropertiesAction extends ActionSupport
                 if (property != null) xmlaUri = property.getValue();    
 				
 				//
-				File imageTempDirFile = new File(directoryProvider.getReportImageTempDirectory());
-				imageTempDirectory = imageTempDirFile.getPath();
-				
-				long size = FileUtils.sizeOfDirectory(imageTempDirFile);			
+				File tempDirFile = new File(directoryProvider.getTempDirectory());
+								
+				long size = FileUtils.sizeOfDirectory(tempDirFile);			
 				directorySize = FileUtils.byteCountToDisplaySize(size);	
 				
-				numberOfFiles = imageTempDirFile.listFiles().length;				
+				numberOfFiles = tempDirFile.listFiles().length;				
 				//
 				
 				return INPUT;
@@ -276,11 +274,6 @@ public class EditPropertiesAction extends ActionSupport
 	public int getNumberOfFiles()
 	{
 		return numberOfFiles;
-	}
-
-	public String getImageTempDirectory()
-	{
-		return imageTempDirectory;
 	}
 
 	public String getReportGenerationDirectory()

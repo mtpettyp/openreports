@@ -75,7 +75,7 @@ public class ChartReportAction extends QueryReportAction
 			chartValues = chartOutput.getChartValues();
 			if (chartValues.length == 0)
 			{
-				addActionError(LocalStrings.ERROR_REPORT_EMPTY);
+				addActionError(getText(LocalStrings.ERROR_REPORT_EMPTY));
 			}
 			
 			imageMap = ImageMapUtilities.getImageMap("chart", chartOutput.getChartRenderingInfo());						

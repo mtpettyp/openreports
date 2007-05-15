@@ -46,7 +46,7 @@ public class ReportUser implements Serializable
 	
 	private Set<String> roles;
 	private List<ReportGroup> groups;
-	private List<ReportAlert> alerts;
+	private List<ReportUserAlert> alerts;
 	private Report defaultReport;
 	
 	//TODO remove pdfExportType, update DB schema
@@ -56,7 +56,7 @@ public class ReportUser implements Serializable
 	{
 		roles = new TreeSet<String>();
 		groups = new ArrayList<ReportGroup>();
-		alerts = new ArrayList<ReportAlert>();
+		alerts = new ArrayList<ReportUserAlert>();
 	}
 
 	public void setId(Integer id)
@@ -171,13 +171,13 @@ public class ReportUser implements Serializable
 		this.pdfExportType = pdfExportType;
 	}
 
-	public List getAlerts()
+	public List<ReportUserAlert> getAlerts()
 	{
 		if (alerts != null) Collections.sort(alerts);
 		return alerts;
 	}
 
-	public void setAlerts(List<ReportAlert> alerts)
+	public void setAlerts(List<ReportUserAlert> alerts)
 	{
 		this.alerts = alerts;
 	}

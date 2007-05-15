@@ -137,7 +137,7 @@ public class SchedulerProviderImpl implements SchedulerProvider
 		}		
 	}
 
-	public List getScheduledReports(ReportUser reportUser) throws ProviderException
+	public List<ReportSchedule> getScheduledReports(ReportUser reportUser) throws ProviderException
 	{
         
 		List<ReportSchedule> scheduledReports = new ArrayList<ReportSchedule>();

@@ -21,7 +21,7 @@ package org.efs.openreports.objects;
 
 import java.io.Serializable;
 
-public class ReportUserAlert implements Comparable, Serializable
+public class ReportUserAlert implements Comparable<ReportUserAlert>, Serializable
 {		
 	private static final long serialVersionUID = 6833718935442336961L;
 	
@@ -79,10 +79,9 @@ public class ReportUserAlert implements Comparable, Serializable
 		this.user = user;
 	}
 
-	public int compareTo(Object object)
-	{
-		ReportUserAlert map = (ReportUserAlert) object;		
-		return alert.getName().compareTo(map.getAlert().getName());
+	public int compareTo(ReportUserAlert reportUserAlert)
+	{			
+		return alert.getName().compareTo(reportUserAlert.getAlert().getName());
 	}
 
 	public int getCount()

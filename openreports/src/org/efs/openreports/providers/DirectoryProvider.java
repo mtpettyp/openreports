@@ -66,17 +66,20 @@ public class DirectoryProvider
 				baseDirectory = ".";
 			}
 		}
-
-		log.info("BaseDirectory: " + baseDirectory);
+				
+		reportDirectory = baseDirectory;
+		if (!reportDirectory.endsWith(separator)) reportDirectory +=separator;		
+		log.info("Report Directory: " + reportDirectory);
+			
+		reportImageDirectory = reportDirectory + "images" + separator;		
+		log.info("Report Image Directory: " + reportImageDirectory);
 		
-		reportDirectory = baseDirectory + separator;
-		reportImageDirectory = reportDirectory + "images" + separator;			
-		
-		//set temp directory path for report virtualization
+		//set temp directory path for report virtualization and image generation
 		property = propertiesProvider.getProperty(ORProperty.TEMP_DIRECTORY);		
 		if (property != null && property.getValue() != null && property.getValue().trim().length() > 0)
 		{
 			tempDirectory = property.getValue(); 
+			if (!tempDirectory.endsWith(separator)) tempDirectory +=separator;			
 			log.info("TempDirectory: " + tempDirectory);
 		}
 		
@@ -84,7 +87,8 @@ public class DirectoryProvider
 		property = propertiesProvider.getProperty(ORProperty.REPORT_GENERATION_DIRECTORY);		
 		if (property != null && property.getValue() != null && property.getValue().trim().length() > 0)
 		{
-			reportGenerationDirectory = property.getValue(); 
+			reportGenerationDirectory = property.getValue();
+			if (!reportGenerationDirectory.endsWith(separator)) reportGenerationDirectory +=separator;			
 			log.info("ReportGenerationDirectory: " + reportGenerationDirectory);
 		}		
 		
@@ -99,17 +103,14 @@ public class DirectoryProvider
 	public void setReportDirectory(String reportDirectory)
 	{
 		this.reportDirectory = reportDirectory;
+		if (!reportDirectory.endsWith(separator)) reportDirectory +=separator;
+		
 		reportImageDirectory = reportDirectory + "images" + separator;	
 	}
 	
 	public String getReportImageDirectory()
 	{
 		return reportImageDirectory;
-	}
-	
-	public String getReportImageTempDirectory()
-	{
-		return reportImageDirectory + "temp" + separator;
 	}
 	
 	public String getTempDirectory()
@@ -120,16 +121,18 @@ public class DirectoryProvider
 	public void setTempDirectory(String tempDirectory)
 	{
 		this.tempDirectory = tempDirectory;
+		if (!tempDirectory.endsWith(separator)) tempDirectory +=separator;		
 	}
 
 	public String getReportGenerationDirectory()
 	{
-		return reportGenerationDirectory + separator;
+		return reportGenerationDirectory;
 	}
 
 	public void setReportGenerationDirectory(String reportGenerationDirectory)
 	{
 		this.reportGenerationDirectory = reportGenerationDirectory;
+		if (!reportGenerationDirectory.endsWith(separator)) reportGenerationDirectory +=separator;
 	}
 
 	public void setPropertiesProvider(PropertiesProvider propertiesProvider)

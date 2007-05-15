@@ -129,7 +129,8 @@ public class ChartReportEngine extends ReportEngine
 		ReportChart chart = input.getReport().getReportChart();
 		chart.setDescription(ORUtil.parseStringWithParameters(chart.getDescription(), input.getParameters()));
 		
-		ChartValue[] values = getChartValues(chart, input.getParameters());		
+		ChartValue[] values = getChartValues(chart, input.getParameters());				
+		if (values == null || values.length < 1) throw new ProviderException(LocalStrings.ERROR_REPORT_EMPTY);
 	        
 		return createChartOutput(chart, values, input.getReport().isDisplayInline());
 	}	
@@ -710,7 +711,7 @@ public class ChartReportEngine extends ReportEngine
 			series.add(value.getValue(), value.getYValue());
 		}
 
-		seriesCollection.addSeries(series);
+		if (series != null) seriesCollection.addSeries(series);
 
 		return seriesCollection;
 	}	

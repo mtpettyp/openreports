@@ -31,7 +31,7 @@ public interface SchedulerProvider
 	public ReportSchedule getScheduledReport(ReportUser reportUser, String name)
 			throws ProviderException;
 
-	public List getScheduledReports(ReportUser reportUser) throws ProviderException;
+	public List<ReportSchedule> getScheduledReports(ReportUser reportUser) throws ProviderException;
 
 	public void deleteScheduledReport(ReportUser reportUser, String name)
 			throws ProviderException;

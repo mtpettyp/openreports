@@ -19,24 +19,28 @@
 
 package org.efs.openreports.util;
 
+import com.opensymphony.xwork2.TextProvider;
+import com.opensymphony.xwork2.TextProviderFactory;
 import org.displaytag.decorator.TableDecorator;
 import org.efs.openreports.objects.ReportUserAlert;
 
-public class AlertTableDecorator extends TableDecorator
-{		
-	  public String addRowClass()
-      {
-		  ReportUserAlert userAlert = (ReportUserAlert) getCurrentRowObject();
-		  
-		  if (userAlert.isTriggered()) return "triggered";
-		  return "nottriggered";         
-      }    
-	  
-	  public Object getStatus()
-	  {
-		  ReportUserAlert userAlert = (ReportUserAlert) getCurrentRowObject();
-		  
-		  if (userAlert.isTriggered()) return LocalStrings.ALERT_PASSED;
-		  return LocalStrings.ALERT_FAILED;
-	  }	
+public class AlertTableDecorator extends TableDecorator {
+
+    private final transient TextProvider textProvider = TextProviderFactory.getInstance();
+
+    public String addRowClass() 
+    {
+        ReportUserAlert userAlert = (ReportUserAlert)getCurrentRowObject();
+
+        if (userAlert.isTriggered()) return "triggered";
+        return "nottriggered";
+    }
+
+    public Object getStatus()
+    {
+        ReportUserAlert userAlert = (ReportUserAlert)getCurrentRowObject();
+
+        if (userAlert.isTriggered()) return textProvider.getText(LocalStrings.ALERT_PASSED);
+        return textProvider.getText(LocalStrings.ALERT_FAILED);
+    }
 }

@@ -62,6 +62,8 @@ public class ReportScheduleAction extends ActionSupport
 	private int alertLimit;
 	private String alertOperator;
 
+    private boolean runToFile;
+    
 	private SchedulerProvider schedulerProvider;
 	private DateProvider dateProvider;
 	private AlertProvider alertProvider;
@@ -126,7 +128,10 @@ public class ReportScheduleAction extends ActionSupport
 						alertId = userAlert.getAlert().getId().intValue();
 						alertLimit = userAlert.getLimit();
 						alertOperator = userAlert.getOperator();
-					}		
+					}	
+                    
+                    Boolean param = (Boolean) reportSchedule.getReportParameters().get(ORStatics.GENERATE_FILE);
+                    if (param != null) runToFile = param.booleanValue();
 				}
 				catch (Exception e)
 				{
@@ -214,6 +219,11 @@ public class ReportScheduleAction extends ActionSupport
 			{
 				reportSchedule.setAlert(null);
 			}
+            
+            Map<String,Object> reportParameters = reportSchedule.getReportParameters();
+            reportParameters.put(ORStatics.GENERATE_FILE, Boolean.valueOf(runToFile));
+                
+            reportSchedule.setReportParameters(reportParameters);       
 
 			if (scheduleName != null && scheduleName.length() > 0)
 			{
@@ -438,4 +448,14 @@ public class ReportScheduleAction extends ActionSupport
 	{
 		this.hours = hours;
 	}	
+    
+    public boolean isRunToFile()
+    {
+        return runToFile;
+    }
+
+    public void setRunToFile(boolean runToFile)
+    {
+        this.runToFile = runToFile;
+    }   
 }

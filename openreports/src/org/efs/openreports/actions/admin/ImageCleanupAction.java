@@ -39,7 +39,7 @@ public class ImageCleanupAction extends ActionSupport
 		
 	public String execute()
 	{
-		File imageTempDirectory = new File(directoryProvider.getReportImageTempDirectory());
+		File imageTempDirectory = new File(directoryProvider.getTempDirectory());
 		
 		try
 		{
