@@ -30,7 +30,7 @@ public interface AlertProvider
 		
 	public ReportAlert getReportAlert(Integer id) throws ProviderException;
 
-	public List getReportAlerts() throws ProviderException;
+	public List<ReportAlert> getReportAlerts() throws ProviderException;
 	
 	public ReportAlert insertReportAlert(ReportAlert reportAlert)
 			throws ProviderException;

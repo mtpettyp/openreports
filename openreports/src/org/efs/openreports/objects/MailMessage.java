@@ -30,6 +30,7 @@ public class MailMessage implements Serializable
 	private String sender;
 	private String subject;
 	private String text;
+    private String bounceAddress;
 
 	private ArrayList<String> recipients = new ArrayList<String>();
 	private ArrayList<String> attachments = new ArrayList<String>();
@@ -130,7 +131,7 @@ public class MailMessage implements Serializable
 		}
 	}
 
-	public ArrayList getHtmlImageDataSources()
+	public ArrayList<ByteArrayDataSource> getHtmlImageDataSources()
 	{
 		return htmlImageDataSources;
 	}
@@ -139,5 +140,15 @@ public class MailMessage implements Serializable
 	{
 		this.htmlImageDataSources.addAll(htmlImageDataSources);
 	}
+    
+    public String getBounceAddress() 
+    {
+        return bounceAddress;
+    }
+    
+    public void setBounceAddress(String bounceAddress) 
+    {
+        this.bounceAddress = bounceAddress;
+    }
 
 }

@@ -67,6 +67,7 @@ public class ReportParameter implements Serializable
 	private String description;
 	private boolean required;
 	private boolean multipleSelect;
+	private String defaultValue;
 
 	public ReportDataSource getDataSource()
 	{
@@ -170,6 +171,16 @@ public class ReportParameter implements Serializable
 	public void setMultipleSelect(boolean multiple)
 	{
 		this.multipleSelect = multiple;
+	}
+
+	public String getDefaultValue() 
+	{
+		return defaultValue;
+	}
+
+	public void setDefaultValue(String defaultValue) 
+	{
+		this.defaultValue = defaultValue;
 	}
 
 }

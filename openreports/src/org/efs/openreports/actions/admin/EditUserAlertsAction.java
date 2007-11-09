@@ -57,6 +57,7 @@ public class EditUserAlertsAction extends ActionSupport implements SessionAware
 	private AlertProvider alertProvider;
 	private ReportProvider reportProvider;
 
+	@Override
 	public String execute()
 	{
 		try
@@ -90,7 +91,7 @@ public class EditUserAlertsAction extends ActionSupport implements SessionAware
 
 			if (submitUpdate != null)
 			{				
-				ReportUserAlert userAlert = (ReportUserAlert) reportUser.getAlerts().get(alertId -1);				
+				ReportUserAlert userAlert = reportUser.getAlerts().get(alertId -1);				
 				userAlert.setLimit(alertLimit);
 				userAlert.setOperator(alertOperator);
 				
@@ -108,7 +109,7 @@ public class EditUserAlertsAction extends ActionSupport implements SessionAware
 
 			if (submitDelete != null)
 			{				
-				ReportUserAlert userAlert = (ReportUserAlert) reportUser.getAlerts().get(alertId -1);		
+				ReportUserAlert userAlert = reportUser.getAlerts().get(alertId);		
 
 				reportUser.getAlerts().remove(userAlert);
 
@@ -149,7 +150,7 @@ public class EditUserAlertsAction extends ActionSupport implements SessionAware
 		this.id = id;
 	}
 
-	public List getAlerts()
+	public List<ReportAlert> getAlerts()
 	{
 		try
 		{
@@ -162,7 +163,7 @@ public class EditUserAlertsAction extends ActionSupport implements SessionAware
 		}
 	}
 
-	public List getUserAlerts()
+	public List<ReportUserAlert> getUserAlerts()
 	{		
 		return reportUser.getAlerts();
 	}

@@ -51,6 +51,7 @@ is_volatile integer not null,
 description varchar(120),
 next_fire_time bigint,
 prev_fire_time bigint,
+priority integer,
 trigger_state varchar(16) not null,
 trigger_type varchar(8) not null,
 start_time bigint not null,
@@ -110,6 +111,7 @@ trigger_group varchar(80) not null,
 is_volatile integer not null,
 instance_name varchar(80) not null,
 fired_time bigint not null,
+priority integer not null,
 state varchar(16) not null,
 job_name varchar(80),
 job_group varchar(80),
@@ -127,7 +129,6 @@ create table qrtz_scheduler_state(
 instance_name varchar(80) not null,
 last_checkin_time bigint not null,
 checkin_interval bigint not null,
-recoverer varchar(80),
 primary key (instance_name)
 );
 

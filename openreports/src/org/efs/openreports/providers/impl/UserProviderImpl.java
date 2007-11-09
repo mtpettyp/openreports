@@ -52,7 +52,7 @@ public class UserProviderImpl implements UserProvider
 		return userPersistenceProvider.getUser(id);
 	}
 
-	public List getUsers() throws ProviderException
+	public List<ReportUser> getUsers() throws ProviderException
 	{
 		return userPersistenceProvider.getUsers();
 	}
@@ -72,7 +72,7 @@ public class UserProviderImpl implements UserProvider
 		userPersistenceProvider.deleteUser(user);
 	}	
 	
-	public List getUsersForGroup(ReportGroup reportGroup) throws ProviderException
+	public List<ReportUser> getUsersForGroup(ReportGroup reportGroup) throws ProviderException
 	{
 		return userPersistenceProvider.getUsersForGroup(reportGroup);
 	}

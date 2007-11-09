@@ -50,7 +50,7 @@ public class DeleteReportParameterAction extends DeleteAction
 		}
 		catch (Exception e)
 		{
-			addActionError(e.getMessage());
+			addActionError(getText(e.getMessage()));
 			return INPUT;
 		}
 

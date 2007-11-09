@@ -6,13 +6,12 @@
 
 <hibernate-configuration>
    
-    <session-factory>
-    
-		<!-- Disable the second-level cache  -->
-        <!-->property name="cache.provider_class">org.hibernate.cache.NoCacheProvider</property-->
+    <session-factory>		
+        
+        <property name="hibernate.cache.provider_class">org.hibernate.cache.EhCacheProvider</property>
         
         <!-- Enable the query cache  -->
-        <property name="cache.use_query_cache">true</property>
+        <property name="hibernate.cache.use_query_cache">true</property>
 
         <!-- Echo all executed SQL to stdout -->
         <property name="show_sql">false</property>
@@ -25,6 +24,7 @@
         <mapping resource="org/efs/openreports/objects/ReportParameter.hbm.xml"/>
         <mapping resource="org/efs/openreports/objects/ReportUser.hbm.xml"/>
         <mapping resource="org/efs/openreports/objects/ReportLog.hbm.xml"/>
+        <mapping resource="org/efs/openreports/objects/ReportDeliveryLog.hbm.xml"/>
         <mapping resource="org/efs/openreports/objects/ReportChart.hbm.xml"/>
         <mapping resource="org/efs/openreports/objects/ReportAlert.hbm.xml"/>
         <mapping resource="org/efs/openreports/objects/ORProperty.hbm.xml"/>

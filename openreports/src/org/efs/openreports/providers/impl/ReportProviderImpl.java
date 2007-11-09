@@ -20,11 +20,16 @@
 package org.efs.openreports.providers.impl;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
+import org.apache.commons.io.filefilter.WildcardFileFilter;
 import org.apache.log4j.Logger;
 import org.efs.openreports.objects.Report;
+import org.efs.openreports.objects.ReportTemplate;
 import org.efs.openreports.providers.DirectoryProvider;
 import org.efs.openreports.providers.ProviderException;
 import org.efs.openreports.providers.ReportProvider;
@@ -50,7 +55,7 @@ public class ReportProviderImpl	implements ReportProvider
 		log.info("ReportProviderImpl created");
 	}
 
-	public List getReportFileNames() throws ProviderException
+	public List<String> getReportFileNames() throws ProviderException
 	{
 		File file = new File(directoryProvider.getReportDirectory());
 		
@@ -75,8 +80,44 @@ public class ReportProviderImpl	implements ReportProvider
 				fileNames.add(files[i].getName());
 			}
 		}
+		
+		Collections.sort(fileNames);
 
 		return fileNames;
+	}
+	
+	public List<ReportTemplate> getReportTemplates() throws ProviderException
+	{	
+		List<String> fileNames =  getReportFileNames();
+		
+		ArrayList<ReportTemplate> reportTemplates = new ArrayList<ReportTemplate>();
+		for (String fileName : fileNames)
+		{			
+			ReportTemplate template = getReportTemplate(fileName);
+		    reportTemplates.add(template);
+		}
+		
+		return reportTemplates;
+	}
+	
+	public ReportTemplate getReportTemplate(String templateName) throws ProviderException
+	{		
+		File reportDirectory = new File(directoryProvider.getReportDirectory());		
+		FileFilter templateFilter = new WildcardFileFilter(templateName + "*");
+	    File[] templateFiles = reportDirectory.listFiles(templateFilter);
+	    
+	    String[] revisions = new String[templateFiles.length];
+	    for (int i=0; i <  templateFiles.length; i++)
+	    {
+	    	revisions[i] = templateFiles[i].getName();
+	    }
+	    
+	    Arrays.sort(revisions);
+	    
+	    ReportTemplate template = new ReportTemplate(templateName);
+	    template.setRevisions(revisions);		 
+		
+		return template;
 	}
 
 	public Report getReport(Integer id) throws ProviderException
@@ -90,7 +131,7 @@ public class ReportProviderImpl	implements ReportProvider
 	}
 
 
-	public List getReports() throws ProviderException
+	public List<Report> getReports() throws ProviderException
 	{
 		return reportPersistenceProvider.getReports();
 	}

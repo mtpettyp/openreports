@@ -1,7 +1,7 @@
 -- Thanks to Patrick Lightbody for submitting this...
 --
 -- In your Quartz properties file, you'll need to set 
--- org.quartz.jobStore.driverDelegateClass = org.quartz.impl.jdbcjobstore.PostreSQLDelegate
+-- org.quartz.jobStore.driverDelegateClass = org.quartz.impl.jdbcjobstore.PostgreSQLDelegate
 
 drop table qrtz_job_listeners;
 drop table qrtz_trigger_listeners;
@@ -50,6 +50,7 @@ CREATE TABLE qrtz_triggers
     DESCRIPTION VARCHAR(120) NULL,
     NEXT_FIRE_TIME BIGINT NULL,
     PREV_FIRE_TIME BIGINT NULL,
+    PRIORITY INTEGER NULL,
     TRIGGER_STATE VARCHAR(16) NOT NULL,
     TRIGGER_TYPE VARCHAR(8) NOT NULL,
     START_TIME BIGINT NOT NULL,
@@ -128,6 +129,7 @@ CREATE TABLE qrtz_fired_triggers
     IS_VOLATILE VARCHAR(1) NOT NULL,
     INSTANCE_NAME VARCHAR(80) NOT NULL,
     FIRED_TIME BIGINT NOT NULL,
+    PRIORITY INTEGER NOT NULL,
     STATE VARCHAR(16) NOT NULL,
     JOB_NAME VARCHAR(80) NULL,
     JOB_GROUP VARCHAR(80) NULL,
@@ -141,7 +143,6 @@ CREATE TABLE qrtz_scheduler_state
     INSTANCE_NAME VARCHAR(80) NOT NULL,
     LAST_CHECKIN_TIME BIGINT NOT NULL,
     CHECKIN_INTERVAL BIGINT NOT NULL,
-    RECOVERER VARCHAR(80) NULL,
     PRIMARY KEY (INSTANCE_NAME)
 );
 
@@ -159,4 +160,3 @@ INSERT INTO qrtz_locks values('STATE_ACCESS');
 INSERT INTO qrtz_locks values('MISFIRE_ACCESS');
 
 commit;
-

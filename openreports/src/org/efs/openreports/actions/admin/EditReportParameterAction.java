@@ -52,6 +52,7 @@ public class EditReportParameterAction extends ActionSupport
 	private String description;
 	private boolean required;
 	private boolean multipleSelect;
+	private String defaultValue;
 
 	private ReportParameter reportParameter;
 	private ReportParameter queryParameter;
@@ -61,6 +62,7 @@ public class EditReportParameterAction extends ActionSupport
 	private DataSourceProvider dataSourceProvider;
 	private ParameterProvider parameterProvider;
 
+	@Override
 	public String execute()
 	{
 		try
@@ -90,6 +92,7 @@ public class EditReportParameterAction extends ActionSupport
 				description = reportParameter.getDescription();
 				required = reportParameter.isRequired();
 				multipleSelect = reportParameter.isMultipleSelect();
+				defaultValue = reportParameter.getDefaultValue();
 			}
 
 			if (!submitOk && !submitValidate && !submitDuplicate)
@@ -109,21 +112,27 @@ public class EditReportParameterAction extends ActionSupport
 			reportParameter.setName(name);
 			reportParameter.setType(type);
 			reportParameter.setClassName(className);
-			reportParameter.setData(data);
-			if (dataSourceId != -1)
-				reportParameter.setDataSource(
-					dataSourceProvider.getDataSource(
-						new Integer(dataSourceId)));
+			reportParameter.setData(data);			
 			reportParameter.setDescription(description);
 			reportParameter.setRequired(required);
 			reportParameter.setMultipleSelect(multipleSelect);
+			reportParameter.setDefaultValue(defaultValue);
+			
+			if (dataSourceId > -1)
+			{
+				reportParameter.setDataSource(dataSourceProvider.getDataSource(new Integer(dataSourceId)));
+			}
+			else
+			{
+				reportParameter.setDataSource(null);
+			}
 
 			if (submitValidate)
 			{
 				if (type.equals(ReportParameter.LIST_PARAM)
 						|| type.equals(ReportParameter.QUERY_PARAM))
 				{
-					Map map = null;
+					Map<String,Object> map = null;
 
 					if (type.equals(ReportParameter.QUERY_PARAM)
 							&& data.toUpperCase().indexOf("$P") > -1)
@@ -208,7 +217,7 @@ public class EditReportParameterAction extends ActionSupport
 		return queryParameter;
 	}
 	
-	public List getDataSources()
+	public List<ReportDataSource> getDataSources()
 	{
 		try
 		{
@@ -319,6 +328,16 @@ public class EditReportParameterAction extends ActionSupport
 	public void setMultipleSelect(boolean multipleSelect)
 	{
 		this.multipleSelect = multipleSelect;
+	}
+
+	public String getDefaultValue() 
+	{
+		return defaultValue;
+	}
+
+	public void setDefaultValue(String defaultValue) 
+	{
+		this.defaultValue = defaultValue;
 	}
 
 }

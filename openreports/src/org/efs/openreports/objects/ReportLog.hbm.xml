@@ -18,12 +18,22 @@
         <property name="status" column="STATUS"/>
         
         <property name="message" column="MESSAGE" type="text"/>
+        
+        <property name="exportType" column="EXPORT_TYPE"/>
+        
+        <property name="requestId" column="REQUEST_ID"/>
                 
         <many-to-one name="report" class="org.efs.openreports.objects.Report" column="REPORT_ID"/>        
         
         <many-to-one name="user" class="org.efs.openreports.objects.ReportUser" column="USER_ID"/>        
         
         <many-to-one name="alert" class="org.efs.openreports.objects.ReportAlert" column="ALERT_ID"/>        
+        
+        <list name="deliveryLogs" cascade="all">
+             <key column="LOG_ID"/>
+             <index column="DELIVERY_INDEX"/>
+             <one-to-many class="org.efs.openreports.objects.ReportDeliveryLog"/>
+        </list>
        
     </class>
     

@@ -30,6 +30,7 @@ import net.sf.jasperreports.engine.design.JRDesignQuery;
 import net.sf.jasperreports.engine.util.JRQueryExecuter;
 
 import org.apache.log4j.Logger;
+import org.efs.openreports.ReportConstants.ExportType;
 import org.efs.openreports.engine.input.ReportEngineInput;
 import org.efs.openreports.engine.output.ReportEngineOutput;
 import org.efs.openreports.objects.ORProperty;
@@ -126,13 +127,13 @@ public class JFreeReportEngine extends ReportEngine
 
 			ReportEngineOutput output = new ReportEngineOutput();
 			
-			if (input.getExportType() == ReportEngine.EXPORT_PDF)
+			if (input.getExportType() == ExportType.PDF)
 			{
 				output.setContentType(ReportEngineOutput.CONTENT_TYPE_PDF);
 				
 				PDFReportUtil.createPDF(jfreeReport, out);
 			}
-			else if (input.getExportType() == ReportEngine.EXPORT_XLS)
+			else if (input.getExportType() == ExportType.XLS)
 			{
 				output.setContentType(ReportEngineOutput.CONTENT_TYPE_XLS);
 				
@@ -142,7 +143,7 @@ public class JFreeReportEngine extends ReportEngine
 				pr.setOutputStream(out);
 				pr.processReport();				
 			}			
-			else if (input.getExportType() == ReportEngine.EXPORT_RTF)
+			else if (input.getExportType() == ExportType.RTF)
 			{
 				output.setContentType(ReportEngineOutput.CONTENT_TYPE_RTF);
 				

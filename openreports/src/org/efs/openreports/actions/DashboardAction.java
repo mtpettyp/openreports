@@ -44,6 +44,7 @@ public class DashboardAction extends ActionSupport
 	
 	private AlertProvider alertProvider;	
 	
+	@Override
 	public String execute()
 	{
 		ReportUser user = (ReportUser) ActionContext.getContext().getSession().get(
@@ -51,12 +52,12 @@ public class DashboardAction extends ActionSupport
 		
 		alerts = new ArrayList<ReportUserAlert>();		
 		
-		Iterator iterator = user.getAlerts().iterator();
+		Iterator<ReportUserAlert> iterator = user.getAlerts().iterator();
 		while(iterator.hasNext())
 		{
 			try
 			{
-				ReportUserAlert userAlert = (ReportUserAlert) iterator.next();
+				ReportUserAlert userAlert = iterator.next();
 				userAlert.setUser(user);
 				
 				ReportUserAlert alert = alertProvider.executeAlert(userAlert, false);
@@ -65,7 +66,7 @@ public class DashboardAction extends ActionSupport
 			}
 			catch(ProviderException pe)
 			{
-				addActionError(pe.getMessage());	
+				addActionError(getText(pe.getMessage()));	
 			}
 		}		
 		
@@ -84,7 +85,7 @@ public class DashboardAction extends ActionSupport
 		this.id = id;
 	}	
 
-	public List getAlerts()
+	public List<ReportUserAlert> getAlerts()
 	{
 		return alerts;
 	}

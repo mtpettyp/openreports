@@ -28,6 +28,7 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.SessionAware;
 import org.efs.openreports.ORStatics;
+import org.efs.openreports.ReportConstants.DeliveryMethod;
 import org.efs.openreports.objects.Report;
 import org.efs.openreports.objects.ReportLog;
 import org.efs.openreports.objects.ReportSchedule;
@@ -119,12 +120,7 @@ public class ReportOptionsAction extends ActionSupport implements SessionAware
         
         if (submitRunToEmail || submitRunToFile)
         {
-            Map<String,Object> reportParameters = getReportParameterMap();
-            
-            if (submitRunToFile)
-            {
-                reportParameters.put(ORStatics.GENERATE_FILE, Boolean.TRUE);
-            }
+            Map<String,Object> reportParameters = getReportParameterMap();            
             
             ReportSchedule schedule = new ReportSchedule();
             schedule.setReport(report);
@@ -135,6 +131,15 @@ public class ReportOptionsAction extends ActionSupport implements SessionAware
             schedule.setScheduleName(report.getId() + "|" + new Date().getTime());
             schedule.setScheduleDescription(description);               
             schedule.setScheduleType(ReportSchedule.ONCE);
+
+            if (submitRunToFile)
+            {
+                schedule.setDeliveryMethods(new String[]{DeliveryMethod.FILE.getName()});               
+            }
+            else
+            {
+                schedule.setDeliveryMethods(new String[]{DeliveryMethod.EMAIL.getName()});  
+            }
             
             try
             {

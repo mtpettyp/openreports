@@ -19,32 +19,28 @@
 
 package org.efs.openreports.util;
 
-import com.thoughtworks.xstream.XStream;
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
-import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.JRVirtualizer;
 import net.sf.jasperreports.engine.fill.JRFileVirtualizer;
-import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.efs.openreports.ORStatics;
+import org.efs.openreports.ReportConstants.ExportType;
+import org.efs.openreports.delivery.DeliveryException;
+import org.efs.openreports.delivery.DeliveryMethod;
 import org.efs.openreports.engine.ChartReportEngine;
 import org.efs.openreports.engine.JasperReportEngine;
 import org.efs.openreports.engine.ReportEngine;
 import org.efs.openreports.engine.ReportEngineHelper;
 import org.efs.openreports.engine.input.ReportEngineInput;
 import org.efs.openreports.engine.output.ChartEngineOutput;
-import org.efs.openreports.engine.output.JasperReportEngineOutput;
 import org.efs.openreports.engine.output.ReportEngineOutput;
-import org.efs.openreports.objects.GeneratedReport;
-import org.efs.openreports.objects.MailMessage;
 import org.efs.openreports.objects.Report;
+import org.efs.openreports.objects.ReportDeliveryLog;
 import org.efs.openreports.objects.ReportLog;
 import org.efs.openreports.objects.ReportSchedule;
 import org.efs.openreports.objects.ReportUser;
@@ -52,26 +48,27 @@ import org.efs.openreports.objects.ReportUserAlert;
 import org.efs.openreports.providers.AlertProvider;
 import org.efs.openreports.providers.DataSourceProvider;
 import org.efs.openreports.providers.DirectoryProvider;
-import org.efs.openreports.providers.MailProvider;
 import org.efs.openreports.providers.PropertiesProvider;
 import org.efs.openreports.providers.ReportLogProvider;
+import org.efs.openreports.scheduler.ScheduledReportCallback;
 import org.quartz.Job;
 import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
+import org.quartz.SchedulerException;
 import org.springframework.context.ApplicationContext;
 
 public class ScheduledReportJob	implements Job
 {
-	protected static Logger log =
-		Logger.getLogger(ScheduledReportJob.class.getName());
+	protected static Logger log = Logger.getLogger(ScheduledReportJob.class.getName());
 	
 	private ReportLogProvider reportLogProvider;	
-	private DirectoryProvider directoryProvider;
-	private MailProvider mailProvider;
+	private DirectoryProvider directoryProvider;	
 	private AlertProvider alertProvider;
 	private DataSourceProvider dataSourceProvider;
 	private PropertiesProvider propertiesProvider;
+	
+	private List<ScheduledReportCallback> callbacks;
 
 	public ScheduledReportJob()
 	{
@@ -83,23 +80,8 @@ public class ScheduledReportJob	implements Job
 	{
 		log.debug("Scheduled Report Executing....");
         
-        try
-        {
-            ApplicationContext appContext =
-                (ApplicationContext)context.getScheduler().getContext().get("applicationContext");
-
-            reportLogProvider = (ReportLogProvider) appContext.getBean("reportLogProvider", ReportLogProvider.class);
-            directoryProvider = (DirectoryProvider) appContext.getBean("directoryProvider", DirectoryProvider.class);
-            mailProvider = (MailProvider) appContext.getBean("mailProvider", MailProvider.class);
-            alertProvider = (AlertProvider) appContext.getBean("alertProvider", AlertProvider.class);
-            dataSourceProvider = (DataSourceProvider) appContext.getBean("dataSourceProvider", DataSourceProvider.class);
-            propertiesProvider = (PropertiesProvider) appContext.getBean("propertiesProvider", PropertiesProvider.class);
-        }
-        catch(Exception ex)
-        {
-            throw new JobExecutionException(ex);
-        }
-
+        ApplicationContext appContext = init(context);
+		        
 		JobDataMap jobDataMap = context.getJobDetail().getJobDataMap();
 
 		ReportSchedule reportSchedule =
@@ -114,10 +96,11 @@ public class ScheduledReportJob	implements Job
 		log.debug("User: " + user.getName());		
 
 		JRVirtualizer virtualizer = null;
-        FileOutputStream file = null;
-		
+       		
 		ReportLog reportLog = new ReportLog(user, report, new Date());
-
+        reportLog.setExportType(reportSchedule.getExportType());
+        reportLog.setRequestId(reportSchedule.getRequestId());
+        
 		try
 		{
 			//
@@ -148,10 +131,12 @@ public class ScheduledReportJob	implements Job
 			reportParameters.put(ORStatics.REPORT_DIR, new File(directoryProvider.getReportDirectory()));
 			//
 			
-			reportLogProvider.insertReportLog(reportLog);		
+			reportLogProvider.insertReportLog(reportLog);			
 			
 			ReportEngineInput reportInput = new ReportEngineInput(report, reportParameters);
-			reportInput.setExportType(reportSchedule.getExportType());
+			reportInput.setExportType(ExportType.findByCode(reportSchedule.getExportType()));
+            reportInput.setXmlInput(reportSchedule.getXmlInput());
+            reportInput.setLocale(reportSchedule.getLocale());
 			
 			if (report.isJasperReport())
 			{
@@ -189,84 +174,52 @@ public class ScheduledReportJob	implements Job
 						directoryProvider, propertiesProvider);
 			}
 			
-			ReportEngineOutput reportOutput = reportEngine.generateReport(reportInput);
+			ReportEngineOutput reportOutput = reportEngine.generateReport(reportInput);            
+           
+            String[] deliveryMethods = reportSchedule.getDeliveryMethods();      
             
-            Boolean generateFile = (Boolean) reportParameters.get(ORStatics.GENERATE_FILE);
-            if (generateFile != null && generateFile.booleanValue() == true)
+            if (deliveryMethods == null || deliveryMethods.length == 0)
             {
-                Date runDate = new Date();
-                
-                String fileName = runDate.getTime() + "-"
-                        + StringUtils.deleteWhitespace(user.getName()) + "-"
-                        + StringUtils.deleteWhitespace(report.getName());                       
-                
-                file = new FileOutputStream(directoryProvider
-                        .getReportGenerationDirectory()
-                        + fileName + reportOutput.getContentExtension());
-                
-                file.write(reportOutput.getContent());  
-                file.flush();
-                file.close();
-                
-                GeneratedReport info = new GeneratedReport();             
-                info.setParameters(reportParameters);
-                info.setReportDescription(reportSchedule.getScheduleDescription());
-                info.setReportName(report.getName());
-                info.setReportFileName(fileName + reportOutput.getContentExtension());
-                info.setRunDate(runDate);
-                info.setUserName(user.getName());
-                
-                file = new FileOutputStream(directoryProvider.getReportGenerationDirectory() + fileName + ".xml");
-
-                XStream xStream = new XStream();
-                xStream.alias("reportGenerationInfo", GeneratedReport.class);
-                xStream.toXML(info, file);
-                
-                file.flush();
-                file.close();           
-                
-                MailMessage mail = new MailMessage();               
-                mail.setSender(user.getEmail());
-                mail.parseRecipients(reportSchedule.getRecipients());
-                mail.setText(report.getName() + ": Generated on " + new Date());
-                mail.setSubject(reportSchedule.getScheduleDescription());
-                
-                mailProvider.sendMail(mail);
-                
-                log.debug(report.getName() + " written to: " + fileName);
+                deliveryMethods = new String[]{org.efs.openreports.ReportConstants.DeliveryMethod.EMAIL.getName()};
+                log.warn("DeliveryMethod not set, defaulting to email delivery");
             }
-            else
-            {			
-    			ArrayList<ByteArrayDataSource> htmlImageDataSources = new ArrayList<ByteArrayDataSource>();
-     			ByteArrayDataSource byteArrayDataSource = exportReport(reportOutput, reportSchedule, htmlImageDataSources);
-    
-    			MailMessage mail = new MailMessage();				
-    			mail.setByteArrayDataSource(byteArrayDataSource);
-    			mail.addHtmlImageDataSources(htmlImageDataSources);			 
-    			mail.setSender(user.getEmail());
-    			mail.parseRecipients(reportSchedule.getRecipients());
-    			
-    			if (reportSchedule.getScheduleDescription() != null && reportSchedule.getScheduleDescription().trim().length() > 0)
-    			{
-    				mail.setSubject(reportSchedule.getScheduleDescription());
-    			}
-    			else
-    			{
-    				mail.setSubject(report.getName());
-    			}
-    			
-    			if (reportSchedule.getExportType() != ReportEngine.EXPORT_HTML)
-    			{
-    				mail.setText(report.getName() + ": Generated on " + new Date());
-    			}
-    
-    			mailProvider.sendMail(mail);
+            
+            // set status to success. if a delivery method fails, this is updated to delivery failure
+            reportLog.setStatus(ReportLog.STATUS_SUCCESS);
+            
+            ArrayList<ReportDeliveryLog> deliveryLogs = new ArrayList<ReportDeliveryLog>();
+            
+            for (int i=0; i < deliveryMethods.length; i++)
+            {                                  
+                ReportDeliveryLog deliveryLog = new ReportDeliveryLog(deliveryMethods[i], new Date());
+            
+                try
+                {      
+                	String deliveryMethodBeanId = deliveryMethods[i] + "DeliveryMethod";
+                	
+                    DeliveryMethod deliveryMethod = (DeliveryMethod) appContext.getBean(deliveryMethodBeanId, DeliveryMethod.class);            
+                    deliveryMethod.deliverReport(reportSchedule, reportOutput);
+                    
+                    deliveryLog.setEndTime(new Date());
+                    deliveryLog.setStatus(ReportLog.STATUS_SUCCESS);
+                }                
+                catch(DeliveryException de)
+                {
+                	log.error("Delivery Error: " + reportSchedule.getRequestId(), de);
+                	
+                    deliveryLog.setMessage(de.toString());
+                    deliveryLog.setStatus(ReportLog.STATUS_DELIVERY_FAILURE);
+                    
+                    reportLog.setMessage(de.toString());
+                    reportLog.setStatus(ReportLog.STATUS_DELIVERY_FAILURE);                    
+                }
                 
-                log.debug(byteArrayDataSource.getName() + " sent to: " + mail.formatRecipients(";"));
+                deliveryLogs.add(deliveryLog);                
             }		
 
-			reportLog.setEndTime(new Date());
-			reportLog.setStatus(ReportLog.STATUS_SUCCESS);
+            reportLog.setDeliveryLogs(deliveryLogs);
+			reportLog.setEndTime(new Date());			
+            
 			reportLogProvider.updateReportLog(reportLog);
 
 			log.debug("Scheduled Report Finished...");
@@ -278,11 +231,10 @@ public class ScheduledReportJob	implements Job
 				reportLog.setStatus(ReportLog.STATUS_EMPTY);
 			}
 			else
-			{
-				e.printStackTrace();
-				log.error(e.toString());
+			{				
+				log.error("ScheduledReport Error: " + reportSchedule.getRequestId(), e);
 
-				reportLog.setMessage(e.getMessage());
+				reportLog.setMessage(e.toString());
 				reportLog.setStatus(ReportLog.STATUS_FAILURE);
 			}
 
@@ -295,7 +247,7 @@ public class ScheduledReportJob	implements Job
 			catch (Exception ex)
 			{
 				log.error("Unable to create ReportLog: " + ex.getMessage());
-			}
+			}			
 		}
 		finally
 		{
@@ -303,81 +255,53 @@ public class ScheduledReportJob	implements Job
 			{
 				reportParameters.remove(JRParameter.REPORT_VIRTUALIZER);			
 				virtualizer.cleanup();
-			}
-            
-            if (file != null)
-            {
-                try
-                {
-                    file.flush();
-                    file.close();
-                }
-                catch(IOException ioe)
-                {
-                    ioe.printStackTrace();
-                }
-            }
-		}		
-	}
-
-	protected ByteArrayDataSource exportReport(ReportEngineOutput reportOutput, ReportSchedule reportSchedule,
-			ArrayList<ByteArrayDataSource> htmlImageDataSources) throws JRException
-	{		
-		String reportName = StringUtils.deleteWhitespace(reportSchedule.getReport().getName());
-
-		ByteArrayDataSource byteArrayDataSource = new ByteArrayDataSource(reportOutput.getContent(), reportOutput.getContentType());
-		byteArrayDataSource.setName(reportName + reportOutput.getContentExtension());
+			}          
+		}	
 		
-		if (reportSchedule.getExportType() == ReportEngine.EXPORT_HTML
-				&& reportSchedule.getReport().isJasperReport())
-		{
-			Map imagesMap = ((JasperReportEngineOutput) reportOutput).getImagesMap();
+		// execute all callbacks after the job is finished processing
+		executeCallbacks(reportLog);
+	}
+	
+	@SuppressWarnings("unchecked")
+	private ApplicationContext init(JobExecutionContext context) throws JobExecutionException
+	{
+		ApplicationContext appContext = null;
+        
+        try
+        {
+            appContext =
+                (ApplicationContext)context.getScheduler().getContext().get("applicationContext");
+        }
+        catch(SchedulerException se)
+        {
+            throw new JobExecutionException(se);
+        }
 
-			for (Iterator entryIter = imagesMap.entrySet().iterator(); entryIter
-					.hasNext();)
-			{
-				Map.Entry entry = (Map.Entry) entryIter.next();
-
-				ByteArrayDataSource imageDataSource = new ByteArrayDataSource(
-						(byte[]) entry.getValue(), getImageContentType((byte[]) entry
-								.getValue()));
-
-				imageDataSource.setName((String) entry.getKey());
-
-				htmlImageDataSources.add(imageDataSource);
-			}
-		}
-
-		return byteArrayDataSource;
+        reportLogProvider = (ReportLogProvider) appContext.getBean("reportLogProvider", ReportLogProvider.class);
+        directoryProvider = (DirectoryProvider) appContext.getBean("directoryProvider", DirectoryProvider.class);
+        alertProvider = (AlertProvider) appContext.getBean("alertProvider", AlertProvider.class);
+        dataSourceProvider = (DataSourceProvider) appContext.getBean("dataSourceProvider", DataSourceProvider.class);
+        propertiesProvider = (PropertiesProvider) appContext.getBean("propertiesProvider", PropertiesProvider.class);
+        
+        if (appContext.containsBean("scheduledReportCallbacks"))
+        {
+        	callbacks = (List<ScheduledReportCallback>) appContext.getBean("scheduledReportCallbacks", List.class);
+        }
+        
+        return appContext;
 	}
 
-	/**
-	 * Try to figure out the image type from its bytes.
+	/*
+	 * Execute all ScheduledReportCallbacks registered for this job. Callbacks are configured in the 
+	 * Spring bean scheduledReportCallbacks
 	 */
-	private String getImageContentType(byte[] bytes)
+	private void executeCallbacks(ReportLog reportLog)
 	{
-		String header = new String(bytes, 0, (bytes.length > 100) ? 100 : bytes.length);
-		if (header.startsWith("GIF"))
+		if (callbacks == null) return;
+		
+		for (ScheduledReportCallback callback : callbacks)
 		{
-			return "image/gif";
+			callback.callback(reportLog);
 		}
-
-		if (header.startsWith("BM"))
-		{
-			return "image/bmp";
-		}
-
-		if (header.indexOf("JFIF") >= 0)
-		{
-			return "image/jpeg";
-		}
-
-		if (header.indexOf("PNG") >= 0)
-		{
-			return "image/png";
-		}
-
-		// We are out of guesses, so just guess tiff
-		return "image/tiff";
 	}	
 }

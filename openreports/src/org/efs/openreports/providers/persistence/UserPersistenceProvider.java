@@ -41,6 +41,7 @@ public class UserPersistenceProvider
 		log.info("UserPersistenceProvider Created.");
 	}
 
+	@SuppressWarnings("unchecked")
 	public ReportUser getUser(String name) throws ProviderException
 	{
 		try
@@ -49,14 +50,14 @@ public class UserPersistenceProvider
 			
 			try
 			{			
-				List list = session.createQuery(
+				List<ReportUser> list = session.createQuery(
 						"from org.efs.openreports.objects.ReportUser as user "
 								+ "where user.name = ?").setString(0, name).list();					
 
 				if (list.size() == 0)
 					return null;
 
-				ReportUser user = (ReportUser) list.get(0);				
+				ReportUser user = list.get(0);				
 
 				return user;
 			}
@@ -80,12 +81,13 @@ public class UserPersistenceProvider
 		return (ReportUser) HibernateProvider.load(ReportUser.class, id);
 	}
 
-	public List getUsers() throws ProviderException
+	@SuppressWarnings("unchecked")
+	public List<ReportUser> getUsers() throws ProviderException
 	{
 		String fromClause =
 			"from org.efs.openreports.objects.ReportUser reportUser order by reportUser.name ";
 
-		return HibernateProvider.query(fromClause);
+		return (List<ReportUser>) HibernateProvider.query(fromClause);
 	}
 
 	public ReportUser insertUser(ReportUser user) throws ProviderException
@@ -130,7 +132,8 @@ public class UserPersistenceProvider
 		}
 	}
 	
-	public List getUsersForGroup(ReportGroup reportGroup) throws ProviderException
+	@SuppressWarnings("unchecked")
+	public List<ReportUser> getUsersForGroup(ReportGroup reportGroup) throws ProviderException
 	{
 		try
 		{
@@ -138,7 +141,7 @@ public class UserPersistenceProvider
 			
 			try
 			{			
-				List list = session.createQuery(
+				List<ReportUser> list = session.createQuery(
 						"from org.efs.openreports.objects.ReportUser as reportUser "
 								+ "where ? in elements(reportUser.groups)").setEntity(0, reportGroup).list();					
 

@@ -27,6 +27,7 @@ import java.util.HashMap;
 import java.util.Map;
 import org.apache.log4j.Logger;
 import org.efs.openreports.ORStatics;
+import org.efs.openreports.ReportConstants.DeliveryMethod;
 import org.efs.openreports.engine.ReportEngine;
 import org.efs.openreports.engine.ReportEngineHelper;
 import org.efs.openreports.engine.input.ReportEngineInput;
@@ -37,7 +38,6 @@ import org.efs.openreports.objects.ReportLog;
 import org.efs.openreports.objects.ReportSchedule;
 import org.efs.openreports.objects.ReportUser;
 import org.efs.openreports.providers.DataSourceProvider;
-import org.efs.openreports.providers.DateProvider;
 import org.efs.openreports.providers.DirectoryProvider;
 import org.efs.openreports.providers.ParameterProvider;
 import org.efs.openreports.providers.PropertiesProvider;
@@ -52,6 +52,7 @@ import org.efs.openreports.services.input.ReportServiceInput;
 import org.efs.openreports.services.output.ReportServiceOutput;
 import org.efs.openreports.services.util.Converter;
 import org.efs.openreports.util.LocalStrings;
+import org.efs.openreports.util.ORUtil;
 
 /**
  * ReportService implementation using standard OpenReports providers. 
@@ -70,8 +71,7 @@ public class ReportServiceImpl implements ReportService
 	private DirectoryProvider directoryProvider;
 	private ParameterProvider parameterProvider;	
 	private DataSourceProvider dataSourceProvider;
-	private PropertiesProvider propertiesProvider;	
-	private DateProvider dateProvider;
+	private PropertiesProvider propertiesProvider;		
     private UserService userService;
     
     private XStream xStream;
@@ -93,19 +93,24 @@ public class ReportServiceImpl implements ReportService
 	 * Includes Report Logging functionality.
 	 */
 	public ReportServiceOutput generateReport(ReportServiceInput reportInput)
-	{		
+	{		        
 		ReportServiceOutput reportOutput = new ReportServiceOutput();	        
+                
+        try
+        {
+           userService.authenticate(reportInput.getUser());        
+        }
+        catch(ServiceException e)
+        {
+            reportOutput.setContentMessage(e.getMessage());
+            return reportOutput;
+        }
         
-        boolean authenticated = userService.authenticate(reportInput.getUser());		
-		if (!authenticated || reportInput.getReportName() == null)
+		if (reportInput.getReportName() == null)
 		{
-			reportOutput.setContentMessage("Invalid ReportInput - Valid User and Report Name required.");
-			log.warn("generateReport: " + reportOutput.getContentMessage());
-			
-			return reportOutput;
-		}
-		
-		ReportLog reportLog = null;
+            reportOutput.setContentMessage(ServiceMessages.REPORT_NAME_REQUIRED);
+            return reportOutput;			
+		}		
 		
 		try
 		{
@@ -113,7 +118,7 @@ public class ReportServiceImpl implements ReportService
 			if (report == null)
 			{
 				reportOutput.setContentMessage("Invalid ReportInput - Report not found: " + reportInput.getReportName());
-				log.warn("generateReport: " + reportOutput.getContentMessage());
+				log.warn("generateReport: request :  " + reportInput.getRequestId() + " : " + reportOutput.getContentMessage());
 				
 				return reportOutput;
 			}
@@ -122,7 +127,7 @@ public class ReportServiceImpl implements ReportService
 			if (user == null)
 			{
 				reportOutput.setContentMessage("Invalid ReportInput - User not found: " + reportInput.getUser().getUserName());
-				log.warn("generateReport: " + reportOutput.getContentMessage());
+				log.warn("generateReport: request :  " + reportInput.getRequestId() + " : " + reportOutput.getContentMessage());
 				
 				return reportOutput;
 			}
@@ -133,29 +138,100 @@ public class ReportServiceImpl implements ReportService
 						+ user.getName() + " not authorized to run: "
 						+ reportInput.getReportName());
 				
-				log.warn("generateReport: " + reportOutput.getContentMessage());
+				log.warn("generateReport: request :  " + reportInput.getRequestId() + " : " + reportOutput.getContentMessage());
 				
 				return reportOutput;	
-			}
+			}		
 			
-			reportLog = new ReportLog(user, report, new Date());
-			reportLog = reportLogProvider.insertReportLog(reportLog);
+			log.info("generateReport: received request :  " + reportInput.getRequestId() + " : for report : " + report.getName() + " : from : " +  user.getName());
 			
-			log.info("generateReport: " + user.getName() + " : " + report.getName() + " : " + reportInput.getDeliveryMethod());
-			
-			if (reportInput.getDeliveryMethod().equals(ReportService.DELIVERY_EMAIL)
-					|| reportInput.getDeliveryMethod()
-							.equals(ReportService.DELIVERY_FILE))
-			{
+            if (reportInput.getDeliveryMethods() == null || reportInput.getDeliveryMethods().length < 1)
+            {
+                ReportLog reportLog = null;
+                
+                try
+                {
+                    reportLog = new ReportLog(user, report, new Date());
+                    reportLog.setExportType(reportInput.getExportType().getCode());
+                    
+                    reportLog = reportLogProvider.insertReportLog(reportLog);               
+                                  
+                    ReportEngine reportEngine = ReportEngineHelper.getReportEngine(report,
+                            dataSourceProvider, directoryProvider, propertiesProvider);
+                    
+                    ReportEngineInput engineInput = new ReportEngineInput(report, buildParameterMap(reportInput, report));
+                    engineInput.setExportType(reportInput.getExportType()); 
+                    engineInput.setXmlInput(reportInput.getXmlInput());
+                    engineInput.setLocale(ORUtil.getLocale(reportInput.getLocale()));
+                    
+                    ReportEngineOutput reportEngineOutput = reportEngine.generateReport(engineInput);
+                    
+                    reportOutput.setContent(reportEngineOutput.getContent());
+                    reportOutput.setContentType(reportEngineOutput.getContentType());
+                    reportOutput.setContentExtension(reportEngineOutput.getContentExtension());
+                    
+                    //convert List of Dynabeans to XML so that it can be serialized
+                    if (reportEngineOutput instanceof QueryEngineOutput)
+                    {
+                        ByteArrayOutputStream out = new ByteArrayOutputStream();           
+                                           
+                        xStream.toXML(((QueryEngineOutput)reportEngineOutput).getResults(), out);                   
+                        
+                        reportOutput.setContent(out.toByteArray());
+                        reportOutput.setContentType(ReportEngineOutput.CONTENT_TYPE_XML);
+                        
+                        out.close();                 
+                    }                
+                   
+                    reportLog.setStatus(ReportLog.STATUS_SUCCESS);
+                    reportLog.setEndTime(new Date());
+                    
+                    reportLogProvider.updateReportLog(reportLog); 
+                }
+                catch(Exception e)
+                {
+                    if (reportLog != null && reportLog.getId() != null)
+                    {
+                        reportLog.setStatus(ReportLog.STATUS_FAILURE);
+                        reportLog.setMessage(e.getMessage());
+                        reportLog.setEndTime(new Date());
+                        
+                        try
+                        {
+                            reportLogProvider.updateReportLog(reportLog);
+                        }
+                        catch (Exception ex)
+                        {
+                            log.error("Unable to update ReportLog: " + ex.getMessage());
+                        }                       
+                    }
+                }
+            }
+            else           
+            {           
 				ReportSchedule schedule = new ReportSchedule();
 				schedule.setReport(report);
 				schedule.setUser(user);
 				schedule.setReportParameters(buildParameterMap(reportInput, report));
-				schedule.setExportType(reportInput.getExportType());
-				schedule.setRecipients(user.getEmail());
+				schedule.setExportType(reportInput.getExportType().getCode());				
 				schedule.setScheduleName(report.getId() + "|" + new Date().getTime());
 				schedule.setScheduleDescription(reportInput.getScheduleDescription());				
 				schedule.setScheduleType(ReportSchedule.ONCE);
+				schedule.setXmlInput(reportInput.getXmlInput());                
+                schedule.setDeliveryReturnAddress(reportInput.getDeliveryReturnAddress());
+                schedule.setRequestId(reportInput.getRequestId());
+                schedule.setSchedulePriority(reportInput.getSchedulePriority());                
+                schedule.setDeliveryMethods(convertDeliveryMethodsToNames(reportInput.getDeliveryMethods()));
+                schedule.setLocale(ORUtil.getLocale(reportInput.getLocale()));
+                
+                if (reportInput.getDeliveryAddress() != null)
+                {
+                    schedule.setRecipients(reportInput.getDeliveryAddress());
+                }
+                else
+                {
+                    schedule.setRecipients(user.getEmail());
+                }
 				
 				// advanced scheduling
 				if (reportInput.getStartDate() != null)
@@ -165,74 +241,28 @@ public class ReportServiceImpl implements ReportService
 						throw new ProviderException("Not Authorized: Advanced Scheduling permission required");					
 					}
 					
-					schedule.setScheduleType(reportInput.getScheduleType());
-					schedule.setStartDate(dateProvider.parseDate(reportInput.getStartDate()));
+					schedule.setScheduleType(reportInput.getScheduleType().getCode());
+					schedule.setStartDate(reportInput.getStartDate());
 					schedule.setStartHour(reportInput.getStartHour());
 					schedule.setStartMinute(reportInput.getStartMinute());
-					schedule.setStartAmPm(reportInput.getStartAmPm());
+					schedule.setStartAmPm(reportInput.getStartAmPm().toString());
 					schedule.setHours(reportInput.getHours());
 					schedule.setCronExpression(reportInput.getCronExpression());					
 				}
 								
 				schedulerProvider.scheduleReport(schedule);					
-			}
-			else
-			{
-				ReportEngine reportEngine = ReportEngineHelper.getReportEngine(report,
-						dataSourceProvider, directoryProvider, propertiesProvider);
-				
-				ReportEngineInput engineInput = new ReportEngineInput(report, buildParameterMap(reportInput, report));
-				engineInput.setExportType(reportInput.getExportType());								 
-				
-				ReportEngineOutput reportEngineOutput = reportEngine.generateReport(engineInput);
-                
-                reportOutput.setContent(reportEngineOutput.getContent());
-                reportOutput.setContentType(reportEngineOutput.getContentType());
-                
-                //convert List of Dynabeans to XML so that it can be serialized
-                if (reportEngineOutput instanceof QueryEngineOutput)
-                {
-                    ByteArrayOutputStream out = new ByteArrayOutputStream();           
-                                       
-                    xStream.toXML(((QueryEngineOutput)reportEngineOutput).getResults(), out);                   
-                    
-                    reportOutput.setContent(out.toByteArray());
-                    reportOutput.setContentType(ReportEngineOutput.CONTENT_TYPE_XML);
-                    
-                    out.close();                 
-                }
-			}
-			
-			reportOutput.setContentMessage(LocalStrings.SERVICE_REQUEST_COMPLETE);
-			
-			reportLog.setStatus(ReportLog.STATUS_SUCCESS);
-			reportLog.setEndTime(new Date());
-			reportLogProvider.updateReportLog(reportLog);			
+			}					
+            
+			reportOutput.setContentMessage(LocalStrings.SERVICE_REQUEST_COMPLETE);           	
 		}
 		catch (Exception e)
 		{			
-			log.error(e);					
-			reportOutput.setContentMessage(e.getMessage());		
-			
-			if (reportLog != null && reportLog.getId() != null)
-			{
-				reportLog.setStatus(ReportLog.STATUS_FAILURE);
-				reportLog.setMessage(e.getMessage());
-				reportLog.setEndTime(new Date());
-				
-				try
-				{
-					reportLogProvider.updateReportLog(reportLog);
-				}
-				catch (Exception ex)
-				{
-					log.error("Unable to update ReportLog: " + ex.getMessage());
-				}						
-			}
+			log.error("generateReport", e);					
+			reportOutput.setContentMessage(e.getMessage());				
 		}
 		
-		log.info("generateReport: " + reportOutput.getContentMessage());				
-		
+		log.info("generateReport: request : " + reportInput.getRequestId() + " : status : " + reportOutput.getContentMessage());	        
+        		
 		return reportOutput;
 	}	  
     
@@ -262,7 +292,7 @@ public class ReportServiceImpl implements ReportService
 	 */	
 	private Map<String,Object> buildParameterMap(ReportServiceInput reportServiceInput, Report report) throws ProviderException
 	{
-		Map<Object,Object> inputParameters = new HashMap<Object,Object>();
+		Map<String,Object> inputParameters = new HashMap<String,Object>();
 		
 		if (reportServiceInput.getParameters() != null)
 		{
@@ -276,13 +306,19 @@ public class ReportServiceImpl implements ReportService
 		Map<String,Object> parsedParameters = parameterProvider.getReportParametersMap(report.getParameters(), inputParameters);		
 		parsedParameters.put(ORStatics.IMAGE_DIR, new File(directoryProvider.getReportImageDirectory()));		
 		parsedParameters.put(ORStatics.REPORT_DIR, new File(directoryProvider.getReportDirectory()));		
-		
-		if (reportServiceInput.getDeliveryMethod().equals(ReportService.DELIVERY_FILE))
+			
+		return parsedParameters;
+	}
+	
+	private String[] convertDeliveryMethodsToNames(DeliveryMethod[] deliveryMethods)
+	{
+		String[] deliveryMethodNames = new String[deliveryMethods.length];
+		for (int i=0; i < deliveryMethods.length; i++)
 		{
-			parsedParameters.put(ORStatics.GENERATE_FILE, Boolean.TRUE);
+			deliveryMethodNames[i] = deliveryMethods[i].getName();
 		}
 		
-		return parsedParameters;
+		return deliveryMethodNames;
 	}
 
 	public void setDirectoryProvider(DirectoryProvider directoryProvider)
@@ -323,12 +359,7 @@ public class ReportServiceImpl implements ReportService
 	public void setPropertiesProvider(PropertiesProvider propertiesProvider)
 	{
 		this.propertiesProvider = propertiesProvider;
-	}
-	
-	public void setDateProvider(DateProvider dateProvider)
-	{
-		this.dateProvider = dateProvider;
-	}   
+	}	
     
     public void setUserService(UserService userService) 
     {

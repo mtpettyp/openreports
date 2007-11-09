@@ -18,13 +18,13 @@ import java.util.*;
  * @see ParameterAware
  * @author Rickard �berg (rickard@middleware-company.com)
  */
-public class SingleValueMap implements Map<Object,Object>, Serializable
+public class SingleValueMap implements Map<String,Object>, Serializable
 {  
 	private static final long serialVersionUID = -6002408173914149493L;
 	
-	private Map<Object,Object> m;	        // Backing Map
+	private Map<String,Object> m;	        // Backing Map
 
-   public SingleValueMap(Map<Object,Object> m)
+   public SingleValueMap(Map<String,Object> m)
    {
       if (m == null)
          throw new NullPointerException();
@@ -54,21 +54,22 @@ public class SingleValueMap implements Map<Object,Object>, Serializable
    public Object get(Object key)
    {
       Object[] value = (Object[])m.get(key);
-      return value == null ? null : ((Object[])value)[0];
+      return value == null ? null : value[0];
    }
 
-   public Object put(Object key, Object value)
+   public Object put(String key, Object value)
    {
       Object[] val = (Object[])m.put(key, new Object[] { value });
-      return val == null ? null : ((Object[])val)[0];
+      return val == null ? null : val[0];
    }
 
    public Object remove(Object key)
    {
       Object[] val = (Object[])m.remove(key);
-      return val == null ? null : ((Object[])val)[0];
+      return val == null ? null : val[0];
    }
 
+   @SuppressWarnings("unchecked")
    public void putAll(Map map)
    {
       throw new UnsupportedOperationException();
@@ -79,7 +80,7 @@ public class SingleValueMap implements Map<Object,Object>, Serializable
       m.clear();
    }   
 
-   public Set<Object> keySet()
+   public Set<String> keySet()
    {
       return m.keySet();
    }
@@ -92,11 +93,11 @@ public class SingleValueMap implements Map<Object,Object>, Serializable
 
    public Collection<Object> values()
    {
-      Collection vals = m.values();
+      Collection<Object> vals = m.values();
       Collection<Object> realVals = new ArrayList<Object>(vals.size());
-      for (Iterator iterator = vals.iterator(); iterator.hasNext();)
+      for (Iterator<Object> iterator = vals.iterator(); iterator.hasNext();)
       {
-         Object o = (Object) iterator.next();
+         Object o = iterator.next();
          if (o != null)
          {
             realVals.add(((Object[])o)[0]);

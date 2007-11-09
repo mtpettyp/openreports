@@ -27,6 +27,8 @@
         
         <property name="multipleSelect" column="MULTI_SELECT" not-null="false" unique="false"/>
         
+        <property name="defaultValue" column="DEFAULT_VALUE" not-null="false" unique="false"/>
+        
     </class>
     
 </hibernate-mapping>

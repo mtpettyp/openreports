@@ -28,6 +28,7 @@ public class DeleteAlertAction extends DeleteAction
     
     private AlertProvider alertProvider;
 
+	@Override
 	public String execute()
 	{
 		try
@@ -50,7 +51,7 @@ public class DeleteAlertAction extends DeleteAction
 		}
 		catch (Exception e)
 		{
-			addActionError(e.getMessage());
+			addActionError(getText(e.getMessage()));
 			return INPUT;
 		}
 

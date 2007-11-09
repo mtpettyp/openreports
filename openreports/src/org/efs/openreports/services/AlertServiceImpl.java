@@ -51,14 +51,9 @@ public class AlertServiceImpl implements AlertService
 		log.info("AlertService: Started");
 	}		
 	
-	public AlertInfo[] getAlerts(UserInput userInput)
+	public AlertInfo[] getAlerts(UserInput userInput) throws ServiceException
 	{
-        boolean authenticated = userService.authenticate(userInput);
-        if (!authenticated)
-        {
-            log.warn("Not Authenticated: " + userInput.getUserName());
-            return null;
-        }
+        userService.authenticate(userInput);        
         
 		ReportUser user = null;
 		
@@ -68,8 +63,7 @@ public class AlertServiceImpl implements AlertService
 		}
 		catch(ProviderException pe)
 		{
-			log.warn(pe);
-			return null;
+			throw new ServiceException(pe);
 		}		
 		
 		ArrayList<AlertInfo> alerts = new ArrayList<AlertInfo>();

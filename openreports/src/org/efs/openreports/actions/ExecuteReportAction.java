@@ -41,7 +41,7 @@ public class ExecuteReportAction extends ActionSupport implements SessionAware, 
     protected static Logger log = Logger.getLogger(ReportOptionsAction.class);
     
 	private Map<Object,Object> session;
-	private Map<Object,Object> parameters;
+	private Map<String,Object> parameters;
 	
 	private int reportId;
 	private String reportName;
@@ -56,6 +56,7 @@ public class ExecuteReportAction extends ActionSupport implements SessionAware, 
 	private UserProvider userProvider;
     private ReportLogProvider reportLogProvider;
 
+	@Override
 	public String execute()
 	{
         ReportUser user = null;
@@ -122,7 +123,7 @@ public class ExecuteReportAction extends ActionSupport implements SessionAware, 
 
 			session.put(ORStatics.EXPORT_TYPE, exportType);
 
-			List reportParameters = report.getParameters();
+			List<ReportParameterMap> reportParameters = report.getParameters();
 			
 			if (reportParameters != null && reportParameters.size() > 0
 					&& promptForParameters)

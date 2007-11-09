@@ -64,7 +64,7 @@ public class AlertProviderImpl implements AlertProvider
 		return alertPersistenceProvider.getReportAlert(id);
 	}
 
-	public List getReportAlerts() throws ProviderException
+	public List<ReportAlert> getReportAlerts() throws ProviderException
 	{
 		return alertPersistenceProvider.getReportAlerts();
 	}

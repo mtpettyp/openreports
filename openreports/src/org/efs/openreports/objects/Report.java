@@ -56,6 +56,8 @@ public class Report implements Comparable<Report>, Serializable
 
 	private boolean excelExportEnabled;
 	
+	private boolean imageExportEnabled;
+	
 	private boolean virtualizationEnabled;
 	
 	private boolean hidden;
@@ -141,6 +143,7 @@ public class Report implements Comparable<Report>, Serializable
 		this.id = id;
 	}
 
+	@Override
 	public String toString()
 	{
 		return name;
@@ -186,16 +189,16 @@ public class Report implements Comparable<Report>, Serializable
 		return parameters;
 	}
 
-	public List getSubReportParameters()
+	public List<ReportParameterMap> getSubReportParameters()
 	{
 		ArrayList<ReportParameterMap> subReportParameters = new ArrayList<ReportParameterMap>();
 
 		if (parameters != null)
 		{
-			Iterator iterator = parameters.iterator();
+			Iterator<ReportParameterMap> iterator = parameters.iterator();
 			while (iterator.hasNext())
 			{
-				ReportParameterMap rpMap = (ReportParameterMap) iterator.next();
+				ReportParameterMap rpMap = iterator.next();
 
 				if (rpMap.getReportParameter().getType().equals(
 						ReportParameter.SUBREPORT_PARAM))
@@ -215,10 +218,10 @@ public class Report implements Comparable<Report>, Serializable
 
 	public ReportParameterMap getReportParameterMap(Integer parameterId)
 	{
-		Iterator iterator = parameters.iterator();
+		Iterator<ReportParameterMap> iterator = parameters.iterator();
 		while (iterator.hasNext())
 		{
-			ReportParameterMap rpMap = (ReportParameterMap) iterator.next();
+			ReportParameterMap rpMap = iterator.next();
 
 			if (rpMap.getReportParameter().getId().equals(parameterId))
 			{
@@ -229,14 +232,14 @@ public class Report implements Comparable<Report>, Serializable
 		return null;
 	}
 
-	public List getReportParametersByStep(int step)
+	public List<ReportParameterMap> getReportParametersByStep(int step)
 	{
 		List<ReportParameterMap> list = new ArrayList<ReportParameterMap>();
 
-		Iterator iterator = parameters.iterator();
+		Iterator<ReportParameterMap> iterator = parameters.iterator();
 		while (iterator.hasNext())
 		{
-			ReportParameterMap rpMap = (ReportParameterMap) iterator.next();
+			ReportParameterMap rpMap = iterator.next();
 
 			if (rpMap.getStep() == step)
 			{
@@ -355,6 +358,17 @@ public class Report implements Comparable<Report>, Serializable
 	{
 		if (textExportEnabled == null) textExportEnabled = new Boolean(false);
 		this.textExportEnabled = textExportEnabled.booleanValue();
+	}
+	
+	public boolean isImageExportEnabled()
+	{
+		return imageExportEnabled;
+	}
+
+	public void setImageExportEnabled(Boolean imageExportEnabled)
+	{
+		if (imageExportEnabled == null) imageExportEnabled = new Boolean(false);
+		this.imageExportEnabled = imageExportEnabled.booleanValue();
 	}
 
 	public ReportExportOption getReportExportOption()

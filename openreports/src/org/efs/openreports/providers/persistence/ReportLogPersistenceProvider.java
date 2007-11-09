@@ -29,7 +29,6 @@ import org.efs.openreports.providers.ProviderException;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
-import org.hibernate.criterion.Expression;
 import org.hibernate.criterion.Restrictions;
 
 public class ReportLogPersistenceProvider 
@@ -48,8 +47,9 @@ public class ReportLogPersistenceProvider
 	{
 		return (ReportLog) HibernateProvider.load(ReportLog.class, id);
 	}
-
-	public List getReportLogs(String status, Integer userId, Integer reportId, Integer alertId, int maxRows) throws ProviderException
+	
+	@SuppressWarnings("unchecked")
+	public List<ReportLog> getReportLogs(String status, Integer userId, Integer reportId, Integer alertId, int maxRows) throws ProviderException
 	{
 		Session session = HibernateProvider.openSession();		
 
@@ -58,17 +58,17 @@ public class ReportLogPersistenceProvider
 			Criteria criteria = session.createCriteria(ReportLog.class);
 			criteria.setMaxResults(maxRows);
 			
-			if (status != null)
+			if (status != null && !status.equals("-1"))
 			{
-				criteria.add(Expression.eq("status", status));
+				criteria.add(Restrictions.eq("status", status));
 			}
 			
-			if (userId != null)
+			if (userId != null && !userId.equals(new Integer(-1)))
 			{
-				criteria.add(Expression.eq("user.id", userId));
+				criteria.add(Restrictions.eq("user.id", userId));
 			}
 			
-			if (reportId != null)
+			if (reportId != null && !reportId.equals(new Integer(-1)))
 			{
 				if (reportId.intValue() == -1)
 				{
@@ -76,11 +76,11 @@ public class ReportLogPersistenceProvider
 				}
 				else
 				{
-					criteria.add(Expression.eq("report.id", reportId));
+					criteria.add(Restrictions.eq("report.id", reportId));
 				}
 			}
 			
-			if (alertId != null)
+			if (alertId != null && !alertId.equals(new Integer(-1)))
 			{
 				if (alertId.intValue() == -1)
 				{
@@ -88,13 +88,11 @@ public class ReportLogPersistenceProvider
 				}
 				else
 				{
-					criteria.add(Expression.eq("alert.id", alertId));
+					criteria.add(Restrictions.eq("alert.id", alertId));
 				}
 			}
 			
-			List list = criteria.list();		
-
-			return list;
+			return criteria.list();
 		}
 		catch (HibernateException he)
 		{			
@@ -129,35 +127,40 @@ public class ReportLogPersistenceProvider
 		}
 	}
 	
-	public List getTopReportsByUser() throws ProviderException
+	@SuppressWarnings("unchecked")
+	public List<Object[]> getTopReportsByUser() throws ProviderException
 	{
 		String fromClause = "select log.user.name, log.report.name, count(*) from org.efs.openreports.objects.ReportLog log group by log.user.name, log.report.name order by log.user.name, count(*) desc ";
 
-		return HibernateProvider.query(fromClause);
+		return (List<Object[]>) HibernateProvider.query(fromClause);
 	}
 	
-	public List getTopReports() throws ProviderException
+	@SuppressWarnings("unchecked")
+	public List<Object[]> getTopReports() throws ProviderException
 	{
 		String fromClause = "select log.report.name, count(*) from org.efs.openreports.objects.ReportLog log group by log.report.name order by count(*) desc ";
 
-		return HibernateProvider.query(fromClause);
+		return (List<Object[]>) HibernateProvider.query(fromClause);
 	}
 	
-	public List getTopFailures() throws ProviderException
+	@SuppressWarnings("unchecked")
+	public List<Object[]> getTopFailures() throws ProviderException
 	{
 		String fromClause = "select log.report.name, count(*) from org.efs.openreports.objects.ReportLog log where log.status = 'failure' group by log.report.name order by count(*) desc ";
 
-		return HibernateProvider.query(fromClause);
+		return (List<Object[]>) HibernateProvider.query(fromClause);
 	}
 	
-	public List getTopEmptyReports() throws ProviderException
+	@SuppressWarnings("unchecked")
+	public List<Object[]> getTopEmptyReports() throws ProviderException
 	{
 		String fromClause = "select log.report.name, count(*) from org.efs.openreports.objects.ReportLog log where log.status = 'empty' group by log.report.name order by count(*) desc ";
 
-		return HibernateProvider.query(fromClause);
+		return (List<Object[]>) HibernateProvider.query(fromClause);
 	}	
 	
-	public List getTopReportsForPeriod(int daysBack) throws ProviderException
+	@SuppressWarnings("unchecked")
+	public List<Object[]> getTopReportsForPeriod(int daysBack) throws ProviderException
 	{
 		try
 		{
@@ -168,7 +171,7 @@ public class ReportLogPersistenceProvider
 			
 			try
 			{			
-				List list = session.createQuery(
+				List<Object[]> list = session.createQuery(
 						"select log.report.name, count(*) from org.efs.openreports.objects.ReportLog log " 
 						+ " where log.startTime > ? group by log.report.name order by count(*) desc").setDate(0, calendar.getTime()).list();					
 
@@ -189,32 +192,36 @@ public class ReportLogPersistenceProvider
 		}
 	}
 	
-	public List getTopAlertsByUser() throws ProviderException
+	@SuppressWarnings("unchecked")
+	public List<Object[]> getTopAlertsByUser() throws ProviderException
 	{
 		String fromClause = "select log.user.name, log.alert.name, count(*) from org.efs.openreports.objects.ReportLog log group by log.user.name, log.alert.name order by log.user.name, count(*) desc ";
 
-		return HibernateProvider.query(fromClause);
+		return (List<Object[]>) HibernateProvider.query(fromClause);
 	}
 	
-	public List getTopAlerts() throws ProviderException
+	@SuppressWarnings("unchecked")
+	public List<Object[]> getTopAlerts() throws ProviderException
 	{
 		String fromClause = "select log.alert.name, count(*) from org.efs.openreports.objects.ReportLog log group by log.alert.name order by count(*) desc ";
 
-		return HibernateProvider.query(fromClause);
+		return (List<Object[]>) HibernateProvider.query(fromClause);
 	}
 	
-	public List getTopTriggeredAlerts() throws ProviderException
+	@SuppressWarnings("unchecked")
+	public List<Object[]> getTopTriggeredAlerts() throws ProviderException
 	{
 		String fromClause = "select log.alert.name, count(*) from org.efs.openreports.objects.ReportLog log where log.status = 'triggered' group by log.alert.name order by count(*) desc ";
 
-		return HibernateProvider.query(fromClause);
+		return (List<Object[]>) HibernateProvider.query(fromClause);
 	}
 	
-	public List getTopNotTriggeredAlerts() throws ProviderException
+	@SuppressWarnings("unchecked")
+	public List<Object[]> getTopNotTriggeredAlerts() throws ProviderException
 	{
 		String fromClause = "select log.alert.name, count(*) from org.efs.openreports.objects.ReportLog log where log.status = 'not triggered' group by log.alert.name order by count(*) desc ";
 
-		return HibernateProvider.query(fromClause);
+		return (List<Object[]>) HibernateProvider.query(fromClause);
 	}
 	
 }

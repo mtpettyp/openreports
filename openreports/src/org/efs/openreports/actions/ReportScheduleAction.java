@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 import org.apache.log4j.Logger;
 import org.efs.openreports.ORStatics;
+import org.efs.openreports.ReportConstants.DeliveryMethod;
 import org.efs.openreports.objects.Report;
 import org.efs.openreports.objects.ReportAlert;
 import org.efs.openreports.objects.ReportSchedule;
@@ -120,7 +121,8 @@ public class ReportScheduleAction extends ActionSupport
 					description = reportSchedule.getScheduleDescription();
 					hours = reportSchedule.getHours();
 					cron = reportSchedule.getCronExpression();
-					
+					runToFile = reportSchedule.isDeliveryMethodSelected(DeliveryMethod.FILE.getName());
+                    
 					if (reportSchedule.getAlert() != null)
 					{				
 						ReportUserAlert userAlert = reportSchedule.getAlert();
@@ -128,10 +130,7 @@ public class ReportScheduleAction extends ActionSupport
 						alertId = userAlert.getAlert().getId().intValue();
 						alertLimit = userAlert.getLimit();
 						alertOperator = userAlert.getOperator();
-					}	
-                    
-                    Boolean param = (Boolean) reportSchedule.getReportParameters().get(ORStatics.GENERATE_FILE);
-                    if (param != null) runToFile = param.booleanValue();
+					}	                    
 				}
 				catch (Exception e)
 				{
@@ -202,6 +201,15 @@ public class ReportScheduleAction extends ActionSupport
 			reportSchedule.setScheduleDescription(description);
 			reportSchedule.setHours(hours);
 			reportSchedule.setCronExpression(cron);
+            
+            if (runToFile)
+            {
+                reportSchedule.setDeliveryMethods(new String[]{DeliveryMethod.FILE.getName()});               
+            }
+            else
+            {
+                reportSchedule.setDeliveryMethods(new String[]{DeliveryMethod.EMAIL.getName()});  
+            }
 			
 			if (alertId != -1)
 			{
@@ -218,12 +226,7 @@ public class ReportScheduleAction extends ActionSupport
 			else
 			{
 				reportSchedule.setAlert(null);
-			}
-            
-            Map<String,Object> reportParameters = reportSchedule.getReportParameters();
-            reportParameters.put(ORStatics.GENERATE_FILE, Boolean.valueOf(runToFile));
-                
-            reportSchedule.setReportParameters(reportParameters);       
+			}  
 
 			if (scheduleName != null && scheduleName.length() > 0)
 			{

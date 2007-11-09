@@ -19,24 +19,13 @@
 
 package org.efs.openreports.actions.schedule;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
-import com.thoughtworks.xstream.XStream;
-
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.io.filefilter.FileFilterUtils;
-import org.apache.commons.io.filefilter.IOFileFilter;
+import java.util.List;
 import org.efs.openreports.ORStatics;
-import org.efs.openreports.objects.GeneratedReport;
+import org.efs.openreports.delivery.FileSystemDeliveryMethod;
+import org.efs.openreports.objects.DeliveredReport;
 import org.efs.openreports.objects.ReportUser;
-import org.efs.openreports.providers.DirectoryProvider;
 import org.efs.openreports.providers.SchedulerProvider;
 
 public class ListScheduledReportsAction	extends ActionSupport
@@ -44,13 +33,13 @@ public class ListScheduledReportsAction	extends ActionSupport
 	private static final long serialVersionUID = 3842653664544858888L;
 
 	private List scheduledReports;
-	private List<GeneratedReport> generatedReports;
+	private DeliveredReport[] deliveredReports;
     
     private int refresh;
     
-	private SchedulerProvider schedulerProvider;
-    private DirectoryProvider directoryProvider;
-
+	private SchedulerProvider schedulerProvider;    
+    private FileSystemDeliveryMethod fileSystemDeliveryMethod;
+    
 	public String execute()
 	{
 		try
@@ -59,35 +48,8 @@ public class ListScheduledReportsAction	extends ActionSupport
 				(ReportUser) ActionContext.getContext().getSession().get(
 					ORStatics.REPORT_USER);
 
-			scheduledReports =
-				schedulerProvider.getScheduledReports(reportUser);
-            
-			IOFileFilter extensionFilter = FileFilterUtils.suffixFileFilter("xml");
-            
-            File directory = new File(directoryProvider.getReportGenerationDirectory());
-
-            generatedReports = new ArrayList<GeneratedReport>();
-
-            Iterator iterator = FileUtils.iterateFiles(directory, extensionFilter, null);
-            while (iterator.hasNext())
-            {
-                File file = (File) iterator.next();
-
-                if (FilenameUtils.wildcardMatch(file.getName(), "*" + reportUser.getName() + "*"))
-                {
-                    XStream xStream = new XStream();
-                    xStream.alias("reportGenerationInfo", GeneratedReport.class);
-
-                    FileInputStream inputStream = new FileInputStream(file);
-                
-                    GeneratedReport info = (GeneratedReport) xStream
-                        .fromXML(inputStream);
-                
-                    generatedReports.add(info);
-                
-                    inputStream.close();
-                }
-            }
+			scheduledReports = schedulerProvider.getScheduledReports(reportUser);            
+            deliveredReports = fileSystemDeliveryMethod.getDeliveredReports(reportUser);		
 		}
 		catch (Exception e)
 		{
@@ -101,21 +63,21 @@ public class ListScheduledReportsAction	extends ActionSupport
 	public void setSchedulerProvider(SchedulerProvider schedulerProvider)
 	{
 		this.schedulerProvider = schedulerProvider;
-	}
-    
-    public void setDirectoryProvider(DirectoryProvider directoryProvider)
+	}  
+	
+    public void setFileSystemDeliveryMethod(FileSystemDeliveryMethod fileSystemDeliveryMethod) 
     {
-        this.directoryProvider = directoryProvider;
+        this.fileSystemDeliveryMethod = fileSystemDeliveryMethod;
     }
 
-	public List getScheduledReports()
+    public List getScheduledReports()
 	{
 		return scheduledReports;
 	}
     
-    public List getGeneratedReports()
+    public DeliveredReport[] getDeliveredReports()
     {
-        return generatedReports;
+        return deliveredReports;
     }
 
     public int getRefresh()

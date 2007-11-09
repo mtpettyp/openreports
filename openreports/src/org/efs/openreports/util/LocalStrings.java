@@ -54,6 +54,10 @@ public class LocalStrings
     public static final String ERROR_CHART_INVALID = "error.chart.invalid";
     public static final String ERROR_XMLA_PROPERTIES_INVALID = "error.xmla.properties.invalid";
     public static final String ERROR_SERVERSIDE = "error.serverside";
+    public static final String LINK_DELETE = "link.delete";
+    public static final String LINK_UPDATE = "link.update";
+    public static final String LINK_USERS = "link.users";
+    public static final String LINK_GROUPS = "link.groups";
 					
 	public static final String MESSAGE_SCHEDULE_SUCCESSFUL = "message.schedule.successful";
 	

@@ -9,7 +9,7 @@
 	<property name="web-inf.classes" value="${web-inf}/classes" />
 	<property name="web-inf.lib" value="${web-inf}/lib" />
 	<property name="distribution" value="\openreports" />
-	<property name="version" value="2.2.0" />
+	<property name="version" value="3.0.0" />
 
 	<target name="compile">
 
@@ -64,7 +64,8 @@
 				<include name="**/*.css" />
 				<include name="**/*.gif" />
 				<include name="**/*.jpg" />
-				<include name="**/*.png" />				
+				<include name="**/*.png" />		
+				<include name="**/applicationContext.xml" />				
 			</fileset>
 
 			<lib dir="${web-inf.lib}" />

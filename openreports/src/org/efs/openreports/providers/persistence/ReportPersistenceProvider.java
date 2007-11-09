@@ -25,12 +25,13 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.efs.openreports.objects.Report;
 import org.efs.openreports.objects.ReportGroup;
+import org.efs.openreports.objects.ReportLog;
 import org.efs.openreports.providers.HibernateProvider;
 import org.efs.openreports.providers.ProviderException;
 import org.efs.openreports.util.LocalStrings;
 
 import org.hibernate.*;
-import org.hibernate.criterion.Expression;
+import org.hibernate.criterion.Restrictions;
 
 public class ReportPersistenceProvider 
 {
@@ -58,7 +59,7 @@ public class ReportPersistenceProvider
 			session = HibernateProvider.openSession();
 			
 			Criteria criteria = session.createCriteria(Report.class);
-			criteria.add(Expression.eq("name", name));
+			criteria.add(Restrictions.eq("name", name));
 			
 			return (Report) criteria.uniqueResult();
 		}
@@ -72,12 +73,14 @@ public class ReportPersistenceProvider
 		}
 	}
 	 
-	public List getReports() throws ProviderException
+	
+	@SuppressWarnings("unchecked")
+	public List<Report> getReports() throws ProviderException
 	{
 		String fromClause =
 			"from org.efs.openreports.objects.Report report order by report.name ";
 		
-		return HibernateProvider.query(fromClause);
+		return (List<Report>) HibernateProvider.query(fromClause);
 	}
 
 	public Report insertReport(Report report) throws ProviderException
@@ -100,17 +103,22 @@ public class ReportPersistenceProvider
 			tx = session.beginTransaction();
 			
 			//delete report			
-			session.delete(report);
+			session.delete(report);		
 			
 			//delete report log entries for report
-			session
-					.createQuery(
-							"DELETE org.efs.openreports.objects.ReportLog reportLog where reportLog.report.id = ? ")
-					.setInteger(0, report.getId().intValue()).executeUpdate();
-								
+			Iterator<?> iterator =  session
+				.createQuery(
+					"from  org.efs.openreports.objects.ReportLog reportLog where reportLog.report.id = ? ")
+				.setInteger(0, report.getId().intValue()).iterate();
+					
+			while(iterator.hasNext())
+			{
+				ReportLog reportLog = (ReportLog) iterator.next();		 	
+				session.delete(reportLog);
+			}		
 			
 			//remove report from groups
-			Iterator iterator =  session
+			iterator =  session
 				.createQuery(
 						"from org.efs.openreports.objects.ReportGroup reportGroup").iterate();
 						
@@ -118,7 +126,7 @@ public class ReportPersistenceProvider
 			 {
 			 	ReportGroup reportGroup = (ReportGroup) iterator.next();
 			 	
-			 	List reports = reportGroup.getReports();			 	
+			 	List<Report> reports = reportGroup.getReports();			 	
 			 	if (reports.contains(report))
 			 	{
 			 		reports.remove(report);

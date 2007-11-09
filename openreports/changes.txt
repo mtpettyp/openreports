@@ -3,15 +3,22 @@ OpenReports Change Log
 ----------------------
 
 -----------------
-OpenReports 2.X
+OpenReports 3.0
 -----------------
 
-- Added - Drill Down ChartReport support (from OpenReports Professional)
-- Added - Auto Add/Create parameter support for JasperReports and BIRT (from OpenReports Professional)
-- Fixed - [ ] Intermittent ChartReport image caching problem
+- Added OLAP support via Mondrian and JPivot
+- Added A Velocity ReportEngine for creating Text or HTML reports from Velocity templates
+- Added Drill Down ChartReport support (from OpenReports Professional)
+- Added full internationization support
+- Added default values for parameters
+- Added ability to disable image export for JasperReports
+- Added support for CC and BCC email address for scheduled reports
+- Migrated From WebWork 2 to Struts 2 (and replaced the old WebWork IOC with Spring)
+- Migrated From Dojo to the Yahoo User Interface (YUI) library
+- Fixed - Intermittent ChartReport image caching problem
 - Fixed - [1635418] Chart image quality
 - Fixed - [1648660] ClassCastException for BIRT reports with scripted datasources
-- Upgraded to JFreeChart 1.0.3
+- Upgraded to JasperReports 2.0.2, BIRT 2.2, and JXLS 0.9.5
 
 -----------------
 OpenReports 2.2

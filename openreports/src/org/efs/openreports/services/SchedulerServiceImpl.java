@@ -51,14 +51,9 @@ public class SchedulerServiceImpl implements SchedulerService
 		log.info("SchedulerService: Started");
 	}		
 	
-	public ReportScheduleInfo[] getScheduledReports(UserInput userInput)
+	public ReportScheduleInfo[] getScheduledReports(UserInput userInput) throws ServiceException
 	{
-        boolean authenticated = userService.authenticate(userInput);
-        if (!authenticated)
-        {
-            log.warn("Not Authenticated: " + userInput.getUserName());
-            return null;
-        }
+        userService.authenticate(userInput);        
         
 		ReportUser user = null;
 		
@@ -68,8 +63,7 @@ public class SchedulerServiceImpl implements SchedulerService
 		}
 		catch(ProviderException pe)
 		{
-			log.warn(pe);
-			return null;
+			throw new ServiceException(pe);
 		}			
 		
 		ArrayList<ReportScheduleInfo> schedules = new ArrayList<ReportScheduleInfo>();
@@ -97,7 +91,7 @@ public class SchedulerServiceImpl implements SchedulerService
 		}
 		catch(ProviderException pe)
 		{
-			log.warn(pe);
+            throw new ServiceException(pe);
 		}
 		
 		ReportScheduleInfo[] scheduleInfos = new ReportScheduleInfo[schedules.size()];

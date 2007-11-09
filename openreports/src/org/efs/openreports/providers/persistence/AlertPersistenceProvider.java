@@ -19,14 +19,19 @@
 
 package org.efs.openreports.providers.persistence;
 
+import java.util.Iterator;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 
 import org.efs.openreports.objects.ReportAlert;
+import org.efs.openreports.objects.ReportLog;
 import org.efs.openreports.providers.HibernateProvider;
 import org.efs.openreports.providers.ProviderException;
 import org.efs.openreports.util.LocalStrings;
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 public class AlertPersistenceProvider 
 {
@@ -46,12 +51,13 @@ public class AlertPersistenceProvider
 		return (ReportAlert) HibernateProvider.load(ReportAlert.class, id);
 	}
 
-	public List getReportAlerts() throws ProviderException
+	@SuppressWarnings("unchecked")
+	public List<ReportAlert> getReportAlerts() throws ProviderException
 	{
 		String fromClause =
 			"from org.efs.openreports.objects.ReportAlert reportAlert order by reportAlert.name ";
 		
-		return HibernateProvider.query(fromClause);
+		return (List<ReportAlert>) HibernateProvider.query(fromClause);
 	}
 
 	public ReportAlert insertReportAlert(ReportAlert reportAlert)
@@ -69,13 +75,45 @@ public class AlertPersistenceProvider
 	public void deleteReportAlert(ReportAlert reportAlert)
 		throws ProviderException
 	{
+		Session session = HibernateProvider.openSession();
+		Transaction tx = null;
+
 		try
 		{
-			HibernateProvider.delete(reportAlert);
+			tx = session.beginTransaction();
+				
+			//delete alert			
+			session.delete(reportAlert);		
+				
+			//delete report log entries for alert
+			Iterator<?> iterator =  session
+				.createQuery(
+					"from  org.efs.openreports.objects.ReportLog reportLog where reportLog.alert.id = ? ")
+				.setInteger(0, reportAlert.getId().intValue()).iterate();
+						
+			while(iterator.hasNext())
+			{
+				ReportLog reportLog = (ReportLog) iterator.next();		 	
+				session.delete(reportLog);
+			}								 
+			
+			tx.commit();
 		}
-		catch (ConstraintException ce)
+		catch (HibernateException he)
 		{
-			throw new ProviderException(LocalStrings.ERROR_ALERT_DELETION);
+			HibernateProvider.rollbackTransaction(tx);
+						
+			if (he.getCause() != null && he.getCause().getMessage() != null && he.getCause().getMessage().toUpperCase().indexOf("CONSTRAINT") > 0)
+			{
+				throw new ProviderException(LocalStrings.ERROR_ALERT_DELETION);
+			}
+				
+			log.error("deleteReportAlert", he);			
+			throw new ProviderException(LocalStrings.ERROR_SERVERSIDE);
 		}
+		finally
+		{
+			HibernateProvider.closeSession(session);
+		}				
 	}
 }

@@ -32,7 +32,7 @@ import org.eclipse.birt.core.framework.PlatformConfig;
 import org.eclipse.birt.core.framework.PlatformFileContext;
 import org.eclipse.birt.report.engine.api.EngineConfig;
 import org.eclipse.birt.report.engine.api.HTMLActionHandler;
-import org.eclipse.birt.report.engine.api.HTMLEmitterConfig;
+import org.eclipse.birt.report.engine.api.HTMLRenderOption;
 import org.eclipse.birt.report.engine.api.HTMLServerImageHandler;
 import org.eclipse.birt.report.engine.api.IReportEngine;
 import org.eclipse.birt.report.engine.api.IReportEngineFactory;
@@ -42,6 +42,7 @@ import org.springframework.beans.factory.DisposableBean;
  * Provides the init and startup of the birt engine and config. 
  * 
  * @author Roberto Nibali
+ * @author Erik Swenson
  * 
  */
 public class BirtProvider implements DisposableBean
@@ -58,13 +59,13 @@ public class BirtProvider implements DisposableBean
 			log.info("Starting BIRT Engine and OSGI Platform");
 						
 			PlatformConfig platformConfig = new PlatformConfig();
-			platformConfig.getBIRTHome(birtHome);
+			platformConfig.setBIRTHome(birtHome);
 			
 			IPlatformContext context = new PlatformFileContext(platformConfig);
 			
 			HTMLServerImageHandler imageHandler = new HTMLServerImageHandler();
 			
-			HTMLEmitterConfig emitterConfig = new HTMLEmitterConfig();
+			HTMLRenderOption emitterConfig = new HTMLRenderOption();
 			emitterConfig.setActionHandler(new HTMLActionHandler());		
 			emitterConfig.setImageHandler(imageHandler);
 
@@ -100,8 +101,7 @@ public class BirtProvider implements DisposableBean
 	{
 		if (birtEngine == null)	return;				
 		
-		birtEngine.destroy();
-		birtEngine.shutdown();			
+		birtEngine.destroy();				
 		Platform.shutdown();
 		birtEngine = null;
 		

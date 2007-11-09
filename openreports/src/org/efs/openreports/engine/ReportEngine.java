@@ -30,17 +30,7 @@ import org.efs.openreports.providers.PropertiesProvider;
 import org.efs.openreports.providers.ProviderException;
 
 public abstract class ReportEngine
-{
-	//	export types
-	public static final int EXPORT_PDF = 0;
-	public static final int EXPORT_XLS = 1;
-	public static final int EXPORT_HTML = 2;
-	public static final int EXPORT_CSV = 3;
-	public static final int EXPORT_IMAGE = 4;
-	public static final int EXPORT_RTF = 5;
-	public static final int EXPORT_TEXT = 6;
-	public static final int EXPORT_EXCEL = 7;
-	
+{	
 	protected DataSourceProvider dataSourceProvider;
 	protected DirectoryProvider directoryProvider;
 	protected PropertiesProvider propertiesProvider;	

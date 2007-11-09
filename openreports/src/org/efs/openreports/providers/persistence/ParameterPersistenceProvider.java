@@ -28,6 +28,7 @@ import org.efs.openreports.providers.ProviderException;
 import org.efs.openreports.util.LocalStrings;
 
 import org.hibernate.*;
+import org.hibernate.criterion.Restrictions;
 
 public class ParameterPersistenceProvider 
 {
@@ -49,45 +50,34 @@ public class ParameterPersistenceProvider
 	
 	public ReportParameter getReportParameter(String name) throws ProviderException
 	{
+		Session session = null;
+		
 		try
 		{
-			Session session = HibernateProvider.openSession();
+			session = HibernateProvider.openSession();
 			
-			try
-			{
-				List list = session.createQuery(
-						"from org.efs.openreports.objects.ReportParameter reportParameter "
-								+ "where reportParameter.name = ?").setString(0, name)
-						.list();
-					
-				if (list.size() == 0)
-					return null;
-
-				ReportParameter reportParameter = (ReportParameter) list.get(0);
-				
-				return reportParameter;
-			}
-			catch (HibernateException he)
-			{				
-				throw he;
-			}
-			finally
-			{
-				session.close();
-			}
+			Criteria criteria = session.createCriteria(ReportParameter.class);
+			criteria.add(Restrictions.eq("name", name));
+			
+			return (ReportParameter) criteria.uniqueResult();
 		}
 		catch (HibernateException he)
 		{
 			throw new ProviderException(he);
 		}
+		finally
+		{
+			HibernateProvider.closeSession(session);
+		}
 	}
 
-	public List getReportParameters() throws ProviderException
+	@SuppressWarnings("unchecked")
+	public List<ReportParameter> getReportParameters() throws ProviderException
 	{
 		String fromClause =
 			"from org.efs.openreports.objects.ReportParameter reportParameter order by reportParameter.name ";
 		
-		return HibernateProvider.query(fromClause);
+		return (List<ReportParameter>) HibernateProvider.query(fromClause);
 	}
 
 	public ReportParameter insertReportParameter(ReportParameter reportParameter)

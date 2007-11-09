@@ -29,6 +29,7 @@ import org.efs.openreports.providers.*;
 import org.efs.openreports.providers.persistence.ParameterPersistenceProvider;
 import org.efs.openreports.util.*;
 
+import net.sf.jasperreports.engine.design.JRDesignParameter;
 import net.sf.jasperreports.engine.design.JRDesignQuery;
 import net.sf.jasperreports.engine.util.JRQueryExecuter;
 
@@ -58,7 +59,7 @@ public class ParameterProviderImpl implements ParameterProvider
 
 	public ReportParameterValue[] getParamValues(
 		ReportParameter reportParameter,
-		Map parameters)
+		Map<String,Object> parameters)
 		throws ProviderException
 	{
 		if (reportParameter.getType().equals(ReportParameter.QUERY_PARAM))
@@ -72,7 +73,7 @@ public class ParameterProviderImpl implements ParameterProvider
 		else if (reportParameter.getType().equals(ReportParameter.BOOLEAN_PARAM))
 		{
 			// default to Yes/No 
-			if (reportParameter.getData().indexOf("|") == -1)
+			if (reportParameter.getData() == null || reportParameter.getData().indexOf("|") == -1)
 			{
 				reportParameter.setData("true:Yes|false:No");
 			}
@@ -157,7 +158,7 @@ public class ParameterProviderImpl implements ParameterProvider
 
 	protected ReportParameterValue[] getParamValuesFromDataSource(
 		ReportParameter param,
-		Map parameters)
+		Map<String,Object> parameters)
 		throws ProviderException
 	{
 		Connection conn = null;
@@ -183,7 +184,7 @@ public class ParameterProviderImpl implements ParameterProvider
 
 				// convert parameters to JRDesignParameters so they can be
 				// parsed
-				Map jrParameters = ORUtil.buildJRDesignParameters(parameters);
+				Map<String,JRDesignParameter> jrParameters = ORUtil.buildJRDesignParameters(parameters);
 
 				pStmt =
 					JRQueryExecuter.getStatement(
@@ -378,15 +379,15 @@ public class ParameterProviderImpl implements ParameterProvider
 	{
 		List<ReportParameter> parameters = new ArrayList<ReportParameter>();
 
-		List allParameters = report.getParameters();
+		List<ReportParameterMap> allParameters = report.getParameters();
 
 		if (allParameters != null)
 		{
-			Iterator iterator = allParameters.iterator();
+			Iterator<ReportParameterMap> iterator = allParameters.iterator();
 
 			while (iterator.hasNext())
 			{
-				ReportParameterMap rpMap = (ReportParameterMap) iterator.next();
+				ReportParameterMap rpMap = iterator.next();
 
 				if (rpMap.getReportParameter().getType().equals(type))
 				{
@@ -399,14 +400,13 @@ public class ParameterProviderImpl implements ParameterProvider
 	}	
 
 	public void loadReportParameterValues(
-		List reportParameters,
-		Map parameters)
+		List<ReportParameterMap> reportParameters,
+		Map<String,Object> parameters)
 		throws ProviderException
 	{
 		for (int i = 0; i < reportParameters.size(); i++)
 		{
-			ReportParameterMap rpMap =
-				(ReportParameterMap) reportParameters.get(i);
+			ReportParameterMap rpMap = reportParameters.get(i);
 			ReportParameter rp = rpMap.getReportParameter();
 
 			try
@@ -431,18 +431,18 @@ public class ParameterProviderImpl implements ParameterProvider
 		}
 	}
 
-	public Map<String,Object> getReportParametersMap(List reportParameters, Map<Object,Object> origParameters)	throws ProviderException
+	public Map<String,Object> getReportParametersMap(List<ReportParameterMap> reportParameters, Map<String,Object> origParameters)	throws ProviderException
 	{
 		Map<String,Object> map = new HashMap<String,Object>();
 
 		// if multiple selections, use origParameters; otherwise, use
 		// parameters
-		Map parameters = new SingleValueMap(origParameters);
+		Map<String,Object> parameters = new SingleValueMap(origParameters);
 
-		Iterator iterator = reportParameters.iterator();
+		Iterator<ReportParameterMap> iterator = reportParameters.iterator();
 		while (iterator.hasNext())
 		{
-			ReportParameterMap rpMap = (ReportParameterMap) iterator.next();
+			ReportParameterMap rpMap = iterator.next();
 
 			ReportParameter reportParameter = rpMap.getReportParameter();
 
@@ -549,17 +549,17 @@ public class ParameterProviderImpl implements ParameterProvider
 		return sb.toString();
 	}
 
-	public boolean validateParameters(List reportParameters, Map<Object,Object> parameters)
+	public boolean validateParameters(List<ReportParameterMap> reportParameters, Map<String,Object> parameters)
 		throws ProviderException
 	{
 		parameters = new SingleValueMap(parameters);
 
 		if (reportParameters != null && reportParameters.size() > 0)
 		{
-			Iterator iterator = reportParameters.iterator();
+			Iterator<ReportParameterMap> iterator = reportParameters.iterator();
 			while (iterator.hasNext())
 			{
-				ReportParameterMap rpMap = (ReportParameterMap) iterator.next();
+				ReportParameterMap rpMap = iterator.next();
 
 				ReportParameter param = rpMap.getReportParameter();
 
@@ -596,20 +596,19 @@ public class ParameterProviderImpl implements ParameterProvider
 		return true;
 	}
 
-	public List getAvailableParameters(Report report) throws ProviderException
+	public List<ReportParameter> getAvailableParameters(Report report) throws ProviderException
 	{
-		List parameters = getReportParameters();
+		List<ReportParameter> parameters = getReportParameters();
 
-		Iterator iterator = parameters.iterator();
+		Iterator<ReportParameter> iterator = parameters.iterator();
 		while (iterator.hasNext())
 		{
-			ReportParameter rp = (ReportParameter) iterator.next();
+			ReportParameter rp = iterator.next();
 
-			Iterator reportIterator = report.getParameters().iterator();
+			Iterator<ReportParameterMap> reportIterator = report.getParameters().iterator();
 			while (reportIterator.hasNext())
 			{
-				ReportParameterMap rpMap =
-					(ReportParameterMap) reportIterator.next();
+				ReportParameterMap rpMap = reportIterator.next();
 
 				if (rp.getId().equals(rpMap.getReportParameter().getId()))
 				{
@@ -634,7 +633,7 @@ public class ParameterProviderImpl implements ParameterProvider
 		return paramPersistenceProvider.getReportParameter(name);
 	}
 
-	public List getReportParameters() throws ProviderException
+	public List<ReportParameter> getReportParameters() throws ProviderException
 	{
 		return paramPersistenceProvider.getReportParameters();
 	}

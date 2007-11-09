@@ -22,8 +22,12 @@ package org.efs.openreports.providers;
 import java.io.Serializable;
 import java.util.List;
 
-import org.hibernate.*;
-import org.hibernate.cfg.Configuration;
+import org.hibernate.HibernateException;
+import org.hibernate.JDBCException;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.hibernate.exception.ConstraintViolationException;
 
 import org.apache.log4j.Logger;
@@ -39,15 +43,6 @@ public class HibernateProvider implements DisposableBean
 
 	public HibernateProvider() throws ProviderException
 	{
-		try
-		{
-			sessionFactory = new Configuration().configure().buildSessionFactory();
-		}
-		catch(HibernateException he)
-		{
-			throw new ProviderException(he);
-		}
-
 		log.info("SessionFactory Created.");
 	}
 	
@@ -177,7 +172,7 @@ public class HibernateProvider implements DisposableBean
 		}
 	}
 
-	public static Object load(Class classType, Serializable id)
+	public static Object load(Class<?> classType, Serializable id)
 		throws ProviderException
 	{
 		Session session = openSession();
@@ -197,7 +192,7 @@ public class HibernateProvider implements DisposableBean
 		}
 	}
 
-	public static List query(String fromClause) throws ProviderException
+	public static List<?> query(String fromClause) throws ProviderException
 	{
 		Session session = openSession();
 		
@@ -206,7 +201,7 @@ public class HibernateProvider implements DisposableBean
 			Query query = session.createQuery(fromClause);
 			query.setCacheable(true);
 			
-			List list = query.list();		
+			List<?> list = query.list();		
 
 			return list;
 		}
@@ -234,7 +229,7 @@ public class HibernateProvider implements DisposableBean
 		}
 	}
 
-	public static void setSessionFactory(SessionFactory sessionFactory)
+	public void setSessionFactory(SessionFactory sessionFactory)
 	{
 		HibernateProvider.sessionFactory = sessionFactory;
 	}

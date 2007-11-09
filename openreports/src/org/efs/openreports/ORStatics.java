@@ -54,8 +54,7 @@ public interface ORStatics
 	public static final String EXTERNAL_ID = "OPENREPORTS_USER_EXTERNALID";
 	public static final String IMAGE_DIR = "OPENREPORTS_IMAGE_DIR";
 	public static final String REPORT_DIR = "OPENREPORTS_REPORT_DIR";
-	public static final String EXPORT_TYPE_PARAM = "OPENREPORTS_EXPORT_TYPE";	
-	public static final String GENERATE_FILE = "OPENREPORTS_GENERATE_FILE";
+	public static final String EXPORT_TYPE_PARAM = "OPENREPORTS_EXPORT_TYPE";		
 
 	public static final String[] EXPORT_TYPES = new String[] { "PDF", "XLS", "HTML", "CSV",
 			"IMAGE", "RFT", "TEXT", "EXCEL" };	

@@ -19,17 +19,20 @@ package org.efs.openreports.providers;
 
 import java.util.ArrayList;
 import java.util.Properties;
+import java.util.StringTokenizer;
 
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
 import javax.activation.FileDataSource;
 import javax.mail.*;
+import javax.mail.Message.RecipientType;
 import javax.mail.internet.*;
 
 import org.apache.log4j.Logger;
 
 import org.efs.openreports.objects.MailMessage;
 import org.efs.openreports.objects.ORProperty;
+import org.efs.openreports.util.ByteArrayDataSource;
 import org.efs.openreports.util.SMTPAuthenticator;
 
 public class MailProvider 
@@ -41,7 +44,8 @@ public class MailProvider
 	private String mailHost;
 	private boolean useMailAuthenticator;
 	private String userName;
-	private String password;	
+	private String password;
+	private Session mailSession;
 	
 	public MailProvider(PropertiesProvider propertiesProvider) throws ProviderException
 	{
@@ -75,28 +79,25 @@ public class MailProvider
 	{
 		try
 		{
-			// create a session
-			Properties mailProps = new Properties();
-			mailProps.put("mail.smtp.host", mailHost);
+			if (mailSession == null)
+			{				
+				// create a session
+				Properties mailProps = new Properties();
+				mailProps.put("mail.smtp.host", mailHost);
+            
+				if (mail.getBounceAddress() != null && mail.getBounceAddress().trim().length() > 0)
+				{
+					mailProps.setProperty("mail.smtp.from", mail.getBounceAddress()); 
+				}      
 
-			Session mailSession = null;
-			if (useMailAuthenticator) 
-			{
-				mailSession = Session.getInstance(mailProps, new SMTPAuthenticator(userName, password));				
-			}
-			else
-			{
-				mailSession = Session.getInstance(mailProps, null);
-			}				
-
-			// construct internet addresses
-			InternetAddress from = new InternetAddress(mail.getSender());
-
-			ArrayList recipients = mail.getRecipients();
-			InternetAddress[] to = new InternetAddress[recipients.size()];
-			for (int i = 0; i < recipients.size(); i++)
-			{
-				to[i] = new InternetAddress((String) recipients.get(i));
+				if (useMailAuthenticator) 
+				{
+					mailSession = Session.getInstance(mailProps, new SMTPAuthenticator(userName, password));				
+				}
+				else
+				{
+					mailSession = Session.getInstance(mailProps, null);
+				}
 			}
 
 			// create multipart
@@ -111,10 +112,10 @@ public class MailProvider
 			}
 
 			// add file attachments
-			ArrayList attachments = mail.getAttachments();
+			ArrayList<String> attachments = mail.getAttachments();
 			for (int i = 0; i < attachments.size(); i++)
 			{
-				String fileAttachment = (String) attachments.get(i);
+				String fileAttachment = attachments.get(i);
 				FileDataSource source = new FileDataSource(fileAttachment);
 
 				MimeBodyPart mbpAttachment = new MimeBodyPart();
@@ -136,10 +137,10 @@ public class MailProvider
 					htmlMP.addBodyPart(htmlBP);
 
 					// Add images
-					ArrayList images = mail.getHtmlImageDataSources();
+					ArrayList<ByteArrayDataSource> images = mail.getHtmlImageDataSources();
 					for (int i = 0; i < images.size(); i++)
 					{
-						DataSource imageDS = (DataSource) images.get(i);
+						DataSource imageDS = images.get(i);
 
 						MimeBodyPart imageBodyPart = new MimeBodyPart();
 						imageBodyPart.setFileName(imageDS.getName());
@@ -163,14 +164,39 @@ public class MailProvider
 
 					multipart.addBodyPart(mbpAttachment);
 				}
-			}
-
+			}			
+			
 			// create message
 			Message msg = new MimeMessage(mailSession);
-			msg.setFrom(from);
-			msg.setRecipients(Message.RecipientType.TO, to);
+			msg.setFrom(new InternetAddress(mail.getSender()));			
 			msg.setSubject(mail.getSubject());
 			msg.setContent(multipart);
+			
+			ArrayList<String> recipients = mail.getRecipients();			
+			for (int i = 0; i < recipients.size(); i++)
+			{
+				RecipientType recipientType = RecipientType.TO;
+				
+				StringTokenizer tokenizer = new StringTokenizer(recipients.get(i),":");
+				if (tokenizer.countTokens() == 2)
+				{					
+					String type = tokenizer.nextToken();
+					if ("TO".equalsIgnoreCase(type))
+					{
+						recipientType = RecipientType.TO;
+					}
+					else if ("CC".equalsIgnoreCase(type))
+					{
+						recipientType = RecipientType.CC;
+					}
+					else if ("BCC".equalsIgnoreCase(type))
+					{
+						recipientType = RecipientType.BCC;
+					}					
+				}
+				
+				msg.addRecipient(recipientType, new InternetAddress(tokenizer.nextToken()));					
+			}
 
 			Transport.send(msg);
 		}
@@ -205,6 +231,11 @@ public class MailProvider
 	public void setPropertiesProvider(PropertiesProvider propertiesProvider)
 	{
 		this.propertiesProvider = propertiesProvider;
+	}
+
+	public void setMailSession(Session mailSession) 
+	{
+		this.mailSession = mailSession;
 	}
 
 }

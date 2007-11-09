@@ -21,6 +21,7 @@ package org.efs.openreports.objects;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 public class ReportLog implements Serializable
 {	
@@ -31,6 +32,7 @@ public class ReportLog implements Serializable
 	public static final String STATUS_EMPTY = "empty";
 	public static final String STATUS_TRIGGERED = "triggered";
 	public static final String STATUS_NOT_TRIGGERED = "not triggered";
+	public static final String STATUS_DELIVERY_FAILURE = "delivery failure";
 	
 	private Integer id;
 	private Report report;
@@ -40,6 +42,10 @@ public class ReportLog implements Serializable
 	private String message;
 	private ReportUser user;
 	private ReportAlert alert;
+    private Integer exportType; 
+    private String requestId;
+    
+    private List<ReportDeliveryLog> deliveryLogs;   
 
 	public ReportLog()
 	{
@@ -77,7 +83,7 @@ public class ReportLog implements Serializable
 	public void setMessage(String message)
 	{
 		this.message = message;
-	}
+	}	
 
 	public Report getReport()
 	{
@@ -152,6 +158,35 @@ public class ReportLog implements Serializable
 	public void setAlert(ReportAlert alert)
 	{
 		this.alert = alert;
+	}       
+    
+    public List<ReportDeliveryLog> getDeliveryLogs()
+    {
+        return deliveryLogs;
+    }
+    
+    public void setDeliveryLogs(List<ReportDeliveryLog> deliveryLogs) 
+    {
+        this.deliveryLogs = deliveryLogs;
+    }
+
+    public Integer getExportType() 
+    {
+        return exportType;
+    }
+    
+    public void setExportType(Integer exportType) 
+    {
+        this.exportType = exportType;
+    }
+
+	public String getRequestId() 
+	{
+		return requestId;
 	}
 
+	public void setRequestId(String requestId)
+	{
+		this.requestId = requestId;
+	}    
 }

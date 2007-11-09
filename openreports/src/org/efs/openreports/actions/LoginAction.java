@@ -42,6 +42,7 @@ public class LoginAction extends ActionSupport implements SessionAware
 
 	protected UserProvider userProvider;
 
+	@Override
 	public String execute()
 	{
 		if (userName == null || userName.length() < 1 || 
@@ -64,7 +65,11 @@ public class LoginAction extends ActionSupport implements SessionAware
 			session.put("user", user);
             ActionContext.getContext().setLocale(user.getLocale());
             						
-			if (user.isDashboardUser()) return ORStatics.DASHBOARD_ACTION;
+			if (user.isDashboardUser() && 
+				(user.getDefaultReport() != null || user.getAlerts().size() > 0))
+			{
+				return ORStatics.DASHBOARD_ACTION;
+			}
 			
 			return SUCCESS;
 		}

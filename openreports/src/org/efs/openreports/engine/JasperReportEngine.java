@@ -19,6 +19,7 @@
 
 package org.efs.openreports.engine;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -57,12 +58,15 @@ import net.sf.jasperreports.engine.export.JRTextExporter;
 import net.sf.jasperreports.engine.export.JRTextExporterParameter;
 import net.sf.jasperreports.engine.export.JRXlsExporter;
 import net.sf.jasperreports.engine.export.JRXlsExporterParameter;
+import net.sf.jasperreports.engine.query.JRXPathQueryExecuterFactory;
 import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.engine.util.JRQueryExecuter;
+import net.sf.jasperreports.engine.util.JRXmlUtils;
 
 import org.apache.commons.beanutils.DynaProperty;
 import org.apache.commons.beanutils.RowSetDynaClass;
 import org.apache.log4j.Logger;
+import org.efs.openreports.ReportConstants.ExportType;
 import org.efs.openreports.engine.input.ReportEngineInput;
 import org.efs.openreports.engine.output.JasperReportEngineOutput;
 import org.efs.openreports.engine.output.ReportEngineOutput;
@@ -75,7 +79,9 @@ import org.efs.openreports.providers.DataSourceProvider;
 import org.efs.openreports.providers.DirectoryProvider;
 import org.efs.openreports.providers.PropertiesProvider;
 import org.efs.openreports.providers.ProviderException;
+import org.efs.openreports.util.LocalStrings;
 import org.efs.openreports.util.ORUtil;
+import org.w3c.dom.Document;
 
 /**
  * JasperReports ReportEngine implementation. Report generation is separated
@@ -146,10 +152,18 @@ public class JasperReportEngine extends ReportEngine
 			// create new HashMap to send to JasperReports in order to
 			// fix serialization problems
 			Map<String,Object> jasperReportMap = new HashMap<String,Object>(parameters);
-
-			if (dataSource == null)
-			{
-
+            
+            if (input.getXmlInput() != null)
+            {
+                ByteArrayInputStream stream = new ByteArrayInputStream(input.getXmlInput().getBytes());
+                Document document = JRXmlUtils.parse(stream);
+                
+                jasperReportMap.put(JRXPathQueryExecuterFactory.PARAMETER_XML_DATA_DOCUMENT, document);
+                               
+                jp = JasperFillManager.fillReport(jr, jasperReportMap);               
+            }
+            else if (dataSource == null)
+			{		    
 				jp = JasperFillManager.fillReport(jr, jasperReportMap, new JREmptyDataSource());
 			}
 			else
@@ -158,26 +172,14 @@ public class JasperReportEngine extends ReportEngine
 				jp = JasperFillManager.fillReport(jr, jasperReportMap, conn);
 			}
 
-			if (jp == null || jp.getPages().size() < 1) throw new ProviderException("Report Empty");
+			if (jp == null || jp.getPages().size() < 1) throw new ProviderException(LocalStrings.ERROR_REPORT_EMPTY);
 
 			return jp;
 		}
 		catch (Exception e)
 		{
-			String errorMessage;
-			if (e.getCause() instanceof java.io.InvalidClassException)
-			{
-				errorMessage = "Error creating report: " + report.getName()
-						+ " was compiled with a different version of JasperReports.";
-			}
-			else
-			{
-				errorMessage = "Error creating report: " + e.toString();
-			}
-
-			log.error(errorMessage, e);
-			throw new ProviderException(errorMessage);
-
+            if (!e.getMessage().equals(LocalStrings.ERROR_REPORT_EMPTY)) log.error("JasperReportEngine.fillReport", e);
+			throw new ProviderException(e.getMessage());
 		}
 		finally
 		{
@@ -192,7 +194,7 @@ public class JasperReportEngine extends ReportEngine
 		}
 	}	
 	
-	public ReportEngineOutput exportReport(JasperPrint jasperPrint, int exportType,
+	public ReportEngineOutput exportReport(JasperPrint jasperPrint, ExportType exportType,
 			ReportExportOption exportOptions, Map imagesMap, boolean inlineImages) throws ProviderException
 	{		
 		JasperReportEngineOutput engineOutput = new JasperReportEngineOutput();
@@ -202,22 +204,22 @@ public class JasperReportEngine extends ReportEngine
 		
 		try
 		{
-			if (exportType == ReportEngine.EXPORT_PDF)
+			if (exportType == ExportType.PDF)
 			{
 				engineOutput.setContentType(ReportEngineOutput.CONTENT_TYPE_PDF);
 				
 				exporter = new JRPdfExporter();				
 			}
-			else if (exportType == ReportEngine.EXPORT_XLS
-					|| exportType == ReportEngine.EXPORT_EXCEL)
+			else if (exportType == ExportType.XLS
+					|| exportType == ExportType.EXCEL)
 			{
 				engineOutput.setContentType(ReportEngineOutput.CONTENT_TYPE_XLS);
 				
-				if (exportType == ReportEngine.EXPORT_XLS)
+				if (exportType == ExportType.XLS)
 				{
 					exporter = new JRXlsExporter();
 				}
-				else if (exportType == ReportEngine.EXPORT_EXCEL)
+				else if (exportType == ExportType.EXCEL)
 				{
 					exporter = new JExcelApiExporter();
 				}
@@ -235,13 +237,13 @@ public class JasperReportEngine extends ReportEngine
 				exporter.setParameter(JRXlsExporterParameter.IS_WHITE_PAGE_BACKGROUND,
 						new Boolean(exportOptions.isXlsWhitePageBackground()));
 			}
-			else if (exportType == ReportEngine.EXPORT_CSV)
+			else if (exportType == ExportType.CSV)
 			{
 				engineOutput.setContentType(ReportEngineOutput.CONTENT_TYPE_CSV);
 				
 				exporter = new JRCsvExporter();
 			}
-			else if (exportType == ReportEngine.EXPORT_TEXT)
+			else if (exportType == ExportType.TEXT)
 			{
 				engineOutput.setContentType(ReportEngineOutput.CONTENT_TYPE_TEXT);
 				
@@ -251,7 +253,7 @@ public class JasperReportEngine extends ReportEngine
 				exporter.setParameter(JRTextExporterParameter.CHARACTER_HEIGHT,
 						new Integer(10));
 			}
-			else if (exportType == ReportEngine.EXPORT_RTF)
+			else if (exportType == ExportType.RTF)
 			{
 				engineOutput.setContentType(ReportEngineOutput.CONTENT_TYPE_RTF);
 				
@@ -310,7 +312,7 @@ public class JasperReportEngine extends ReportEngine
 	 * Creates a default JasperPrint from a QueryReport. This method is used when
 	 * a scheduled QueryReport is executed.
 	 */
-	private JasperPrint fillQueryReport(Report report, Map<String,Object> map, int exportType) throws Exception
+	private JasperPrint fillQueryReport(Report report, Map<String,Object> map, ExportType exportType) throws Exception
 	{
 		Connection conn = null;
 		PreparedStatement pStmt = null;
@@ -400,7 +402,7 @@ public class JasperReportEngine extends ReportEngine
 			}
 		}
 
-		if (exportType == ReportEngine.EXPORT_PDF)
+		if (exportType == ExportType.PDF)
 		{
 			// add title
 			JRDesignStaticText sText = new JRDesignStaticText();
@@ -515,7 +517,7 @@ public class JasperReportEngine extends ReportEngine
 			}
 		}
 
-		if (exportType == ReportEngine.EXPORT_PDF) jasperDesign.setColumnHeader(bandHeader);
+		if (exportType == ExportType.PDF) jasperDesign.setColumnHeader(bandHeader);
 		jasperDesign.setDetail(bandDetail);
 		
 		JasperReport jasperReport = JasperCompileManager.compileReport(jasperDesign);

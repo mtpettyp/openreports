@@ -35,6 +35,7 @@ import org.apache.log4j.Logger;
 import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.interceptor.SessionAware;
 import org.efs.openreports.ORStatics;
+import org.efs.openreports.ReportConstants.ExportType;
 import org.efs.openreports.engine.ChartReportEngine;
 import org.efs.openreports.engine.JasperReportEngine;
 import org.efs.openreports.engine.ReportEngine;
@@ -71,9 +72,11 @@ public class ReportRunAction extends ActionSupport implements SessionAware
 
 		Report report = (Report) ActionContext.getContext().getSession().get(ORStatics.REPORT);
 
-		int exportType =
+		int exportTypeCode =
 			Integer.parseInt(
 				(String) ActionContext.getContext().getSession().get(ORStatics.EXPORT_TYPE));
+		
+		ExportType exportType = ExportType.findByCode(exportTypeCode);
 
 		Map<String, Object> reportParameters = getReportParameterMap(user, report, exportType);
 		Map imagesMap = getImagesMap();
@@ -86,12 +89,13 @@ public class ReportRunAction extends ActionSupport implements SessionAware
 		response.setHeader("Cache-Control", "max-age=0");
 
 		ReportLog reportLog = new ReportLog(user, report, new Date());
+        reportLog.setExportType(exportType.getCode());
 		
 		JRVirtualizer virtualizer = null;
 
 		try
 		{
-			if (exportType == ReportEngine.EXPORT_PDF)				
+			if (exportType == ExportType.PDF)				
 			{
 				// Handle "contype" request from Internet Explorer
 				if ("contype".equals(request.getHeader("User-Agent"))) 
@@ -110,7 +114,7 @@ public class ReportRunAction extends ActionSupport implements SessionAware
 			
 			reportLogProvider.insertReportLog(reportLog);						
 
-			if (report.isVirtualizationEnabled() && exportType != ReportEngine.EXPORT_IMAGE)
+			if (report.isVirtualizationEnabled() && exportType != ExportType.IMAGE)
 			{
 				log.debug("Virtualization Enabled");
 				virtualizer = new JRFileVirtualizer(2, directoryProvider.getTempDirectory());
@@ -161,13 +165,13 @@ public class ReportRunAction extends ActionSupport implements SessionAware
 			
 			response.setContentType(reportOutput.getContentType());
 			
-			if (exportType != ReportEngine.EXPORT_HTML && exportType != ReportEngine.EXPORT_IMAGE)
+			if (exportType != ExportType.HTML && exportType != ExportType.IMAGE)
 			{
 				response.setHeader("Content-disposition", "inline; filename="
 						+ StringUtils.deleteWhitespace(report.getName()) + reportOutput.getContentExtension());
 			}			
 			
-			if (exportType == ReportEngine.EXPORT_IMAGE)
+			if (exportType == ExportType.IMAGE)
 			{
 				if (jasperPrint != null)
 				{					
@@ -194,20 +198,19 @@ public class ReportRunAction extends ActionSupport implements SessionAware
 		}
 		catch (Exception e)
 		{
-			if (e.getMessage() != null && e.getMessage().indexOf("Empty") > 0)
-			{
-				addActionError(LocalStrings.ERROR_REPORT_EMPTY);
+			if (e.getMessage() != null && e.getMessage().equals(LocalStrings.ERROR_REPORT_EMPTY))
+			{				
 				reportLog.setStatus(ReportLog.STATUS_EMPTY);
 			}
 			else
-			{
-				addActionError(e.getMessage());
-
+			{				
 				log.error(e.getMessage());
 
 				reportLog.setMessage(e.getMessage());
 				reportLog.setStatus(ReportLog.STATUS_FAILURE);
 			}
+            
+            addActionError(getText(e.getMessage()));
 
 			reportLog.setEndTime(new Date());
 
@@ -231,13 +234,13 @@ public class ReportRunAction extends ActionSupport implements SessionAware
 			}
 		}		
 		
-		if (exportType == ReportEngine.EXPORT_IMAGE) return SUCCESS;
+		if (exportType == ExportType.IMAGE) return SUCCESS;
 		
 		return NONE;
 	}
 
 	@SuppressWarnings("unchecked")
-	protected Map<String,Object> getReportParameterMap(ReportUser user, Report report, int exportType)
+	protected Map<String,Object> getReportParameterMap(ReportUser user, Report report, ExportType exportType)
 	{
 		Map<String,Object> reportParameters = new HashMap<String,Object>();
 		
@@ -249,7 +252,7 @@ public class ReportRunAction extends ActionSupport implements SessionAware
 		
 		reportParameters.put(ORStatics.IMAGE_DIR, new File(directoryProvider.getReportImageDirectory()));		
 		reportParameters.put(ORStatics.REPORT_DIR, new File(directoryProvider.getReportDirectory()));		
-		reportParameters.put(ORStatics.EXPORT_TYPE_PARAM, new Integer(exportType));
+		reportParameters.put(ORStatics.EXPORT_TYPE_PARAM, new Integer(exportType.getCode()));
 
 		return reportParameters;
 	}

@@ -36,7 +36,7 @@ public class ReportDetailAction extends ActionSupport implements SessionAware, P
 	private static final long serialVersionUID = 724821018564650888L;
 	
 	private Map<Object,Object> session;
-	private Map<Object,Object> parameters;
+	private Map<String,Object> parameters;
 	
 	private Report report;
 	private int reportId = Integer.MIN_VALUE;
@@ -47,11 +47,12 @@ public class ReportDetailAction extends ActionSupport implements SessionAware, P
 	private ReportProvider reportProvider;
 	private DateProvider dateProvider;
 
-	private List reportParameters;
+	private List<ReportParameterMap> reportParameters;
 	private int step = 0;
 	
 	private boolean displayInline;	
 
+	@Override
 	public String execute()
 	{
 		try
@@ -63,13 +64,13 @@ public class ReportDetailAction extends ActionSupport implements SessionAware, P
 
 			if (report == null)
 			{
-				addActionError(LocalStrings.ERROR_REPORT_INVALID);
+				addActionError(getText(LocalStrings.ERROR_REPORT_INVALID));
 				return ERROR;
 			}
 
 			if (!user.isValidReport(report))
 			{
-				addActionError(LocalStrings.ERROR_REPORT_NOTAUTHORIZED);
+				addActionError(getText(LocalStrings.ERROR_REPORT_NOTAUTHORIZED));
 				return ERROR;
 			}			
 
@@ -125,8 +126,7 @@ public class ReportDetailAction extends ActionSupport implements SessionAware, P
 		}
 		catch (Exception e)
 		{			
-			Map map = (Map) ActionContext.getContext().getSession().get(
-					ORStatics.REPORT_PARAMETERS);
+			Map<String,Object> map = getReportParametersFromSession();
 
 			try
 			{
@@ -134,10 +134,10 @@ public class ReportDetailAction extends ActionSupport implements SessionAware, P
 			}
 			catch (ProviderException pe)
 			{
-				addActionError(pe.getMessage());
+				addActionError(getText(pe.getMessage()));
 			}
 
-			addActionError(e.getMessage());
+			addActionError(getText(e.getMessage()));
 			return INPUT;
 		}
 	}    
@@ -190,7 +190,7 @@ public class ReportDetailAction extends ActionSupport implements SessionAware, P
 		this.reportProvider = reportProvider;
 	}
 
-	public List getReportParameters()
+	public List<ReportParameterMap> getReportParameters()
 	{
 		return reportParameters;
 	}

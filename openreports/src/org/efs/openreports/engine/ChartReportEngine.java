@@ -27,7 +27,9 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -85,6 +87,8 @@ import org.jfree.chart.renderer.category.StackedBarRenderer3D;
 import org.jfree.chart.renderer.xy.XYAreaRenderer;
 import org.jfree.chart.renderer.xy.XYItemRenderer;
 import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
+import org.jfree.chart.renderer.xy.StackedXYBarRenderer;
+import org.jfree.chart.renderer.xy.XYBarRenderer;
 import org.jfree.chart.urls.StandardCategoryURLGenerator;
 import org.jfree.chart.urls.StandardPieURLGenerator;
 import org.jfree.data.Range;
@@ -132,7 +136,7 @@ public class ChartReportEngine extends ReportEngine
 		ChartValue[] values = getChartValues(chart, input.getParameters());				
 		if (values == null || values.length < 1) throw new ProviderException(LocalStrings.ERROR_REPORT_EMPTY);
 	        
-		return createChartOutput(chart, values, input.getReport().isDisplayInline());
+		return createChartOutput(chart, values, input.getReport().isDisplayInline(), input.getParameters());
 	}	
 
 	/**
@@ -143,8 +147,8 @@ public class ChartReportEngine extends ReportEngine
 	{
 		Connection conn = null;
 		PreparedStatement pStmt = null;
-		ResultSet rs = null;
-
+		ResultSet rs = null;		
+		
 		try
 		{
 			ReportDataSource dataSource = reportChart.getDataSource();
@@ -193,7 +197,8 @@ public class ChartReportEngine extends ReportEngine
 					list.add(pieValue);
 				}
 			}
-			else if (chartType == ReportChart.XY_CHART | chartType == ReportChart.XY_AREA_CHART)
+			else if (chartType == ReportChart.XY_CHART || chartType == ReportChart.XY_AREA_CHART
+					 || chartType == ReportChart.XY_BAR_CHART || chartType == ReportChart.STACKED_XY_BAR_CHART)
 			{
 				while (rs.next())
 				{
@@ -220,15 +225,29 @@ public class ChartReportEngine extends ReportEngine
 					list.add(xyzValue);
 				}
 			}
-			else if (chartType == ReportChart.TIME_CHART | chartType == ReportChart.TIME_AREA_CHART)
+			else if (chartType == ReportChart.TIME_CHART || chartType == ReportChart.TIME_AREA_CHART 
+					|| chartType == ReportChart.TIME_BAR_CHART || chartType == ReportChart.STACKED_TIME_BAR_CHART)
 			{
+                int columnType = rs.getMetaData().getColumnType(3);
+                
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+                dateFormat.setTimeZone(java.util.TimeZone.getTimeZone("UTC"));
+                
 				while (rs.next())
 				{
 					TimeChartValue timeValue = new TimeChartValue();
-
-					timeValue.setSeries(rs.getString(1));
+				
+					timeValue.setSeries(rs.getString(1));					
 					timeValue.setValue(rs.getDouble(2));
-					timeValue.setTime(rs.getTimestamp(3));
+                    
+                    if (columnType == 91 || columnType == 92 || columnType == 93) //date, time, or timestamp
+                    {
+                        timeValue.setTime(rs.getTimestamp(3));   
+                    }
+                    else
+                    {                                    	
+                    	timeValue.setTime(dateFormat.parse(rs.getString(3)));   
+                    }                      
 
 					list.add(timeValue);
 				}
@@ -244,6 +263,7 @@ public class ChartReportEngine extends ReportEngine
 					list.add(chartValue);
 				}
 			}
+			
 
 			ChartValue[] values = new ChartValue[list.size()];
 			list.toArray(values);
@@ -270,10 +290,50 @@ public class ChartReportEngine extends ReportEngine
 		}
 	}	
 	
-	private static ChartEngineOutput createChartOutput(ReportChart reportChart, ChartValue[] values, boolean displayInline)
+	private ChartEngineOutput createChartOutput(ReportChart reportChart, ChartValue[] values, boolean displayInline, Map parameters)
 	{
 		JFreeChart chart = null;
+		
+		if (reportChart.getOverlayChart() != null)
+		{		
+			chart = createOverlayChart(reportChart, values, displayInline, parameters);			
+		}
+		else
+		{
+			chart = createChart(reportChart, values, displayInline);
+		}
 
+		if (chart == null) return null;		
+		
+		chart.setBackgroundPaint(Color.WHITE);
+		
+		ChartRenderingInfo info = new ChartRenderingInfo(new StandardEntityCollection());
+
+		BufferedImage bufferedImage =  chart.createBufferedImage(reportChart.getWidth(), reportChart.getHeight(),info);
+		byte[] image = null;
+		
+		try
+		{
+			image = EncoderUtil.encode(bufferedImage, ImageFormat.PNG);
+		}
+		catch(IOException ioe)
+		{
+			log.warn(ioe);
+		}
+			
+		ChartEngineOutput chartOutput = new ChartEngineOutput();
+		chartOutput.setContent(image);	
+		chartOutput.setContentType(ReportEngineOutput.CONTENT_TYPE_JPEG);
+		chartOutput.setChartRenderingInfo(info);		
+		chartOutput.setChartValues(values);
+		
+		return chartOutput;
+	}
+	
+	private JFreeChart createChart(ReportChart reportChart, ChartValue[] values, boolean displayInline)
+	{
+		JFreeChart chart = null;		
+		
 		switch (reportChart.getChartType())
 		{
 			case ReportChart.BAR_CHART :
@@ -308,37 +368,27 @@ public class ChartReportEngine extends ReportEngine
 				break;
 			case ReportChart.THERMOMETER_CHART :
 				chart = createThermometerChart(reportChart, values, displayInline);
-				break;		
-		}
+				break;			
+			case ReportChart.XY_BAR_CHART :
+				chart = createXYBarChart(reportChart, values, displayInline);
+				break;
+			case ReportChart.STACKED_XY_BAR_CHART :
+				chart = createStackedXYBarChart(reportChart, values, displayInline);
+				break;
+			case ReportChart.TIME_BAR_CHART :
+				chart = createTimeBarChart(reportChart, values, displayInline);
+				break;
+			case ReportChart.STACKED_TIME_BAR_CHART :
+				chart = createStackedTimeBarChart(reportChart, values, displayInline);
+				break;
+			default :
+				break;
+		}		
 
-		if (chart == null) return null;		
-		
-		chart.setBackgroundPaint(Color.WHITE);
-		
-		ChartRenderingInfo info = new ChartRenderingInfo(new StandardEntityCollection());
-
-		BufferedImage bufferedImage =  chart.createBufferedImage(reportChart.getWidth(), reportChart.getHeight(),info);
-		byte[] image = null;
-		
-		try
-		{
-			image = EncoderUtil.encode(bufferedImage, ImageFormat.PNG);
-		}
-		catch(IOException ioe)
-		{
-			log.warn(ioe);
-		}
-			
-		ChartEngineOutput chartOutput = new ChartEngineOutput();
-		chartOutput.setContent(image);	
-		chartOutput.setContentType(ReportEngineOutput.CONTENT_TYPE_JPEG);
-		chartOutput.setChartRenderingInfo(info);
-		chartOutput.setChartValues(values);
-		
-		return chartOutput;
-	}	
+		return chart;
+	}		
 	
-	public static JFreeChart createBarChart(ReportChart reportChart, ChartValue[] values, boolean displayInline)
+	private JFreeChart createBarChart(ReportChart reportChart, ChartValue[] values, boolean displayInline)
 	{
 		CategoryDataset dataset = createCategoryDataset(values);
 		
@@ -367,9 +417,29 @@ public class ChartReportEngine extends ReportEngine
 		JFreeChart chart = new JFreeChart(reportChart.getTitle(), JFreeChart.DEFAULT_TITLE_FONT, plot, reportChart.isShowLegend());
 		
 		return chart;
-	}	
+	}		
 	
-	public static JFreeChart createPieChart(ReportChart reportChart, ChartValue[] values, boolean displayInline)
+	private JFreeChart createXYBarChart(ReportChart reportChart, ChartValue[] values, boolean displayInline)
+	{
+		XYDataset dataset = createXYDataset(values);
+		
+		NumberAxis xAxis = new NumberAxis(reportChart.getXAxisLabel());
+		NumberAxis yAxis = new NumberAxis(reportChart.getYAxisLabel());
+		
+		XYBarRenderer renderer = new XYBarRenderer();
+		renderer.setToolTipGenerator(new StandardXYToolTipGenerator());		
+		
+		XYPlot plot = new XYPlot(dataset, xAxis, yAxis, renderer);
+		plot.setOrientation(PlotOrientation.VERTICAL);
+		if (reportChart.getPlotOrientation() == ReportChart.HORIZONTAL)
+		{
+			plot.setOrientation(PlotOrientation.HORIZONTAL);
+		}		
+		
+		return new JFreeChart(reportChart.getTitle(), JFreeChart.DEFAULT_TITLE_FONT, plot, reportChart.isShowLegend());
+	}
+	
+	private JFreeChart createPieChart(ReportChart reportChart, ChartValue[] values, boolean displayInline)
 	{
 		PieDataset dataset = createPieDataset(values);		
 		
@@ -390,7 +460,7 @@ public class ChartReportEngine extends ReportEngine
 		return chart;
 	}	
 
-	public static JFreeChart createRingChart(ReportChart reportChart,
+	private JFreeChart createRingChart(ReportChart reportChart,
 			ChartValue[] values, boolean displayInline)
 	{
 		PieDataset dataset = createPieDataset(values);
@@ -413,14 +483,14 @@ public class ChartReportEngine extends ReportEngine
 		return chart;
 	}
 	
-	private static JFreeChart createXYChart(ReportChart reportChart, ChartValue[] values, boolean displayInline)
+	private JFreeChart createXYChart(ReportChart reportChart, ChartValue[] values, boolean displayInline)
 	{
 		XYDataset dataset = createXYDataset(values);
 		
 		NumberAxis xAxis = new NumberAxis(reportChart.getXAxisLabel());
 	    NumberAxis yAxis = new NumberAxis(reportChart.getYAxisLabel());
 	    
-	    XYItemRenderer renderer = new XYLineAndShapeRenderer(true, false);	
+	    XYItemRenderer renderer = new XYLineAndShapeRenderer();
 	    renderer.setBaseToolTipGenerator(new StandardXYToolTipGenerator());
 	    
 	    if (reportChart.getDrillDownReport() != null)
@@ -445,14 +515,14 @@ public class ChartReportEngine extends ReportEngine
 		return chart;
 	}
 
-	private static JFreeChart createTimeChart(ReportChart reportChart, ChartValue[] values, boolean displayInline)
+	private JFreeChart createTimeChart(ReportChart reportChart, ChartValue[] values, boolean displayInline)
 	{
 		XYDataset dataset = createTimeDataset(values);
 		
 		ValueAxis timeAxis = new DateAxis(reportChart.getXAxisLabel());
-	    NumberAxis valueAxis = new NumberAxis(reportChart.getYAxisLabel());
-	    
-	    XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer(true, false);
+	    NumberAxis valueAxis = new NumberAxis(reportChart.getYAxisLabel());	    
+	   
+	    XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer();
         renderer.setBaseToolTipGenerator(StandardXYToolTipGenerator.getTimeSeriesInstance());
         
         if (reportChart.getDrillDownReport() != null)
@@ -475,9 +545,84 @@ public class ChartReportEngine extends ReportEngine
 		JFreeChart chart = new JFreeChart(reportChart.getTitle(), JFreeChart.DEFAULT_TITLE_FONT, plot, reportChart.isShowLegend());
 
 		return chart;
-	}	
+	}
 	
-	private static JFreeChart createAreaChart(ReportChart reportChart, ChartValue[] values, boolean displayInline)
+	private JFreeChart createTimeBarChart(ReportChart reportChart, ChartValue[] values, boolean displayInline)
+	{
+		JFreeChart chart = null;
+		
+		XYDataset dataset = createTimeDataset(values);
+				
+		ValueAxis timeAxis = new DateAxis(reportChart.getXAxisLabel());
+		NumberAxis valueAxis = new NumberAxis(reportChart.getYAxisLabel());
+		
+		XYItemRenderer renderer = new XYBarRenderer();
+		renderer.setBaseToolTipGenerator(StandardXYToolTipGenerator.getTimeSeriesInstance());		
+		
+		XYPlot plot = new XYPlot(dataset, timeAxis, valueAxis, renderer);
+		plot.setOrientation(PlotOrientation.VERTICAL);
+		if (reportChart.getPlotOrientation() == ReportChart.HORIZONTAL)
+		{
+			plot.setOrientation(PlotOrientation.HORIZONTAL);
+		}
+		
+		chart = new JFreeChart(reportChart.getTitle(), JFreeChart.DEFAULT_TITLE_FONT, plot, reportChart.isShowLegend());
+				
+		return chart;
+	}
+	
+	private JFreeChart createStackedTimeBarChart(ReportChart reportChart, ChartValue[] values, boolean displayInline)
+	{
+		XYDataset dataset = createTimeDataset(values);
+		
+		ValueAxis timeAxis = new DateAxis(reportChart.getXAxisLabel());
+		NumberAxis valueAxis = new NumberAxis(reportChart.getYAxisLabel());
+		
+		XYItemRenderer renderer = new StackedXYBarRenderer();
+		renderer.setBaseToolTipGenerator(StandardXYToolTipGenerator.getTimeSeriesInstance());
+				
+		XYPlot plot = new XYPlot(dataset, timeAxis, valueAxis, renderer);
+		plot.setOrientation(PlotOrientation.VERTICAL);
+		if (reportChart.getPlotOrientation() == ReportChart.HORIZONTAL)
+		{
+			plot.setOrientation(PlotOrientation.HORIZONTAL);
+		}
+		
+		return new JFreeChart(reportChart.getTitle(), JFreeChart.DEFAULT_TITLE_FONT, plot, reportChart.isShowLegend());
+	}
+	
+	private JFreeChart createOverlayChart(ReportChart reportChart, ChartValue[] values, boolean displayInline, Map parameters)
+	{
+		JFreeChart chart = createChart(reportChart, values, displayInline);	
+		
+		try
+		{
+			ReportChart overlayReportChart = reportChart.getOverlayChart();
+			ChartValue[] overlayValues = getChartValues(overlayReportChart, parameters);
+		
+			JFreeChart overlayChart = createChart(overlayReportChart, overlayValues, displayInline);			
+			
+			XYPlot plot = (XYPlot) chart.getPlot();
+			XYPlot overlayPlot = (XYPlot) overlayChart.getPlot();				
+			
+			NumberAxis axis = new NumberAxis(overlayReportChart.getYAxisLabel());
+			axis.setUpperMargin(.25);
+			
+			plot.setRangeAxis(1, axis);
+			plot.setDataset(1, overlayPlot.getDataset());
+			plot.setRangeAxis(1, axis);
+			plot.mapDatasetToRangeAxis(1, 1);
+			plot.setRenderer(1, overlayPlot.getRenderer());				
+		}
+		catch(Exception e)
+		{
+			log.error("createOverlayChart", e);
+		}
+		
+		return chart;
+	}
+		
+	private JFreeChart createAreaChart(ReportChart reportChart, ChartValue[] values, boolean displayInline)
 	{
 		CategoryDataset dataset = createCategoryDataset(values);
 		
@@ -509,8 +654,8 @@ public class ChartReportEngine extends ReportEngine
 
 		return chart;
 	}	
-	
-	private static JFreeChart createTimeAreaChart(ReportChart reportChart, ChartValue[] values, boolean displayInline)
+		
+	private JFreeChart createTimeAreaChart(ReportChart reportChart, ChartValue[] values, boolean displayInline)
 	{
 		XYDataset dataset = createTimeDataset(values);
 		
@@ -542,7 +687,7 @@ public class ChartReportEngine extends ReportEngine
 		return chart;
 	}	
 	
-	private static JFreeChart createXYAreaChart(ReportChart reportChart, ChartValue[] values, boolean displayInline)
+	private JFreeChart createXYAreaChart(ReportChart reportChart, ChartValue[] values, boolean displayInline)
 	{
 		XYDataset dataset = createXYDataset(values);
 		
@@ -578,7 +723,7 @@ public class ChartReportEngine extends ReportEngine
 		return chart;
 	}
 	
-	private static JFreeChart createStackedBarChart(ReportChart reportChart,
+	private JFreeChart createStackedBarChart(ReportChart reportChart,
 			ChartValue[] values, boolean displayInline)
 	{
 		CategoryDataset dataset = createCategoryDataset(values);
@@ -610,9 +755,29 @@ public class ChartReportEngine extends ReportEngine
 				JFreeChart.DEFAULT_TITLE_FONT, plot, reportChart.isShowLegend());
 
 		return chart;
+	}	
+	
+	private JFreeChart createStackedXYBarChart(ReportChart reportChart, ChartValue[] values, boolean displayInline)
+	{
+		XYDataset dataset = createXYDataset(values);
+		
+		NumberAxis xAxis = new NumberAxis(reportChart.getXAxisLabel());
+		NumberAxis yAxis = new NumberAxis(reportChart.getYAxisLabel());
+		
+		StackedXYBarRenderer renderer = new StackedXYBarRenderer();
+		renderer.setBaseToolTipGenerator(new StandardXYToolTipGenerator());		
+		
+		XYPlot plot = new XYPlot(dataset, xAxis, yAxis, renderer);
+		plot.setOrientation(PlotOrientation.VERTICAL);
+		if (reportChart.getPlotOrientation() == ReportChart.HORIZONTAL)
+		{
+			plot.setOrientation(PlotOrientation.HORIZONTAL);
+		}
+		
+		return new JFreeChart(reportChart.getTitle(), JFreeChart.DEFAULT_TITLE_FONT, plot, reportChart.isShowLegend());
 	}
 	
-	private static JFreeChart createDialChart(ReportChart reportChart,
+	private JFreeChart createDialChart(ReportChart reportChart,
 			ChartValue[] values, boolean displayInline)
 	{
 		DefaultValueDataset dataset = createDefaultValueDataset(values);
@@ -644,7 +809,7 @@ public class ChartReportEngine extends ReportEngine
 		return chart;
 	}
 	
-	private static JFreeChart createThermometerChart(ReportChart reportChart,
+	private JFreeChart createThermometerChart(ReportChart reportChart,
 			ChartValue[] values, boolean displayInline)
 	{
 		DefaultValueDataset dataset = createDefaultValueDataset(values);
@@ -663,7 +828,7 @@ public class ChartReportEngine extends ReportEngine
 		return chart;
 	}		
 
-	private static CategoryDataset createCategoryDataset(ChartValue[] values)
+	private CategoryDataset createCategoryDataset(ChartValue[] values)
 	{
 		DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 
@@ -676,7 +841,7 @@ public class ChartReportEngine extends ReportEngine
 		return dataset;
 	}
 
-	private static PieDataset createPieDataset(ChartValue[] values)
+	private PieDataset createPieDataset(ChartValue[] values)
 	{
 		DefaultPieDataset dataset = new DefaultPieDataset();
 
@@ -689,7 +854,7 @@ public class ChartReportEngine extends ReportEngine
 		return dataset;
 	}
 
-	private static XYDataset createXYDataset(ChartValue[] values)
+	private XYDataset createXYDataset(ChartValue[] values)
 	{
 		XYSeries series = null;
 		XYSeriesCollection seriesCollection = new XYSeriesCollection();
@@ -716,13 +881,13 @@ public class ChartReportEngine extends ReportEngine
 		return seriesCollection;
 	}	
 
-	private static XYDataset createTimeDataset(ChartValue[] values)
+	private XYDataset createTimeDataset(ChartValue[] values)
 	{
 		TimeSeries series = null;
 		TimeSeriesCollection seriesCollection = new TimeSeriesCollection();
 
 		for (int i = 0; i < values.length; i++)
-		{
+		{			
 			TimeChartValue value = (TimeChartValue) values[i];
 
 			if (series == null || !series.getKey().equals(value.getSeries()))
@@ -741,9 +906,9 @@ public class ChartReportEngine extends ReportEngine
 		seriesCollection.addSeries(series);
 
 		return seriesCollection;
-	}
+	}	
 	
-	private static DefaultValueDataset createDefaultValueDataset(ChartValue[] values)
+	private DefaultValueDataset createDefaultValueDataset(ChartValue[] values)
 	{
 		DefaultValueDataset dataset = new DefaultValueDataset(values[0].getValue());
 		return dataset;
@@ -752,5 +917,7 @@ public class ChartReportEngine extends ReportEngine
 	public List buildParameterList(Report report) throws ProviderException
 	{
 		throw new ProviderException("ChartReportEngine: buildParameterList not implemented.");
-	}		
+	}	
+	
+	
 }

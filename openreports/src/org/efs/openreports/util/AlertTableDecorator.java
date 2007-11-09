@@ -19,14 +19,27 @@
 
 package org.efs.openreports.util;
 
+import com.opensymphony.xwork2.ActionContext;
+import com.opensymphony.xwork2.LocaleProvider;
 import com.opensymphony.xwork2.TextProvider;
 import com.opensymphony.xwork2.TextProviderFactory;
+import java.util.Locale;
 import org.displaytag.decorator.TableDecorator;
 import org.efs.openreports.objects.ReportUserAlert;
 
-public class AlertTableDecorator extends TableDecorator {
-
-    private final transient TextProvider textProvider = TextProviderFactory.getInstance();
+public class AlertTableDecorator extends TableDecorator implements LocaleProvider
+{
+    private final transient TextProvider textProvider;
+    
+    public AlertTableDecorator()
+    {
+        textProvider = new TextProviderFactory().createInstance(getClass(), this);
+    }
+    
+    public Locale getLocale()
+    {       
+        return ActionContext.getContext().getLocale();
+    }   
 
     public String addRowClass() 
     {

@@ -22,21 +22,20 @@
 
 package org.efs.openreports.engine;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
-import org.eclipse.birt.report.engine.api.EngineConstants;
-import org.eclipse.birt.report.engine.api.HTMLRenderContext;
 import org.eclipse.birt.report.engine.api.HTMLRenderOption;
 import org.eclipse.birt.report.engine.api.IGetParameterDefinitionTask;
 import org.eclipse.birt.report.engine.api.IParameterDefnBase;
 import org.eclipse.birt.report.engine.api.IParameterGroupDefn;
+import org.eclipse.birt.report.engine.api.IRenderOption;
 import org.eclipse.birt.report.engine.api.IReportEngine;
 import org.eclipse.birt.report.engine.api.IReportRunnable;
 import org.eclipse.birt.report.engine.api.IRunAndRenderTask;
@@ -44,6 +43,7 @@ import org.eclipse.birt.report.engine.api.IScalarParameterDefn;
 import org.eclipse.birt.report.model.api.OdaDataSourceHandle;
 import org.eclipse.birt.report.model.api.ReportDesignHandle;
 import org.eclipse.birt.report.model.api.activity.SemanticException;
+import org.efs.openreports.ReportConstants.ExportType;
 import org.efs.openreports.engine.input.ReportEngineInput;
 import org.efs.openreports.engine.output.ReportEngineOutput;
 import org.efs.openreports.objects.Report;
@@ -62,6 +62,7 @@ import org.efs.openreports.providers.ProviderException;
  * 'reports/images/temp' directory.
  * 
  * @author Roberto Nibali
+ * @author Erik Swenson
  * 
  */
 public class BirtReportEngine extends ReportEngine
@@ -77,11 +78,13 @@ public class BirtReportEngine extends ReportEngine
 	/**
 	 * Generates a report from a BIRT report design.
 	 */	
+	@SuppressWarnings("unchecked")
+	@Override
 	public ReportEngineOutput generateReport(ReportEngineInput input)
 			throws ProviderException
 	{
 		Report report = input.getReport();
-		Map parameters = input.getParameters();
+		Map<String,Object> parameters = input.getParameters();
 		
 		ReportEngineOutput output = new ReportEngineOutput();
 		ByteArrayOutputStream out = new ByteArrayOutputStream();			
@@ -90,47 +93,51 @@ public class BirtReportEngine extends ReportEngine
 				.getBirtEngine(directoryProvider.getReportDirectory() + "platform");		
 
 		// Set options for task
-		HTMLRenderOption options = new HTMLRenderOption();
-		options.setOutputStream(out);
-			   
-		HTMLRenderContext renderContext = new HTMLRenderContext();		
-		renderContext.setImageDirectory(directoryProvider.getTempDirectory());
-		renderContext.setBaseImageURL("report-images");		
-		 
-		HashMap<String,Object> contextMap = new HashMap<String,Object>();
-		contextMap.put(EngineConstants.APPCONTEXT_HTML_RENDER_CONTEXT, renderContext);
-				
+		HTMLRenderOption renderOption = new HTMLRenderOption();
+		renderOption.setOutputStream(out);			
+		renderOption.setImageDirectory(directoryProvider.getTempDirectory());
+		renderOption.setBaseImageURL("report-images");		
+						
 		try
 		{
 			String designFile = directoryProvider.getReportDirectory() + report.getFile();
 			
 			log.info("Loading BIRT report design: " + report.getFile());
 			
-			IReportRunnable design = engine.openReportDesign(designFile);
-			
-			IRunAndRenderTask task = engine.createRunAndRenderTask(design);
-			task.setAppContext(contextMap);			
-			
+			IReportRunnable design = engine.openReportDesign(designFile);			
+						
 			handleDataSourceOverrides(design);				
 			
-			if (input.getExportType() == ReportEngine.EXPORT_PDF)
+			if (input.getExportType() == ExportType.PDF)
 			{			
 				output.setContentType(ReportEngineOutput.CONTENT_TYPE_PDF);
-				options.setOutputFormat(HTMLRenderOption.OUTPUT_FORMAT_PDF);				
+				renderOption.setOutputFormat(IRenderOption.OUTPUT_FORMAT_PDF);				
 			}
-			else if (input.getExportType() == ReportEngine.EXPORT_HTML)
+			else if (input.getExportType() == ExportType.HTML)
 			{			
 				output.setContentType(ReportEngineOutput.CONTENT_TYPE_HTML);
-				options.setOutputFormat(HTMLRenderOption.OUTPUT_FORMAT_HTML);				
+				renderOption.setOutputFormat(IRenderOption.OUTPUT_FORMAT_HTML);				
 			}
 			else
 			{
 				log.error("Export type not yet implemented: " + input.getExportType());
 			}
 			
-			task.setRenderOption(options);
-			task.setParameterValues(parameters);
+			IRunAndRenderTask task = engine.createRunAndRenderTask(design);					
+			task.setRenderOption(renderOption);
+			task.setParameterValues(parameters);			
 			task.validateParameters();
+			
+			if (input.getLocale() != null)
+			{
+				task.setLocale(input.getLocale());
+			}
+			
+			if (input.getXmlInput() != null)
+			{
+				ByteArrayInputStream stream = new ByteArrayInputStream(input.getXmlInput().getBytes());					
+				task.getAppContext().put("org.eclipse.datatools.enablement.oda.xml.inputStream", stream);				
+            }
 			
 			log.info("Generating BIRT report: " + report.getName());
 			
@@ -156,24 +163,25 @@ public class BirtReportEngine extends ReportEngine
 	 * BIRT rptdesign file must match the name of an existing OpenReports
 	 * DataSource.
 	 */
+	@SuppressWarnings("unchecked")
 	private void handleDataSourceOverrides(IReportRunnable design)
 	{		
 		ReportDesignHandle reportDH = (ReportDesignHandle) design.getDesignHandle();
 		
-		List birtDataSources = reportDH.getAllDataSources();
+		List<OdaDataSourceHandle> birtDataSources = reportDH.getAllDataSources();
 		
 		if (birtDataSources == null) return;
 		
-		Iterator iterator = birtDataSources.iterator();
+		Iterator<OdaDataSourceHandle> iterator = birtDataSources.iterator();
 		while (iterator.hasNext())
 		{
-			OdaDataSourceHandle dataSH = (OdaDataSourceHandle) iterator.next();
+			OdaDataSourceHandle dataSH = iterator.next();
 
 			try
-			{
+			{				
 				ReportDataSource reportDataSource = dataSourceProvider
 						.getDataSource(dataSH.getName());
-
+				
 				if (reportDataSource != null)
 				{		
 					log.info("Overriding BIRT DataSource: " + dataSH.getName());
@@ -188,7 +196,7 @@ public class BirtReportEngine extends ReportEngine
 						dataSH.setStringProperty("odaURL", reportDataSource.getUrl());
 						dataSH.setStringProperty("odaDriverClass", reportDataSource.getDriverClassName());
 						dataSH.setStringProperty("odaUser", reportDataSource.getUsername());
-						dataSH.setStringProperty("odaPassword", reportDataSource.getPassword());
+						dataSH.setStringProperty("odaPassword", reportDataSource.getPassword());						
 					}
 					catch (SemanticException e)
 					{
@@ -198,12 +206,12 @@ public class BirtReportEngine extends ReportEngine
 					log.debug("New connection properties for: " + dataSH.getName());
 					log.debug("URL:    " + dataSH.getStringProperty("odaURL"));
 					log.debug("DRIVER:    " + dataSH.getStringProperty("odaDriverClass"));
-					log.debug("USER:   " + dataSH.getStringProperty("odaUser"));					
+					log.debug("USER:   " + dataSH.getStringProperty("odaUser"));				
 				}
 				else
 				{
 					log.info("Unknown data source: " + dataSH.getName());
-				}
+				}				
 			}
 			catch (ProviderException pe)
 			{
@@ -214,6 +222,8 @@ public class BirtReportEngine extends ReportEngine
 		design.setDesignHandle(reportDH);
 	}
 	
+	@Override
+	@SuppressWarnings("unchecked")
 	public List buildParameterList(Report report) throws ProviderException	
 	{
 		IReportEngine engine = BirtProvider
@@ -235,15 +245,15 @@ public class BirtReportEngine extends ReportEngine
 		IGetParameterDefinitionTask task = engine
 				.createGetParameterDefinitionTask(design);
 		
-		Collection params = task.getParameterDefns(true);
+		Collection<IParameterDefnBase> params = task.getParameterDefns(true);
 		
 		ArrayList<ReportParameter> parameters = new ArrayList<ReportParameter>();
 
-		Iterator iter = params.iterator();
+		Iterator<IParameterDefnBase> iter = params.iterator();
 		// Iterate over all parameters
 		while (iter.hasNext())
 		{
-			IParameterDefnBase param = (IParameterDefnBase) iter.next();
+			IParameterDefnBase param = iter.next();
 			// Group section found
 			if (param instanceof IParameterGroupDefn)
 			{
@@ -251,10 +261,10 @@ public class BirtReportEngine extends ReportEngine
 				IParameterGroupDefn group = (IParameterGroupDefn) param;				
 
 				// Get the parameters within a group
-				Iterator i2 = group.getContents().iterator();
+				Iterator<IScalarParameterDefn> i2 = group.getContents().iterator();
 				while (i2.hasNext())
 				{
-					IScalarParameterDefn scalar = (IScalarParameterDefn) i2.next();
+					IScalarParameterDefn scalar = i2.next();
 
 					ReportParameter rp = new ReportParameter();
 					rp.setClassName("java.lang.String");

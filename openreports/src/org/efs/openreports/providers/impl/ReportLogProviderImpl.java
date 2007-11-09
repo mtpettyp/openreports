@@ -46,7 +46,7 @@ public class ReportLogProviderImpl implements ReportLogProvider
 		return reportLogPersistenceProvider.getReportLog(id);
 	}
 
-	public List getReportLogs(String status, Integer userId, Integer reportId, Integer alertId, int maxRows) throws ProviderException
+	public List<ReportLog> getReportLogs(String status, Integer userId, Integer reportId, Integer alertId, int maxRows) throws ProviderException
 	{
 		return reportLogPersistenceProvider.getReportLogs(status, userId, reportId, alertId, maxRows);
 	}
@@ -67,47 +67,47 @@ public class ReportLogProviderImpl implements ReportLogProvider
 		reportLogPersistenceProvider.deleteReportLog(reportLog);
 	}
 	
-	public List getTopReportsByUser() throws ProviderException
+	public List<Object[]> getTopReportsByUser() throws ProviderException
 	{
 		return reportLogPersistenceProvider.getTopReportsByUser();
 	}
 	
-	public List getTopReports() throws ProviderException
+	public List<Object[]> getTopReports() throws ProviderException
 	{
 		return reportLogPersistenceProvider.getTopReports();
 	}
 
-	public List getTopFailures() throws ProviderException
+	public List<Object[]> getTopFailures() throws ProviderException
 	{
 		return reportLogPersistenceProvider.getTopFailures();		
 	}
 	
-	public List getTopEmptyReports() throws ProviderException
+	public List<Object[]> getTopEmptyReports() throws ProviderException
 	{
 		return reportLogPersistenceProvider.getTopEmptyReports();		
 	}	
 	
-	public List getTopReportsForPeriod(int daysBack) throws ProviderException
+	public List<Object[]> getTopReportsForPeriod(int daysBack) throws ProviderException
 	{
 		return reportLogPersistenceProvider.getTopReportsForPeriod(daysBack);
 	}
 	
-	public List getTopAlertsByUser() throws ProviderException
+	public List<Object[]> getTopAlertsByUser() throws ProviderException
 	{
 		return reportLogPersistenceProvider.getTopAlertsByUser();
 	}
 	
-	public List getTopAlerts() throws ProviderException
+	public List<Object[]> getTopAlerts() throws ProviderException
 	{
 		return reportLogPersistenceProvider.getTopAlerts();
 	}
 	
-	public List getTopTriggeredAlerts() throws ProviderException
+	public List<Object[]> getTopTriggeredAlerts() throws ProviderException
 	{
 		return reportLogPersistenceProvider.getTopTriggeredAlerts();
 	}
 	
-	public List getTopNotTriggeredAlerts() throws ProviderException
+	public List<Object[]> getTopNotTriggeredAlerts() throws ProviderException
 	{
 		return reportLogPersistenceProvider.getTopNotTriggeredAlerts();
 	}

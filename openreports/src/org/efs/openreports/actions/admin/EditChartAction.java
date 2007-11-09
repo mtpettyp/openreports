@@ -28,7 +28,9 @@ import org.apache.log4j.Logger;
 
 import org.efs.openreports.ORStatics;
 import org.efs.openreports.engine.ChartReportEngine;
+import org.efs.openreports.objects.Report;
 import org.efs.openreports.objects.ReportChart;
+import org.efs.openreports.objects.ReportDataSource;
 import org.efs.openreports.objects.ReportParameter;
 import org.efs.openreports.objects.ReportUser;
 import org.efs.openreports.objects.chart.ChartValue;
@@ -51,21 +53,22 @@ public class EditChartAction extends ActionSupport
 	private int id;
 	private String name;
 	private String description;
-	private String query;
+	private String query;	
 	private int dataSourceId = Integer.MIN_VALUE;	
 	private int reportId = Integer.MIN_VALUE;
 	private int chartType;
 	private int width = 600;
 	private int height = 400;
 	private String xAxisLabel;
-	private String yAxisLabel;
-	private int orientation;
+	private String yAxisLabel;	
+	private int orientation;	
 	private boolean showLegend;
 	private boolean showTitle;
-	private boolean showValues;
+	private boolean showValues;	
 
 	private ReportChart reportChart;		
 	private ChartValue[] chartValues;
+	private int overlayChartId = Integer.MIN_VALUE;
 
 	private DataSourceProvider dataSourceProvider;
 	private ChartProvider chartProvider;
@@ -74,6 +77,7 @@ public class EditChartAction extends ActionSupport
 	private PropertiesProvider propertiesProvider;
 	private DirectoryProvider directoryProvider;
 
+	@Override
 	public String execute()
 	{
 		try
@@ -92,16 +96,16 @@ public class EditChartAction extends ActionSupport
 			{
 				name = reportChart.getName();
 				description = reportChart.getDescription();
-				query = reportChart.getQuery();				
+				query = reportChart.getQuery();						
 				chartType = reportChart.getChartType();
 				width = reportChart.getWidth();
 				height = reportChart.getHeight();
 				xAxisLabel = reportChart.getXAxisLabel();
-				yAxisLabel = reportChart.getYAxisLabel();
-				orientation = reportChart.getPlotOrientation();
+				yAxisLabel = reportChart.getYAxisLabel();				
+				orientation = reportChart.getPlotOrientation();				
 				showLegend = reportChart.isShowLegend();
 				showTitle = reportChart.isShowTitle();
-				showValues = reportChart.isShowValues();
+				showValues = reportChart.isShowValues();				
 				id = reportChart.getId().intValue();
 				
 				if (reportChart.getDataSource() != null)
@@ -115,15 +119,20 @@ public class EditChartAction extends ActionSupport
 					reportId = reportChart.getDrillDownReport().getId().intValue();
 				}
 				
+				if (reportChart.getOverlayChart() != null)
+				{
+					overlayChartId = reportChart.getOverlayChart().getId();
+				}
+				
 			}
 
-			if (!submitOk && !submitValidate && !submitDuplicate) return INPUT;
-            
+			if (!submitOk && !submitValidate && !submitDuplicate) return INPUT;            
+			
             if (name == null || name.trim().length() < 1 || 
                 description == null || description.trim().length() < 1 ||
                 query == null || query.trim().length() < 1 )
             {
-                addActionError(LocalStrings.ERROR_CHART_INVALID);
+                addActionError(getText(LocalStrings.ERROR_CHART_INVALID));
                 return INPUT;
             }
             
@@ -137,19 +146,19 @@ public class EditChartAction extends ActionSupport
             		name = "Copy of ".concat(name);
             	}
             }
-
+                        
 			reportChart.setName(name);
 			reportChart.setDescription(description);
-			reportChart.setQuery(query);		
-			reportChart.setChartType(chartType);
+			reportChart.setQuery(query);				
+			reportChart.setChartType(chartType);			
 			reportChart.setWidth(width);
 			reportChart.setHeight(height);
 			reportChart.setXAxisLabel(xAxisLabel);
-			reportChart.setYAxisLabel(yAxisLabel);
+			reportChart.setYAxisLabel(yAxisLabel);			
 			reportChart.setShowLegend(new Boolean(showLegend));
 			reportChart.setShowTitle(new Boolean(showTitle));
 			reportChart.setShowValues(new Boolean(showValues));
-			reportChart.setPlotOrientation(new Integer(orientation));
+			reportChart.setPlotOrientation(new Integer(orientation));			
 			
 			if (dataSourceId != -1) reportChart.setDataSource(dataSourceProvider
 					.getDataSource(new Integer(dataSourceId)));
@@ -161,11 +170,20 @@ public class EditChartAction extends ActionSupport
 			else
 			{
 				reportChart.setDrillDownReport(null);
-			}					
+			}	
+			
+			if (overlayChartId != -1)
+			{
+				reportChart.setOverlayChart(chartProvider.getReportChart(overlayChartId));
+			}
+			else
+			{
+				reportChart.setOverlayChart(null);
+			}			
 			
 			if (submitValidate)
 			{
-				Map map = new HashMap();
+				Map<String,Object> map = new HashMap<String,Object>();
 				if (query.toUpperCase().indexOf("$P") > -1)
 				{
 					ReportUser reportUser = (ReportUser) ActionContext.getContext().getSession().get(ORStatics.REPORT_USER);
@@ -195,7 +213,7 @@ public class EditChartAction extends ActionSupport
 		}
 		catch (Exception e)
 		{
-			addActionError(e.getMessage());
+			addActionError(getText(e.getMessage()));
 			return INPUT;
 		}
 	}
@@ -245,7 +263,7 @@ public class EditChartAction extends ActionSupport
 		this.name = name;
 	}
 
-	public List getDataSources()
+	public List<ReportDataSource> getDataSources()
 	{
 		try
 		{
@@ -253,12 +271,12 @@ public class EditChartAction extends ActionSupport
 		}
 		catch (Exception e)
 		{
-			addActionError(e.getMessage());
+			addActionError(getText(e.getMessage()));
 			return null;
 		}
 	}
 	
-	public List getReports()
+	public List<Report> getReports()
 	{	
 		try
 		{
@@ -266,10 +284,25 @@ public class EditChartAction extends ActionSupport
 		}
 		catch (Exception e)
 		{
-			addActionError(e.getMessage());
+			addActionError(getText(e.getMessage()));
 			return null;
 		}		
 	}
+	
+	public List<ReportChart> getReportCharts()
+	{	
+		try
+		{
+			return chartProvider.getReportCharts();		
+		}
+		catch (Exception e)
+		{
+			addActionError(getText(e.getMessage()));
+			return null;
+		}		
+	}
+	
+	
 
 	public String[] getTypes()
 	{
@@ -319,8 +352,8 @@ public class EditChartAction extends ActionSupport
 	public void setQuery(String query)
 	{
 		this.query = query;
-	}	
-
+	}		
+	
 	public int getChartType()
 	{
 		return chartType;
@@ -330,7 +363,7 @@ public class EditChartAction extends ActionSupport
 	{
 		this.chartType = chartType;
 	}
-
+		
 	public int getHeight()
 	{
 		return height;
@@ -374,8 +407,8 @@ public class EditChartAction extends ActionSupport
 	public void setYAxisLabel(String axisLabel)
 	{
 		yAxisLabel = axisLabel;
-	}
-
+	}	
+	
 	public void setParameterProvider(ParameterProvider parameterProvider)
 	{
 		this.parameterProvider = parameterProvider;
@@ -394,7 +427,7 @@ public class EditChartAction extends ActionSupport
 	public boolean isShowLegend()
 	{
 		return showLegend;
-	}
+	}	
 
 	public void setShowLegend(boolean showLegend)
 	{
@@ -409,7 +442,7 @@ public class EditChartAction extends ActionSupport
 	public void setShowTitle(boolean showTitle)
 	{
 		this.showTitle = showTitle;
-	}
+	}	
 
 	public int getReportId()
 	{
@@ -444,5 +477,15 @@ public class EditChartAction extends ActionSupport
 	public void setPropertiesProvider(PropertiesProvider propertiesProvider)
 	{
 		this.propertiesProvider = propertiesProvider;
+	}
+	
+	public int getOverlayChartId()
+	{
+		return overlayChartId;
+	}
+	
+	public void setOverlayChartId(int overlayChartId)
+	{
+		this.overlayChartId = overlayChartId;
 	}
 }

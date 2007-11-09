@@ -106,9 +106,11 @@ public class SchedulerProviderImpl implements SchedulerProvider
 			catch(ParseException pe)
 			{
 				throw new ProviderException(pe);
-			}
-			
+			}			
+            
 			cronTrigger.setStartTime(reportSchedule.getStartDate());
+            cronTrigger.setPriority(reportSchedule.getSchedulePriority());
+            cronTrigger.getJobDataMap().put(reportSchedule.getScheduleName(), reportSchedule.getRequestId());
 
             try
             {
@@ -125,6 +127,8 @@ public class SchedulerProviderImpl implements SchedulerProvider
 			SimpleTrigger trigger = new SimpleTrigger(reportSchedule.getScheduleName(),
 					reportSchedule.getScheduleGroup(), reportSchedule.getStartDateTime(), null,
 					0, 0L);
+            trigger.setPriority(reportSchedule.getSchedulePriority());
+            trigger.getJobDataMap().put(reportSchedule.getScheduleName(), reportSchedule.getRequestId());
 
             try
             {

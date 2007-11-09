@@ -50,6 +50,14 @@ public class ReportSchedule implements Serializable
 	private String recipients;
 	
 	private String scheduleName;
+    
+    private String xmlInput;
+    private String[] deliveryMethods;
+    private String deliveryReturnAddress;
+    private String requestId;
+    private int schedulePriority = 5;
+    
+    private Locale locale;
 	
 	private transient String scheduleDescription;
 	private transient Date nextFireDate;
@@ -306,4 +314,76 @@ public class ReportSchedule implements Serializable
 	{
 		this.hours = hours;
 	}
+    
+    public String getXmlInput() 
+    {
+        return xmlInput;
+    }
+    
+    public void setXmlInput(String xmlInput) 
+    {
+        this.xmlInput = xmlInput;
+    }
+    
+    public String[] getDeliveryMethods() 
+    {
+        return deliveryMethods;
+    }
+    
+    public void setDeliveryMethods(String[] deliveryMethods) 
+    {
+        this.deliveryMethods = deliveryMethods;
+    }
+    
+    public boolean isDeliveryMethodSelected(String deliveryMethod)
+    {
+        if (deliveryMethods == null) return false;
+        
+        for (int i=0; i < deliveryMethods.length; i++)
+        {
+            if (deliveryMethods[i].equals(deliveryMethod)) return true;
+        }
+            
+        return false;
+    }
+    
+    public String getDeliveryReturnAddress()
+    {
+        return deliveryReturnAddress;
+    }
+    
+    public void setDeliveryReturnAddress(String deliveryReturnAddress)
+    {
+        this.deliveryReturnAddress = deliveryReturnAddress;
+    }
+    
+    public String getRequestId() 
+    {
+        return requestId;
+    }
+    
+    public void setRequestId(String requestId) 
+    {
+        this.requestId = requestId;
+    }
+    
+    public int getSchedulePriority() 
+    {
+        return schedulePriority;
+    }
+    
+    public void setSchedulePriority(int schedulePriority) 
+    {
+        this.schedulePriority = schedulePriority;
+    }
+
+	public Locale getLocale() 
+	{
+		return locale;
+	}
+
+	public void setLocale(Locale locale) 
+	{
+		this.locale = locale;
+	}       
 }

@@ -33,15 +33,15 @@ import net.sf.jasperreports.engine.design.JRDesignParameter;
 
 public class ORUtil
 {
-	public static Map buildJRDesignParameters(Map parameters)
+	public static Map<String,JRDesignParameter> buildJRDesignParameters(Map<String,Object> parameters)
 	{
 		// convert parameters to JRDesignParameters so they can be parsed
 		HashMap<String,JRDesignParameter> jrParameters = new HashMap<String,JRDesignParameter>();
 
-		Iterator iterator = parameters.keySet().iterator();
+		Iterator<String> iterator = parameters.keySet().iterator();
 		while (iterator.hasNext())
 		{
-			String key = (String) iterator.next();
+			String key = iterator.next();
 			Object value = parameters.get(key);
 			
 			if (value != null)
@@ -61,9 +61,9 @@ public class ORUtil
 	 * Build map containing the parameter name and a test value in order to validate
 	 * queries with parameters. 
 	 */	
-	public static Map buildQueryParameterMap(ReportUser reportUser, String queryString, ParameterProvider parameterProvider) throws ORException
+	public static Map<String,Object> buildQueryParameterMap(ReportUser reportUser, String queryString, ParameterProvider parameterProvider) throws ORException
 	{
-		HashMap<Object,Object> map = new HashMap<Object,Object>();
+		HashMap<String,Object> map = new HashMap<String,Object>();
 		
 		String name = queryString.substring(queryString.indexOf("{") + 1, queryString.indexOf("}"));
 		
@@ -97,7 +97,7 @@ public class ORUtil
 		ArrayList<ReportParameterMap> queryParameters = new ArrayList<ReportParameterMap>();
 		queryParameters.add(rpMap);		
 		
-		Map parameterMap = new HashMap();
+		Map<String,Object> parameterMap = new HashMap<String,Object>();
 		if (queryParameter.getData().toUpperCase().indexOf("$P") > -1)
 		{
 			parameterMap = buildQueryParameterMap(reportUser, queryParameter.getData(), parameterProvider);
@@ -120,7 +120,7 @@ public class ORUtil
      * as JasperReports: $P{ParameterName}
      * 
      */
-	public static String parseStringWithParameters(String text, Map parameters) 
+	public static String parseStringWithParameters(String text, Map<String,Object> parameters) 
 	{
 		if (text == null) return null;
 
@@ -147,7 +147,7 @@ public class ORUtil
      */
     public static void resetOlapContext(ActionContext context)
     {
-        Iterator i = context.getSession().keySet().iterator();
+        Iterator<?> i = context.getSession().keySet().iterator();
         while(i.hasNext())
         {
             String key = (String) i.next();
@@ -156,6 +156,21 @@ public class ORUtil
                 context.getSession().remove(key);               
             }
         }
+    }
+    
+    public static Locale getLocale(String locale)
+    {
+    	if (locale == null) return Locale.getDefault();
+    	
+    	StringTokenizer localeTokenizer = new StringTokenizer(locale,"_");
+    	if (localeTokenizer.countTokens() == 1)
+    	{
+    		return new Locale(locale);
+    	}
+    	else
+    	{
+    		return new Locale(localeTokenizer.nextToken(), localeTokenizer.nextToken());
+    	}
     }
 
 }

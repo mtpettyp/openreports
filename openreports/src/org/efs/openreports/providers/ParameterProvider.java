@@ -28,25 +28,25 @@ public interface ParameterProvider
 {
 	public ReportParameterValue[] getParamValues(
 		ReportParameter reportParameter,
-		Map parameters)
+		Map<String,Object> parameters)
 		throws ProviderException;
 	public void loadReportParameterValues(
-		List reportParameters,
-		Map parameters)
+		List<ReportParameterMap> reportParameters,
+		Map<String,Object> parameters)
 		throws ProviderException;
 
-	public List getReportParameters(Report report, String type)
+	public List<ReportParameter> getReportParameters(Report report, String type)
 		throws ProviderException;
 
-	public Map<String,Object> getReportParametersMap(List reportParameters, Map<Object,Object> parameters)
+	public Map<String,Object> getReportParametersMap(List<ReportParameterMap> reportParameters, Map<String,Object> parameters)
 		throws ProviderException;
-	public boolean validateParameters(List reportParameters, Map<Object,Object> parameters)
+	public boolean validateParameters(List<ReportParameterMap> reportParameters, Map<String,Object> parameters)
 		throws ProviderException;
 
 	public ReportParameter getReportParameter(Integer id)
 		throws ProviderException;
 	public ReportParameter getReportParameter(String name) throws ProviderException;
-	public List getReportParameters() throws ProviderException;
+	public List<ReportParameter> getReportParameters() throws ProviderException;
 	public ReportParameter insertReportParameter(ReportParameter reportParameter)
 		throws ProviderException;
 	public void updateReportParameter(ReportParameter reportParameter)
@@ -54,6 +54,6 @@ public interface ParameterProvider
 	public void deleteReportParameter(ReportParameter reportParameter)
 		throws ProviderException;
 
-	public List getAvailableParameters(Report report) throws ProviderException;
+	public List<ReportParameter> getAvailableParameters(Report report) throws ProviderException;
 
 }

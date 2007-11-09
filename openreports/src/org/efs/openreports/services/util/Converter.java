@@ -21,14 +21,14 @@ package org.efs.openreports.services.util;
 
 import java.util.ArrayList;
 
-import org.efs.openreports.engine.ReportEngine;
-import org.efs.openreports.objects.GeneratedReport;
+import org.efs.openreports.ReportConstants.ExportType;
+import org.efs.openreports.objects.DeliveredReport;
 import org.efs.openreports.objects.Report;
 import org.efs.openreports.objects.ReportParameterMap;
 import org.efs.openreports.objects.ReportUser;
 import org.efs.openreports.objects.ReportUserAlert;
 import org.efs.openreports.services.info.AlertInfo;
-import org.efs.openreports.services.info.GeneratedReportInfo;
+import org.efs.openreports.services.info.DeliveredReportInfo;
 import org.efs.openreports.services.info.ParameterInfo;
 import org.efs.openreports.services.info.ReportInfo;
 import org.efs.openreports.services.info.UserInfo;
@@ -59,15 +59,15 @@ public class Converter
 		
 		if (report.isJXLSReport())
 		{
-			reportInfo.setDefaultExportType(ReportEngine.EXPORT_XLS);
+			reportInfo.setDefaultExportType(ExportType.XLS);
 		}
 		else if (report.isHtmlExportEnabled() || report.isQueryReport() || report.isChartReport())
 		{
-			reportInfo.setDefaultExportType(ReportEngine.EXPORT_HTML);
+			reportInfo.setDefaultExportType(ExportType.HTML);
 		}
 		else
 		{
-			reportInfo.setDefaultExportType(ReportEngine.EXPORT_PDF);
+			reportInfo.setDefaultExportType(ExportType.PDF);
 		}
 		
 		if (report.getParameters() != null && report.getParameters().size() > 0)
@@ -111,22 +111,42 @@ public class Converter
 		alertInfo = new AlertInfo();
 		alertInfo.setAlertName(userAlert.getAlert().getName());
 		alertInfo.setCondition(userAlert.getCondition());
-		alertInfo.setCount(userAlert.getCount());
-		alertInfo.setReportName(userAlert.getReport().getName());
+		alertInfo.setCount(userAlert.getCount());		
 		alertInfo.setTriggered(userAlert.isTriggered());
+        
+        if (userAlert.getReport() != null)
+        {
+            alertInfo.setReportName(userAlert.getReport().getName());
+        }
 		
 		return alertInfo;
 	}
 	
-	public static GeneratedReportInfo convertToGeneratedReportInfo(GeneratedReport report)
+	public static DeliveredReportInfo convertToDeliveredReportInfo(DeliveredReport report)
 	{
-		GeneratedReportInfo info = new GeneratedReportInfo();
+		DeliveredReportInfo info = new DeliveredReportInfo();
 		info.setReportDescription(report.getReportDescription());
 		info.setReportFileName(report.getReportFileName());
 		info.setReportName(report.getReportName());
 		info.setRunDate(report.getRunDate());
 		info.setUserName(report.getUserName());
+        info.setDeliveryMethod(report.getDeliveryMethod());
+        info.setRequestId(report.getRequestId());
 		
 		return info;
 	}
+    
+    public static DeliveredReport convertToDeliveredReport(DeliveredReportInfo info)
+    {
+        DeliveredReport deliveredReport = new DeliveredReport();
+        deliveredReport.setReportDescription(info.getReportDescription());
+        deliveredReport.setReportFileName(info.getReportFileName());
+        deliveredReport.setReportName(info.getReportName());
+        deliveredReport.setRunDate(info.getRunDate());
+        deliveredReport.setUserName(info.getUserName());
+        deliveredReport.setDeliveryMethod(info.getDeliveryMethod());
+        deliveredReport.setRequestId(info.getRequestId());
+        
+        return deliveredReport;
+    }
 }

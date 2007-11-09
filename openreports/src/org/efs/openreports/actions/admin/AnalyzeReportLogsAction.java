@@ -43,11 +43,12 @@ public class AnalyzeReportLogsAction extends ActionSupport
 	private static final String TOP_TRIGGERED_ALERTS = "topTriggeredAlerts";
 	private static final String TOP_NOT_TRIGGERED_ALERTS = "topNotTriggeredAlerts";
     
-	private List results;
+	private List<Object[]> results;
 	private String queryName;	
 
 	private ReportLogProvider reportLogProvider;		
 
+	@Override
 	public String execute()
 	{
 		try
@@ -128,7 +129,7 @@ public class AnalyzeReportLogsAction extends ActionSupport
 		this.queryName = queryName;
 	}
 
-	public List getResults()
+	public List<Object[]> getResults()
 	{
 		return results;
 	}

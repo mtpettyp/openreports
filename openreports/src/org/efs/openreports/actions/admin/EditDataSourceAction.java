@@ -52,6 +52,7 @@ public class EditDataSourceAction extends ActionSupport
 	
 	private DataSourceProvider dataSourceProvider;	
 
+	@Override
 	public String execute()
 	{
 		try
@@ -131,8 +132,8 @@ public class EditDataSourceAction extends ActionSupport
 			return SUCCESS;
 		}
 		catch (Exception e)
-		{			
-			addActionError(e.getMessage());
+		{				
+			addActionError(getText(e.getMessage()));
 			return INPUT;
 		}
 	}

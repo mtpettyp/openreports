@@ -59,6 +59,7 @@ public class EditReportAction extends ActionSupport
 	private boolean rtfExportEnabled;
 	private boolean textExportEnabled;
 	private boolean excelExportEnabled;
+	private boolean imageExportEnabled;
 	private boolean virtual;
 	private boolean hidden;
 	
@@ -72,6 +73,7 @@ public class EditReportAction extends ActionSupport
 	
 	private ReportParameterValue[] parameterValues;    
     
+	@Override
 	public String execute()
 	{
 		try
@@ -100,6 +102,7 @@ public class EditReportAction extends ActionSupport
 				rtfExportEnabled = report.isRtfExportEnabled();
 				textExportEnabled = report.isTextExportEnabled();
 				excelExportEnabled = report.isExcelExportEnabled();
+				imageExportEnabled = report.isImageExportEnabled();
 				virtual = report.isVirtualizationEnabled();
 				hidden = report.isHidden();
 				if (report.getDataSource() != null)
@@ -144,6 +147,7 @@ public class EditReportAction extends ActionSupport
 			report.setRtfExportEnabled(new Boolean(rtfExportEnabled));
 			report.setTextExportEnabled(new Boolean(textExportEnabled));
 			report.setExcelExportEnabled(new Boolean(excelExportEnabled));
+			report.setImageExportEnabled(new Boolean(imageExportEnabled));
 			report.setVirtualizationEnabled(new Boolean(virtual));
 			report.setHidden(new Boolean(hidden));
 			
@@ -184,7 +188,7 @@ public class EditReportAction extends ActionSupport
 			{
 				if (report.getQuery() == null || report.getQuery().length() < 1) return INPUT;
 				
-				Map map = new HashMap();
+				Map<String,Object> map = new HashMap<String,Object>();
 				if (query.toUpperCase().indexOf("$P") > -1)
 				{
 					ReportUser reportUser = (ReportUser) ActionContext.getContext().getSession().get(ORStatics.REPORT_USER);						
@@ -302,7 +306,7 @@ public class EditReportAction extends ActionSupport
 		this.name = name;
 	}
 
-	public List getDataSources()
+	public List<ReportDataSource> getDataSources()
 	{
 		try
 		{
@@ -315,7 +319,7 @@ public class EditReportAction extends ActionSupport
 		}
 	}
 
-	public List getReportFileNames()
+	public List<String> getReportFileNames()
 	{
 		try
 		{
@@ -338,7 +342,7 @@ public class EditReportAction extends ActionSupport
 		this.id = id;
 	}
 
-	public List getParametersInReport()
+	public List<ReportParameterMap> getParametersInReport()
 	{
 		if (report == null || report.getParameters() == null)
 			return null;
@@ -349,7 +353,7 @@ public class EditReportAction extends ActionSupport
 		return list;
 	}
 
-	public List getReportParameters()
+	public List<ReportParameter> getReportParameters()
 	{
 		try
 		{
@@ -387,7 +391,7 @@ public class EditReportAction extends ActionSupport
 		this.reportChartId = reportChartId;
 	}
 
-	public List getReportCharts()
+	public List<ReportChart> getReportCharts()
 	{
 		try
 		{
@@ -500,6 +504,16 @@ public class EditReportAction extends ActionSupport
 		this.rtfExportEnabled = rtfExportEnabled;
 	}
 
+	public boolean isImageExportEnabled()
+	{
+		return imageExportEnabled;
+	}
+
+	public void setImageExportEnabled(boolean imageExportEnabled)
+	{
+		this.imageExportEnabled = imageExportEnabled;
+	}
+	
 	public boolean isTextExportEnabled()
 	{
 		return textExportEnabled;

@@ -16,23 +16,18 @@
  * Place - Suite 330, Boston, MA 02111-1307, USA.
  *  
  */
+package org.efs.openreports.delivery;
 
-package org.efs.openreports.services;
+import org.efs.openreports.engine.output.ReportEngineOutput;
+import org.efs.openreports.objects.DeliveredReport;
+import org.efs.openreports.objects.ReportSchedule;
+import org.efs.openreports.objects.ReportUser;
 
-import org.efs.openreports.services.info.GeneratedReportInfo;
-import org.efs.openreports.services.input.UserInput;
-
-/**
- * Central Interface for external access into OpenReports generated report services.
- * 
- * @author Erik Swenson
- * @see GeneratedReportServiceImpl
- */
-
-public interface GeneratedReportService
-{		
-	/**
-	 * Get generated reports for a given user
-	 */	
-	public GeneratedReportInfo[] getGeneratedReports(UserInput user);	
+public interface DeliveryMethod 
+{    
+    public void deliverReport(ReportSchedule reportSchedule, ReportEngineOutput reportOutput) throws DeliveryException;
+    
+    public DeliveredReport[] getDeliveredReports(ReportUser user) throws DeliveryException;
+    
+    public byte[] getDeliveredReport(DeliveredReport deliveredReport) throws DeliveryException;        
 }

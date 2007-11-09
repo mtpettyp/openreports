@@ -27,7 +27,6 @@ import org.efs.openreports.objects.ReportUser;
 import org.efs.openreports.providers.ProviderException;
 import org.efs.openreports.providers.UserProvider;
 import org.efs.openreports.services.info.ReportInfo;
-import org.efs.openreports.services.info.ServiceCallInfo;
 import org.efs.openreports.services.info.UserInfo;
 import org.efs.openreports.services.input.UserInput;
 import org.efs.openreports.services.util.Converter;
@@ -49,54 +48,40 @@ public class UserServiceImpl implements UserService
 		log.info("UserService: Started");
 	}		
 
-	public boolean authenticate(UserInput userInput)
-	{
-		boolean authenticated = false;
-		
+	public void authenticate(UserInput userInput) throws ServiceException
+	{		
 		try
 		{
 			ReportUser user = userProvider.getUser(userInput.getUserName());
-			if (user != null && user.getPassword().equals(userInput.getPassword())) return true;
+			if (user == null || !user.getPassword().equals(userInput.getPassword()))
+            {
+                throw new ServiceException(ServiceMessages.NOT_AUTHENTICATED);
+            }
 		}
 		catch(ProviderException pe)
 		{
-			log.warn(pe);			
-		}
-		
-		return authenticated;
+			throw new ServiceException(pe);		
+		}		
 	}
 	
-	public UserInfo getUserInfo(UserInput userInput)
+	public UserInfo getUserInfo(UserInput userInput) throws ServiceException
 	{	
-        boolean authenticated = authenticate(userInput);
-        if (!authenticated) return null;
+	    authenticate(userInput);        
         
 		try
 		{   
 			ReportUser user = userProvider.getUser(userInput.getUserName());
-			if (user != null)
-			{
-				return Converter.convertToUserInfo(user);		
-			}
+			return Converter.convertToUserInfo(user);				
 		}
 		catch(ProviderException pe)
 		{
-			log.warn(pe);			
-		}
-		
-		return null;
+            throw new ServiceException(pe);			
+		}		
 	}
 	
-	public ServiceCallInfo updateUserInfo(UserInput userInput, UserInfo userInfo)
-	{		
-		ServiceCallInfo callInfo = new ServiceCallInfo();
-        
-        boolean authenticated = authenticate(userInput);
-        if (!authenticated)
-        {
-            callInfo.setMessage("Not Authenticated");
-            return callInfo;
-        }
+	public void updateUserInfo(UserInput userInput, UserInfo userInfo) throws ServiceException
+	{        
+        authenticate(userInput);        
 		
 		try
 		{
@@ -106,18 +91,15 @@ public class UserServiceImpl implements UserService
 			
 			userProvider.updateUser(user);
 		}
-		catch(Exception e)
+		catch(ProviderException e)
 		{
-			callInfo.setMessage(e.toString());
-		}
-		
-		return callInfo;
+			throw new ServiceException(e);
+		}	
 	}
 	
-	public ReportInfo[] getReports(UserInput userInput)
+	public ReportInfo[] getReports(UserInput userInput) throws ServiceException
 	{
-        boolean authenticated = authenticate(userInput);
-        if (!authenticated) return null;
+        authenticate(userInput);       
 
 		ReportInfo[] reports = null;
 
@@ -135,9 +117,9 @@ public class UserServiceImpl implements UserService
 				}
 			}
 		}
-		catch (Exception e)
+		catch (ProviderException e)
 		{
-			log.warn(e);
+            throw new ServiceException(e);
 		}
 
 		return reports;

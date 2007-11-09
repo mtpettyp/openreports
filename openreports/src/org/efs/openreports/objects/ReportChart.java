@@ -36,7 +36,11 @@ public class ReportChart implements Serializable
 	public static final int STACKED_BAR_CHART = 8;
 	public static final int DIAL_CHART = 9;
 	public static final int THERMOMETER_CHART = 10;
-	public static final int BUBBLE_CHART = 11;
+	public static final int BUBBLE_CHART = 11;	
+	public static final int XY_BAR_CHART = 13;
+	public static final int STACKED_XY_BAR_CHART = 14;
+	public static final int TIME_BAR_CHART = 15;
+	public static final int STACKED_TIME_BAR_CHART = 16;
 	
 	public static final int HORIZONTAL = 1;
 	public static final int VERTICAL = 2;
@@ -46,14 +50,15 @@ public class ReportChart implements Serializable
 	private Integer id;
 	private String name;
 	private String description;
-	private String query;
+	private String query;	
 	
 	private int chartType;
+	
 	private int width = 400;
 	private int height = 400;
 	
 	private String xAxisLabel;
-	private String yAxisLabel;	
+	private String yAxisLabel;
 	
 	private boolean showLegend;	
 	private boolean showTitle;
@@ -63,6 +68,8 @@ public class ReportChart implements Serializable
 	private ReportDataSource dataSource;
 	
 	private Report drillDownReport;
+	
+	private ReportChart overlayChart;
 
 	public ReportChart()
 	{
@@ -134,7 +141,7 @@ public class ReportChart implements Serializable
 	{
 		this.query = query;
 	}
-
+		
 	public int getChartType()
 	{
 		return chartType;
@@ -143,8 +150,8 @@ public class ReportChart implements Serializable
 	public void setChartType(int chartType)
 	{
 		this.chartType = chartType;
-	}
-
+	}	
+	
 	public int getHeight()
 	{
 		return height;
@@ -183,7 +190,7 @@ public class ReportChart implements Serializable
 	public void setYAxisLabel(String axisLabel)
 	{
 		yAxisLabel = axisLabel;
-	}
+	}	
 
 	public boolean isShowLegend()
 	{
@@ -216,7 +223,7 @@ public class ReportChart implements Serializable
 	{
 		if (plotOrientation == null) plotOrientation = new Integer(VERTICAL);
 		this.plotOrientation = plotOrientation.intValue();
-	}
+	}	
 
 	public Report getDrillDownReport()
 	{
@@ -238,4 +245,14 @@ public class ReportChart implements Serializable
 		if (showValues == null) showValues = new Boolean(false);
 		this.showValues = showValues.booleanValue();
 	}	
+	
+	public ReportChart getOverlayChart()
+	{
+		return overlayChart;
+	}
+	
+	public void setOverlayChart(ReportChart overlayChart)
+	{
+		this.overlayChart = overlayChart;
+	}
 }

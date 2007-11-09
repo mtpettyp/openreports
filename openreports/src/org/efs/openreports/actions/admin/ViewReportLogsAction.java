@@ -22,17 +22,20 @@ package org.efs.openreports.actions.admin;
 import java.util.List;
 
 import org.efs.openreports.actions.DisplayTagAction;
+import org.efs.openreports.objects.Report;
+import org.efs.openreports.objects.ReportAlert;
 import org.efs.openreports.objects.ReportLog;
+import org.efs.openreports.objects.ReportUser;
 import org.efs.openreports.providers.*;
 
 public class ViewReportLogsAction extends DisplayTagAction
 {	
 	private static final long serialVersionUID = 1524361082711124253L;
 	
-	private List reportLogs;
-	private List users;
-	private List reports;
-	private List alerts;
+	private List<ReportLog> reportLogs;
+	private List<ReportUser> users;
+	private List<Report> reports;
+	private List<ReportAlert> alerts;
 	private String status;
 	private Integer userId;
 	private Integer reportId;
@@ -49,11 +52,12 @@ public class ViewReportLogsAction extends DisplayTagAction
 	private UserProvider userProvider;
 	private AlertProvider alertProvider;
 
-	public List getReportLogs()
+	public List<ReportLog> getReportLogs()
 	{
 		return reportLogs;
 	}
 
+	@Override
 	public String execute()
 	{
 		try
@@ -88,7 +92,7 @@ public class ViewReportLogsAction extends DisplayTagAction
 		return submitOk;
 	}
 	
-	public List getReports()
+	public List<Report> getReports()
 	{
 		return reports;
 	}
@@ -98,7 +102,7 @@ public class ViewReportLogsAction extends DisplayTagAction
 		return statuses;
 	}
 
-	public List getUsers()
+	public List<ReportUser> getUsers()
 	{
 		return users;
 	}
@@ -163,7 +167,7 @@ public class ViewReportLogsAction extends DisplayTagAction
 		this.alertProvider = alertProvider;
 	}
 
-	public List getAlerts()
+	public List<ReportAlert> getAlerts()
 	{
 		return alerts;
 	}	

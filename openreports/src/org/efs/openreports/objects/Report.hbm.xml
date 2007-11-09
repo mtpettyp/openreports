@@ -29,7 +29,9 @@
         
         <property name="textExportEnabled" column="TEXT_EXPORT" not-null="true" /> 
         
-        <property name="excelExportEnabled" column="EXCEL_EXPORT" not-null="true" /> 
+        <property name="excelExportEnabled" column="EXCEL_EXPORT" not-null="true" />
+        
+        <property name="imageExportEnabled" column="IMAGE_EXPORT" not-null="true" />  
         
         <property name="virtualizationEnabled" column="FILL_VIRTUAL" not-null="true" />        
         

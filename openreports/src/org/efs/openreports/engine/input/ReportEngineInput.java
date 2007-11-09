@@ -19,8 +19,10 @@
 
 package org.efs.openreports.engine.input;
 
+import java.util.Locale;
 import java.util.Map;
 
+import org.efs.openreports.ReportConstants.ExportType;
 import org.efs.openreports.objects.Report;
 
 /**
@@ -34,7 +36,10 @@ public class ReportEngineInput
 {		
 	private Report report;
 	private Map<String,Object> parameters;
-	private int exportType;	
+	private ExportType exportType;	
+	private Locale locale;
+    
+    private String xmlInput;  
 	
 	// JasperReports only
 	private Map imagesMap;	
@@ -67,12 +72,12 @@ public class ReportEngineInput
 		this.report = report;
 	}	
 
-	public int getExportType()
+	public ExportType getExportType()
 	{
 		return exportType;
 	}
 
-	public void setExportType(int exportType)
+	public void setExportType(ExportType exportType)
 	{
 		this.exportType = exportType;
 	}
@@ -95,5 +100,25 @@ public class ReportEngineInput
 	public void setInlineImages(boolean inlineImages)
 	{
 		this.inlineImages = inlineImages;
+	}
+    
+    public String getXmlInput() 
+    {
+        return xmlInput;
+    }
+    
+    public void setXmlInput(String xmlInput) 
+    {
+        this.xmlInput = xmlInput;
+    }
+
+	public Locale getLocale() 
+	{
+		return locale;
+	}
+
+	public void setLocale(Locale locale) 
+	{
+		this.locale = locale;
 	}	
 }

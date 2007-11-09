@@ -22,7 +22,7 @@ package org.efs.openreports.actions.admin;
 import java.io.File;
 import java.io.FileInputStream;
 
-import org.efs.openreports.objects.GeneratedReport;
+import org.efs.openreports.objects.DeliveredReport;
 import org.efs.openreports.providers.DateProvider;
 import org.efs.openreports.providers.DirectoryProvider;
 
@@ -47,7 +47,7 @@ public class DeleteGeneratedReportAction extends DeleteAction
 			if (!submitDelete && !submitCancel)
 			{				
 				XStream xStream = new XStream();
-				xStream.alias("reportGenerationInfo", GeneratedReport.class);
+				xStream.alias("reportGenerationInfo", DeliveredReport.class);
 
 				String xmlFileName = fileName.substring(0, fileName.indexOf(".")) + ".xml";
 				System.out.println(xmlFileName);
@@ -55,7 +55,7 @@ public class DeleteGeneratedReportAction extends DeleteAction
 				File file = new File(directoryProvider.getReportGenerationDirectory() + xmlFileName);
 				FileInputStream inputStream = new FileInputStream(file);
 			
-				GeneratedReport info = (GeneratedReport) xStream
+				DeliveredReport info = (DeliveredReport) xStream
 					.fromXML(inputStream);				
 				
 				runDate = dateProvider.formatDate(info.getRunDate());					

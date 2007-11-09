@@ -27,7 +27,7 @@ public interface ChartProvider
 {	
 	public ReportChart getReportChart(Integer id) throws ProviderException;
 
-	public List getReportCharts() throws ProviderException;
+	public List<ReportChart> getReportCharts() throws ProviderException;
 
 	public ReportChart insertReportChart(ReportChart reportChart)
 			throws ProviderException;

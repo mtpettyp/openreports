@@ -26,19 +26,19 @@ import org.efs.openreports.objects.ReportLog;
 public interface ReportLogProvider
 {
 	public ReportLog getReportLog(Integer id) throws ProviderException;
-	public List getReportLogs(String status, Integer userId, Integer reportId, Integer alertId, int maxRows) throws ProviderException;
+	public List<ReportLog> getReportLogs(String status, Integer userId, Integer reportId, Integer alertId, int maxRows) throws ProviderException;
 	public ReportLog insertReportLog(ReportLog reportLog)	throws ProviderException;
 	public void updateReportLog(ReportLog reportLog) throws ProviderException;
 	public void deleteReportLog(ReportLog reportLog) throws ProviderException;	
 	
-	public List getTopReportsByUser() throws ProviderException;
-	public List getTopReports() throws ProviderException;
-	public List getTopFailures() throws ProviderException;
-	public List getTopEmptyReports() throws ProviderException;
-	public List getTopReportsForPeriod(int daysBack) throws ProviderException;	
+	public List<Object[]> getTopReportsByUser() throws ProviderException;
+	public List<Object[]> getTopReports() throws ProviderException;
+	public List<Object[]> getTopFailures() throws ProviderException;
+	public List<Object[]> getTopEmptyReports() throws ProviderException;
+	public List<Object[]> getTopReportsForPeriod(int daysBack) throws ProviderException;	
 	
-	public List getTopAlertsByUser() throws ProviderException;	
-	public List getTopAlerts() throws ProviderException;	
-	public List getTopTriggeredAlerts() throws ProviderException;	
-	public List getTopNotTriggeredAlerts() throws ProviderException;
+	public List<Object[]> getTopAlertsByUser() throws ProviderException;	
+	public List<Object[]> getTopAlerts() throws ProviderException;	
+	public List<Object[]> getTopTriggeredAlerts() throws ProviderException;	
+	public List<Object[]> getTopNotTriggeredAlerts() throws ProviderException;
 }

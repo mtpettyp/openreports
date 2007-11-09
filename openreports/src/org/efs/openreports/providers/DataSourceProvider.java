@@ -28,7 +28,7 @@ public interface DataSourceProvider
 {
 	public Connection getConnection(Integer id) throws ProviderException;
 	public boolean isValidDataSource(Integer id);
-	public List getDataSources() throws ProviderException;
+	public List<ReportDataSource> getDataSources() throws ProviderException;
 	public ReportDataSource getDataSource(Integer id) throws ProviderException;
 	public ReportDataSource getDataSource(String name) throws ProviderException;
 	public ReportDataSource insertDataSource(ReportDataSource dataSource)
