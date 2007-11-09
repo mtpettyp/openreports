@@ -7,18 +7,18 @@
 
 <s:if test="report == null || !report.isDisplayInline()">
 
-<a class="back-link img-report-small" href="reportList.action">Back to Reports</a>
-<a class="back-link img-group-small" href="reportGroup.action">Back to Groups</a>  	
+<a class="back-link img-report-small" href="reportList.action"><s:text name="link.back.reports"/></a>
+<a class="back-link img-group-small" href="reportGroup.action"><s:text name="link.back.groups"/></a>  	
   
 <br/>
 
+<s:actionerror/>
+	<div align="center">  
+  		<div class="important img-queryreport" id="instructions"><s:property value="report.name"/></div>  
+	</div>
 </s:if>
 
-<s:actionerror/>
-  
-<div align="center">
-	
-  <div class="important img-queryreport" id="instructions"><s:property value="report.name"/></div>     
+<div align="center">   
     
   <s:set name="results" value="results" scope="request" />  
   <s:set name="properties" value="properties" scope="request" />
@@ -41,7 +41,7 @@
 
   <s:if test="#session.user.scheduler">
   
-    Schedule Report: 
+    <s:text name="queryReport.scheduleReport"/>
     <a href="reportOptions.action?reportId=<%=report.getId()%>&submitSchedule=true&exportType=3">CSV</a> |
     <a href="reportOptions.action?reportId=<%=report.getId()%>&submitSchedule=true&exportType=1">Excel</a> |
     <a href="reportOptions.action?reportId=<%=report.getId()%>&submitSchedule=true&exportType=0">PDF</a>

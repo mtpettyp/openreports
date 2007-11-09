@@ -8,8 +8,8 @@
 
 <s:if test="report == null || !report.isDisplayInline()">
 
-<a class="back-link img-report-small" href="reportList.action">Back to Reports</a>
-<a class="back-link img-group-small" href="reportGroup.action">Back to Groups</a>   
+<a class="back-link img-report-small" href="reportList.action"><s:text name="link.back.reports"/></a>
+<a class="back-link img-group-small" href="reportGroup.action"><s:text name="link.back.groups"/></a>  	  
 
 <br/>
 

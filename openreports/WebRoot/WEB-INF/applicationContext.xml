@@ -1,17 +1,73 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
 
-<beans default-autowire="byName">
+<beans default-autowire="byName">  
 
-  <import resource="classpath:org/codehaus/xfire/spring/xfire.xml" />
+  <!-- allow for property placeholders -->
+  <bean id="environment"
+    class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"
+    lazy-init="false">
+    <property name="ignoreResourceNotFound" value="true" />
+    <property name="locations">
+      <list>
+        <value>
+          classpath:openreports.properties
+        </value>        
+      </list>
+    </property>
+  </bean>  
+  
+  <bean id="hibernateDataSource" destroy-method="close" class="org.apache.commons.dbcp.BasicDataSource">
+    <property name="driverClassName" value="${hibernate.jdbc.driver}" />
+    <property name="url" value="${hibernate.jdbc.url}" />
+    <property name="username" value="${hibernate.jdbc.username}" />
+    <property name="password" value="${hibernate.jdbc.password}" />
+    <property name="maxIdle" value="${hibernate.jdbc.maxIdle}" />
+    <property name="maxActive" value="${hibernate.jdbc.maxActive}" />    
+  </bean>
 
-  <bean id="hibernateProvider"
-    class="org.efs.openreports.providers.HibernateProvider"
-    singleton="true" />
+  <bean id="sessionFactory" class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">   
+    <property name="dataSource" ref="hibernateDataSource" /> 
+    <property name="configLocation" value="classpath:/hibernate.cfg.xml"/>
+    <property name="hibernateProperties">
+      <props>
+        <prop key="hibernate.dialect">${hibernate.dialect}</prop>      
+        <prop key="hibernate.jdbc.batch_size">0</prop>
+      </props>
+    </property>
+  </bean>
+
+  <bean id="hibernateProvider" class="org.efs.openreports.providers.HibernateProvider" singleton="true">
+     <property name="sessionFactory" ref="sessionFactory"/>
+  </bean>
+  
+  <bean id="quartzDataSource" destroy-method="close" class="org.apache.commons.dbcp.BasicDataSource">
+    <property name="driverClassName" value="${quartz.jdbc.driver}" />
+    <property name="url" value="${quartz.jdbc.url}" />
+    <property name="username" value="${quartz.jdbc.username}" />
+    <property name="password" value="${quartz.jdbc.password}" />
+    <property name="maxIdle" value="${quartz.jdbc.maxIdle}" />
+    <property name="maxActive" value="${quartz.jdbc.maxActive}" />   
+  </bean>
     
   <bean id="scheduler"
   	class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+  	<property name="dataSource" ref="quartzDataSource" />
  	<property name="applicationContextSchedulerContextKey" value="applicationContext"/>
+ 	<property name="quartzProperties">
+      <props>
+        <prop key="org.quartz.scheduler.instanceName">ReportScheduler</prop>
+        <prop key="org.quartz.scheduler.instanceId">AUTO</prop>
+        <prop key="org.quartz.threadPool.class">org.quartz.simpl.SimpleThreadPool</prop>
+        <prop key="org.quartz.threadPool.threadCount">${org.quartz.threadPool.threadCount}</prop>      
+        <prop key="org.quartz.jobStore.class">org.quartz.impl.jdbcjobstore.JobStoreTX</prop>
+        <prop key="org.quartz.jobStore.isClustered">false</prop>
+        <prop key="org.quartz.jobStore.useProperties">false</prop>
+        <prop key="org.quartz.jobStore.tablePrefix">QRTZ_</prop>
+        <prop key="org.quartz.jobStore.driverDelegateClass">${quartz.jobStore.driverDelegateClass}</prop>       
+        <prop key="org.quartz.jobStore.selectWithLockSQL">${quartz.jobStore.selectWithLockSQL}</prop>
+      </props>
+    </property>
   </bean> 
 
   <bean id="propertiesProvider"
@@ -99,139 +155,22 @@
     <constructor-arg>
       <ref bean="reportLogProvider" />
     </constructor-arg>
-  </bean>  
-    
-  <bean id="addressingHandler"
-    class="org.codehaus.xfire.addressing.AddressingInHandler" />
-
-  <bean name="xfireReportService"
-    class="org.codehaus.xfire.spring.ServiceBean" singleton="true">
-    <property name="serviceBean" ref="reportService" />
-    <property name="serviceClass"
-      value="org.efs.openreports.services.ReportService" />
-    <property name="inHandlers">
-      <list>
-        <ref bean="addressingHandler" />
-      </list>
-    </property>
-    <property name="properties">
-      <map>
-        <entry>
-          <key>
-            <value>mtom-enabled</value>
-          </key>
-          <value>true</value>
-        </entry>
-      </map>
-    </property>
-  </bean>
-
-  <bean id="reportService"
-    class="org.efs.openreports.services.ReportServiceImpl">
-    <property name="reportProvider" ref="reportProvider" />
-    <property name="reportLogProvider" ref="reportLogProvider" />   
-    <property name="schedulerProvider" ref="schedulerProvider" />
-    <property name="userProvider" ref="userProvider" />
-    <property name="directoryProvider" ref="directoryProvider" />
-    <property name="parameterProvider" ref="parameterProvider" />   
-    <property name="dataSourceProvider" ref="dataSourceProvider" />
-    <property name="propertiesProvider" ref="propertiesProvider" />
-    <property name="userService" ref="userService" />
-  </bean>
-  
-  <bean name="xfireUserService"
-    class="org.codehaus.xfire.spring.ServiceBean" singleton="true">
-    <property name="serviceBean" ref="userService" />
-    <property name="serviceClass"
-      value="org.efs.openreports.services.UserService" />
-    <property name="inHandlers">
-      <list>
-        <ref bean="addressingHandler" />
-      </list>
-    </property>   
-  </bean>
-
-  <bean id="userService"
-    class="org.efs.openreports.services.UserServiceImpl">     
-    <property name="userProvider" ref="userProvider" />   
-  </bean>
-  
-  <bean name="xfireAlertService"
-    class="org.codehaus.xfire.spring.ServiceBean" singleton="true">
-    <property name="serviceBean" ref="alertService" />
-    <property name="serviceClass"
-      value="org.efs.openreports.services.AlertService" />
-    <property name="inHandlers">
-      <list>
-        <ref bean="addressingHandler" />
-      </list>
-    </property>   
-  </bean>
-
-  <bean id="alertService"
-    class="org.efs.openreports.services.AlertServiceImpl">
-    <property name="alertProvider" ref="alertProvider" />   
-    <property name="userProvider" ref="userProvider" />   
-    <property name="userService" ref="userService" />
-  </bean>
-  
-  <bean name="xfireParameterService"
-    class="org.codehaus.xfire.spring.ServiceBean" singleton="true">
-    <property name="serviceBean" ref="parameterService" />
-    <property name="serviceClass"
-      value="org.efs.openreports.services.ParameterService" />
-    <property name="inHandlers">
-      <list>
-        <ref bean="addressingHandler" />
-      </list>
-    </property>   
-  </bean>
-
-  <bean id="parameterService"
-    class="org.efs.openreports.services.ParameterServiceImpl">
-    <property name="parameterProvider" ref="parameterProvider" />   
-  </bean>
-  
-  <bean name="xfireSchedulerService"
-    class="org.codehaus.xfire.spring.ServiceBean" singleton="true">
-    <property name="serviceBean" ref="schedulerService" />
-    <property name="serviceClass"
-      value="org.efs.openreports.services.SchedulerService" />
-    <property name="inHandlers">
-      <list>
-        <ref bean="addressingHandler" />
-      </list>
-    </property>   
-  </bean>
-
-  <bean id="schedulerService"
-    class="org.efs.openreports.services.SchedulerServiceImpl">
-    <property name="schedulerProvider" ref="schedulerProvider" />   
-    <property name="userProvider" ref="userProvider" />
-    <property name="userService" ref="userService" />     
-  </bean>
-  
-  <bean name="xfireGeneratedReportService"
-  	class="org.codehaus.xfire.spring.ServiceBean" singleton="true">
-  	<property name="serviceBean" ref="generatedReportService" />
-  	<property name="serviceClass"
-  		value="org.efs.openreports.services.GeneratedReportService" />
-  	<property name="inHandlers">
-  		<list>
-  			<ref bean="addressingHandler" />
-  		</list>
-  	</property>
-  </bean>
-
-  <bean id="generatedReportService"
-  	class="org.efs.openreports.services.GeneratedReportServiceImpl">
-  	<property name="directoryProvider" ref="directoryProvider" />
-  	<property name="userService" ref="userService" />
-  </bean>  
+  </bean>   
   
   <bean id="searchResultsTableDecorator"
   	class="org.efs.openreports.util.SearchResultsTableDecorator">
   	<property name="tagProvider" ref="tagProvider" />  	
+  </bean>  
+  
+  <bean id="fileSystemDeliveryMethod"
+  	class="org.efs.openreports.delivery.FileSystemDeliveryMethod">
+  	<property name="directoryProvider" ref="directoryProvider" />
+  	<property name="mailProvider" ref="mailProvider" /> 	
+  </bean>  
+  
+  <bean id="emailDeliveryMethod"
+  	class="org.efs.openreports.delivery.EMailDeliveryMethod">  	
+  	<property name="mailProvider" ref="mailProvider" /> 	
   </bean>  
 
 </beans>

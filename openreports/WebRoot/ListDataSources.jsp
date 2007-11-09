@@ -11,10 +11,10 @@
   
    	<div class="instructions" id="instructions">
 		<a href="editDataSource.action?command=add">
-			<img border="0" src="images/add.gif"/>Add DataSource
+			<img border="0" src="images/add.gif"/><s:text name="link.admin.addDataSource"/>
 		</a>
 		<a href="reportAdmin.action?command=add">
-  			<img border="0" src="images/back.gif"/> Back to Admin Menu
+  			<img border="0" src="images/back.gif"/> <s:text name="link.back.admin"/>
   		</a>
 	</div>
   	
@@ -23,7 +23,7 @@
   <s:set name="dataSourceNames" value="dataSourceNames" scope="request" />
   
   <display:table name="dataSourceNames" class="displayTag" sort="list" requestURI="listDataSources.action" decorator="org.efs.openreports.util.HRefColumnDecorator">  	      
-    <display:column property="name" href="editDataSource.action?command=edit" paramId="id" paramProperty="id" title="Name" sortable="true" headerClass="sortable"/>    	     	      	     
+    <display:column property="name" href="editDataSource.action?command=edit" paramId="id" paramProperty="id" titleKey="label.name" sortable="true" headerClass="sortable"/>    	     	      	     
     <display:column property="removeLink" title="" href="deleteDataSource.action" paramId="id" paramProperty="id"/> 	     	     		
   </display:table> 
   <br> 

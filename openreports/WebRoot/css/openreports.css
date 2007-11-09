@@ -6,26 +6,25 @@ html {
 body {
 	margin: 0;
 	padding: 0;
-	width: 100%;
-	font-size: 12px;
-	text-align: center;	
-	font-family: verdana;
+	width: 100%;	
+	text-align: center;		
 }
 
 a {			
-	font-size: 14px;	
+	font-size: 14px;
+	font-weight: bold;	
 	text-decoration: none;
-	color: #000666;		
-	font-weight: bold;
+	color:black;		
 }
 
 a:hover {		
 	border-bottom: 2px solid;	
 }
 	
-form {
-	background-color: #F6F7EE;		
+.dialog-form {		
 	margin:0;	
+	background-color: #edf5ff;
+	border: 1px solid;
 }
 
 ul {
@@ -33,15 +32,18 @@ ul {
 }
 
 .logo{
-	font-size: 26px;		
-	color: #000666;	
-	font-style: oblique; 	
+	color: white;
+	font-size: 18px;
+	font-weight: bold;	
+	padding-left: 8px;
+	padding-top: 8px;	
+	letter-spacing: 1px;
 }
 
 .menu {		
-	height: 42px;
-	background: #FFFFCC url(../images/menu-gradient.jpg) 0 0 repeat-x;	 
-	border-bottom: 1px solid;		
+	height: 38px;
+	background: url(../images/menu-gradient.jpg) 0 0 repeat-x;	 
+	border-bottom: 2px solid;		
 	border-top: 1px solid;	
 }
 
@@ -110,7 +112,7 @@ a.back-link {
 }
 
 .highlight {
-	background-color: #ececec;
+	background-color: #badfff;
 	border-bottom: 1px solid;		
 }
 
@@ -138,7 +140,7 @@ table.displaytag thead tr {
 	background-color: #ececec;
 	background: #FFFFCC url(../images/table-gradient.jpg) 0 0 repeat-x;
 	font-weight: bold;
-	height: 30px;
+	height: 28px;
 	border-bottom: 1px solid;	
 }
 
@@ -229,54 +231,26 @@ table.displaytag th.order2 a {
 	white-space: nowrap;	
 }
 
-#usermenu ul li a:link,#usermenu ul li a:visited {
-	background-color: white;
-	display: block;
-	color: #000666;
-	padding: 5px;
-	margin: 5px;
-	margin-top: 0px;
-	text-transform: uppercase;
-	text-decoration: none;
-	letter-spacing: 2px;
-	font-family: "Trebuchet MS";
-	font-size: 12px;
-	border: 1px solid;	
+.adminmenu{	
+	text-align: left;
+	margin-left: 20px;
+	width: 90%;		
 }
 
-#usermenu ul li a:hover,#usermenu ul li a:active,#usermenu ul li a.selected {
-	background-color: #ececec;	
-}
-
-.adminmenu{
-	float: left;
-	margin-left: 40px;
-	width: 30em;		
-}
-
-.adminmenu li {
-	display: block;	
-	padding: 10px;
+.adminmenu li {	
+	padding-bottom: 10px;
+	padding-left: 40px;
 }
 
 .adminmenu a {	
 	font-size: 22px;
+
 }
 
 .alert-form {
 	background-color: white;
 	border: 0; 	
 }
-
-#tagsautocomplete {position:relative;width:55em;margin-bottom:1em;}/* set width of widget here*/
-#tagsautocomplete {z-index:9000} /* for IE z-index of absolute divs inside relative divs issue */
-#tagscontainer {position:absolute;top:1.7em;width:100%}
-#tagscontainer .yui-ac-content {position:absolute;width:100%;border:1px solid #404040;background:#fff;overflow:hidden;z-index:9050;}
-#tagscontainer .yui-ac-shadow {position:absolute;margin:.3em;width:100%;background:#a0a0a0;z-index:9049;}
-#tagscontainer ul {padding:5px 0;width:100%;}
-#tagscontainer li {padding:0 5px;cursor:default;white-space:nowrap;}
-#tagscontainer li.yui-ac-highlight {background:#FFFFCC;}
-#tagscontainer li.yui-ac-prehighlight {background:#FFFFCC;}
 
 .img-report {
 	background:url(../images/reports.gif) no-repeat 3px 3px;	

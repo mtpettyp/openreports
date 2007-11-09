@@ -9,13 +9,13 @@
  
   <br/>
   
-  <div class="img-group important" id="instructions">Groups</div>
+  <div class="img-group important" id="instructions"><s:text name="reportGroup.title"/></div>
   
   <s:set name="reportGroups" value="reportGroups" scope="request" />  	 
  
   <display:table name="reportGroups" class="displayTag" sort="list" requestURI="reportGroup.action" >  	      
-    <display:column property="name" title="Name" href="reportList.action" paramId="groupId" paramProperty="id" sortable="true" headerClass="sortable"/>  	     
-    <display:column property="description" title="Description" sortable="true" headerClass="sortable"/>  	     	     
+    <display:column property="name" titleKey="label.name" href="reportList.action" paramId="groupId" paramProperty="id" sortable="true" headerClass="sortable"/>  	     
+    <display:column property="description" titleKey="label.description" sortable="true" headerClass="sortable"/>  	     	     
   </display:table>
    
 </div>

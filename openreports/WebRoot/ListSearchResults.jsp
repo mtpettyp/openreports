@@ -5,35 +5,46 @@
 
 <s:actionerror/> 
 
+<link rel="stylesheet" type="text/css" href="css/yui/autocomplete.css" />
 <script type="text/javascript" src="js/yui/autocomplete-min.js"></script>
 <script type="text/javascript" src="js/autocomplete-tags.js"></script>
 
-<script type="text/javascript">
-  var tagsArray = [$tags];            
+<script type="text/javascript">  
+  var tagsArray = [<s:property value='tags' escape="false"/>];            
 </script>
+
+<style type="text/css">
+#tagsautocomplete {
+   width:30em;
+   text-align:left; 
+   padding-bottom: 5px; 
+}
+</style>
 
 <br/>
 
-<div align="center">
-  
-   <div id="instructions" style="width: 700px;">
-      <form action="search.action">            
-        <div id="tagsautocomplete"> 
-             <b>Search by tag:</b>     
-             <input id="tagsinput" name="search" value="<s:property value="search"/>"> 
-             <input type="submit" value="Submit">
-             <div id="tagscontainer"></div> 
-         </div>         
-      </form>
-      <br/>
-    </div>
+<div align="center">	 
+     <form action="search.action" class="dialog-form" style="width: 500px;">
+      <b><s:text name="listSearchResults.title"/></b>               
+       <div id="tagsautocomplete">                       
+            <input id="tagsinput" name="search" value="<s:property value="search"/>">                       
+            <div id="tagscontainer"></div>              
+       </div>
+       <br/>
+       <input type="submit" value="<s:text name="button.submit"/>">                     
+     </form>            
+</div>    
+    
+<br/>
+
+<div align="center">     
     
   <s:set name="results" value="results" scope="request" />  
   
   <display:table name="results" class="displayTag" sort="list" decorator="searchResultsTableDecorator">
-    <display:column property="name" title="Name" sortable="true"/>
-    <display:column property="action" title="Action"/>    
-    <display:column property="tags" title="Tags"/> 
+    <display:column property="name" titleKey="label.name" sortable="true"/>
+    <display:column property="action" titleKey="label.action"/>    
+    <display:column property="tags" titleKey="label.tags"/> 
   </display:table>  
   <br>  
 </div>
