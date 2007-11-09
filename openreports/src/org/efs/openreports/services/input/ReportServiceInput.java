@@ -20,38 +20,94 @@
 package org.efs.openreports.services.input;
 
 import java.io.Serializable;
+import java.util.Date;
 
-import org.efs.openreports.services.ReportService;
+import org.efs.openreports.ReportConstants;
+import org.efs.openreports.ReportConstants.DeliveryMethod;
+import org.efs.openreports.ReportConstants.ExportType;
+import org.efs.openreports.ReportConstants.ScheduleAmPm;
+import org.efs.openreports.ReportConstants.ScheduleType;
 
 /**
- * Standard ReportServiceInput object. UserInput and ReportName are required, the rest
- * are optional. If not specified, exportType defaults to PDF and deliveryMethod
- * defaults to API.
+ * ReportService input object contains information used to identify the user, report,
+ * delivery method, and export type of the request along with optional xml input, 
+ * parameter and scheduling information. 
  * 
  * @author Erik Swenson
+ * @see ReportConstants
  */
 
 public class ReportServiceInput implements Serializable
 {	
-	private static final long serialVersionUID = -3094443722330870862L;	
+	private static final long serialVersionUID = -3094443722330870862L;		
 	
-	private UserInput user;
-	private String reportName;
-	private int exportType = 0; // default to PDF
-	private String deliveryMethod = ReportService.DELIVERY_API;	
+	/** unique id of request  */
+	private String requestId;
+	
+    /** identifies the user making the request */
+	private UserInput user;  
+    
+    /** name of report */
+	private String reportName;	
+	
+    /** exportType for the report. defaults to PDF */
+	private ExportType exportType = ExportType.PDF;
+    
+    /** list of delivery methods for the report */
+	private DeliveryMethod[] deliveryMethods;	
+    
+    /** delivery address for report */
+    private String deliveryAddress;
+    
+    /** return or bounce address for the report */
+    private String deliveryReturnAddress;
+    
+    /** parameters passed to the report */
 	private ParameterInput[] parameters;  
+    
+    /** xml data for report generation */
+    private String xmlInput;
    	
-	// schedule options	
-	private String startDate;		
+    /** start date for scheduled report */
+	private Date startDate;		
+    
+    /** start hour for scheduled report */
 	private String startHour;
+    
+    /** start minute for scheduled report */
 	private String startMinute;
-	private String startAmPm;
-	private int scheduleType = 0; // default to once		
+    
+    /** am/pm indicator for scheduled report */
+	private ScheduleAmPm startAmPm;
+    
+    /** schedule type (once, daily, weekly, etc.). defaulted to once */
+	private ScheduleType scheduleType = ScheduleType.ONCE;
+    
+    /** sets priority of scheduled report. defaulted to five */
+    private int schedulePriority = 5;
+    
+    /** description of scheduled report */
 	private String scheduleDescription;
+    
+    /** number of hours to run hourly schedule report */
 	private int hours;	
-	private String cronExpression;
-	// 	
+    
+    /** cron expression for cron schedule report */
+	private String cronExpression;	
 	
+	/** locale for the report in standard format, for example: "en_US" */
+	private String locale;
+			
+	public String getRequestId() 
+	{
+		return requestId;
+	}
+
+	public void setRequestId(String requestId)
+	{
+		this.requestId = requestId;
+	}
+
 	public UserInput getUser()
 	{
 		return user;
@@ -62,22 +118,34 @@ public class ReportServiceInput implements Serializable
 		this.user = user;
 	}
 
-	public String getDeliveryMethod()
+	public DeliveryMethod[] getDeliveryMethods()
 	{
-		return deliveryMethod;
+		return deliveryMethods;
 	}
 	
-	public void setDeliveryMethod(String deliveryMethod)
+	public void setDeliveryMethods(DeliveryMethod... deliveryMethods)
 	{
-		this.deliveryMethod = deliveryMethod;
+		this.deliveryMethods = deliveryMethods;
 	}	
+    
+    public boolean isDeliveryMethodSelected(String deliveryMethod)
+    {
+        if (deliveryMethods == null) return false;
+        
+        for (int i=0; i < deliveryMethods.length; i++)
+        {
+            if (deliveryMethods[i].equals(deliveryMethod)) return true;
+        }
+            
+        return false;
+    }
 
-	public int getExportType()
+	public ExportType getExportType()
 	{
 		return exportType;
 	}
 
-	public void setExportType(int exportType)
+	public void setExportType(ExportType exportType)
 	{
 		this.exportType = exportType;
 	}
@@ -87,7 +155,7 @@ public class ReportServiceInput implements Serializable
         return parameters;
     }
 
-    public void setParameters(ParameterInput[] parameters)
+    public void setParameters(ParameterInput... parameters)
     {
         this.parameters = parameters;
     }   
@@ -102,32 +170,32 @@ public class ReportServiceInput implements Serializable
 		this.reportName = reportName;
 	}    
 
-    public int getScheduleType()
+    public ScheduleType getScheduleType()
 	{
 		return scheduleType;
 	}
 
-	public void setScheduleType(int scheduleType)
+	public void setScheduleType(ScheduleType scheduleType)
 	{
 		this.scheduleType = scheduleType;
 	}
 
-	public String getStartAmPm()
+	public ScheduleAmPm getStartAmPm()
 	{
 		return startAmPm;
 	}
 
-	public void setStartAmPm(String startAmPm)
+	public void setStartAmPm(ScheduleAmPm startAmPm)
 	{
 		this.startAmPm = startAmPm;
 	}
 
-	public String getStartDate()
+	public Date getStartDate()
 	{
 		return startDate;
 	}
 
-	public void setStartDate(String startDate)
+	public void setStartDate(Date startDate)
 	{
 		this.startDate = startDate;
 	}
@@ -180,5 +248,55 @@ public class ReportServiceInput implements Serializable
 	public void setHours(int hours)
 	{
 		this.hours = hours;
-	}		
+	}
+    
+    public String getXmlInput() 
+    {
+        return xmlInput;
+    }
+    
+    public void setXmlInput(String xmlInput) 
+    {
+        this.xmlInput = xmlInput;
+    }
+    
+    public String getDeliveryAddress() 
+    {
+        return deliveryAddress;
+    }
+    
+    public void setDeliveryAddress(String deliveryAddress) 
+    {
+        this.deliveryAddress = deliveryAddress;
+    }
+    
+    public String getDeliveryReturnAddress()
+    {
+        return deliveryReturnAddress;
+    }
+    
+    public void setDeliveryReturnAddress(String deliveryReturnAddress)
+    {
+        this.deliveryReturnAddress = deliveryReturnAddress;
+    }
+    
+    public int getSchedulePriority() 
+    {
+        return schedulePriority;
+    }
+    
+    public void setSchedulePriority(int schedulePriority) 
+    {
+        this.schedulePriority = schedulePriority;
+    }
+
+	public String getLocale()
+	{
+		return locale;
+	}
+
+	public void setLocale(String locale) 
+	{
+		this.locale = locale;
+	}	    
 }
