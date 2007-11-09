@@ -66,7 +66,7 @@ public class ParameterServiceImpl implements ParameterService
 			{
 				//TODO support multi-step parameters
 				ReportParameterValue[] reportParamValues = parameterProvider
-						.getParamValues(parameter, new HashMap());
+						.getParamValues(parameter, new HashMap<String,Object>());
 				
 				paramValues = new ParameterValueInfo[reportParamValues.length];
 
