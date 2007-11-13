@@ -22,6 +22,7 @@ package org.efs.openreports.engine;
 import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.sql.Connection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -65,7 +66,9 @@ public class JXLSReportEngine extends ReportEngine
 		try
 		{
 			Report report = input.getReport();
-			Map<String,Object> parameters = input.getParameters();
+						
+			// create new HashMap to send to JXLS in order to maintain original map of parameters
+			Map<String,Object> jxlsReportMap = new HashMap<String,Object>(input.getParameters());
 			
 			if (report.getQuery() != null && report.getQuery().trim().length() > 0)
 			{
@@ -74,13 +77,13 @@ public class JXLSReportEngine extends ReportEngine
 				QueryEngineOutput output = (QueryEngineOutput) queryEngine
 						.generateReport(input);		
 				
-				parameters.put(ORStatics.JXLS_REPORT_RESULTS, output.getResults());
+				jxlsReportMap.put(ORStatics.JXLS_REPORT_RESULTS, output.getResults());
 			}
 			else
 			{
 				conn = dataSourceProvider.getConnection(report.getDataSource().getId());
-				JXLSReportManagerImpl rm = new JXLSReportManagerImpl(conn, parameters, dataSourceProvider);
-				parameters.put("rm", rm);
+				JXLSReportManagerImpl rm = new JXLSReportManagerImpl(conn, jxlsReportMap, dataSourceProvider);
+				jxlsReportMap.put("rm", rm);
 			}
 
 			FileInputStream template = new FileInputStream(directoryProvider
@@ -88,7 +91,7 @@ public class JXLSReportEngine extends ReportEngine
 					+ report.getFile());
 
 			XLSTransformer transformer = new XLSTransformer();
-			HSSFWorkbook workbook = transformer.transformXLS(template, parameters);			
+			HSSFWorkbook workbook = transformer.transformXLS(template, jxlsReportMap);			
 
 			ByteArrayOutputStream out = new ByteArrayOutputStream();
 			workbook.write(out);
