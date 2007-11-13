@@ -8,7 +8,7 @@
 	<property name="web-inf" value="${WebRoot}/WEB-INF" />
 	<property name="web-inf.classes" value="${web-inf}/classes" />
 	<property name="web-inf.lib" value="${web-inf}/lib" />
-	<property name="distribution" value="\openreports" />
+	<property name="distribution" value="/openreports/distributions" />
 	<property name="version" value="3.0.0" />
 
 	<target name="compile">
@@ -121,12 +121,12 @@
 	<target name="createDistribution">
 
 		<delete failonerror="false" includeemptydirs="true">
-			<fileset dir="${distribution}" />
+			<fileset dir="${distribution}/${version}" />
 		</delete>
 
-		<mkdir dir="${distribution}" />
+		<mkdir dir="${distribution}/${version}" />
 
-		<copy todir="${distribution}">
+		<copy todir="${distribution}/${version}">
 			<fileset dir=".">
 				<filename name="**/**" />
 			</fileset>
