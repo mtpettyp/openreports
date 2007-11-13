@@ -118,6 +118,11 @@ public class BirtReportEngine extends ReportEngine
 				output.setContentType(ReportEngineOutput.CONTENT_TYPE_HTML);
 				renderOption.setOutputFormat(IRenderOption.OUTPUT_FORMAT_HTML);				
 			}
+			else if (input.getExportType() == ExportType.XLS)
+			{			
+				output.setContentType(ReportEngineOutput.CONTENT_TYPE_XLS);
+				renderOption.setOutputFormat("xls");				
+			}
 			else
 			{
 				log.error("Export type not yet implemented: " + input.getExportType());
