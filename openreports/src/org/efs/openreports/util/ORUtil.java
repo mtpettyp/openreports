@@ -22,8 +22,10 @@ package org.efs.openreports.util;
 import com.opensymphony.xwork2.ActionContext;
 import java.util.*;
 
+import org.apache.commons.io.FilenameUtils;
 import org.efs.openreports.ORException;
 import org.efs.openreports.ORStatics;
+import org.efs.openreports.engine.output.ReportEngineOutput;
 import org.efs.openreports.objects.ReportParameter;
 import org.efs.openreports.objects.ReportParameterMap;
 import org.efs.openreports.objects.ReportUser;
@@ -172,5 +174,51 @@ public class ORUtil
     		return new Locale(localeTokenizer.nextToken(), localeTokenizer.nextToken());
     	}
     }
+    
+    public static String getContentType(String fileName)
+    {
+    	String extension = FilenameUtils.getExtension(fileName);
+    	
+    	if (".pdf".equalsIgnoreCase(extension))
+    	{
+    		return ReportEngineOutput.CONTENT_TYPE_PDF;
+    	}
+    	else if (".xls".equalsIgnoreCase(extension))
+    	{
+    		return ReportEngineOutput.CONTENT_TYPE_XLS;
+    	}
+    	else if (".html".equalsIgnoreCase(extension))
+    	{
+    		return ReportEngineOutput.CONTENT_TYPE_HTML;
+    	}
+    	else if (".csv".equalsIgnoreCase(extension))
+    	{
+    		return ReportEngineOutput.CONTENT_TYPE_CSV;
+    	}
+    	else if (".rtf".equalsIgnoreCase(extension))
+    	{
+    		return ReportEngineOutput.CONTENT_TYPE_RTF;
+    	}
+    	else if (".txt".equalsIgnoreCase(extension))
+    	{
+    		return ReportEngineOutput.CONTENT_TYPE_TEXT;
+    	}
+    	else if (".xml".equalsIgnoreCase(extension))
+    	{
+    		return ReportEngineOutput.CONTENT_TYPE_XML;
+    	}
+    	else if (".jpg".equalsIgnoreCase(extension))
+    	{
+    		return ReportEngineOutput.CONTENT_TYPE_JPEG;
+    	}
+    	else if (".png".equalsIgnoreCase(extension))
+    	{
+    		return ReportEngineOutput.CONTENT_TYPE_PNG;
+    	}
+    	
+    	//default content type
+    	return "application/octet-stream";
+    }
+
 
 }

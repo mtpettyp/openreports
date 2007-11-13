@@ -33,8 +33,10 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.efs.openreports.ORStatics;
+import org.efs.openreports.engine.output.ReportEngineOutput;
 import org.efs.openreports.objects.ReportUser;
 import org.efs.openreports.providers.DirectoryProvider;
+import org.efs.openreports.util.ORUtil;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
@@ -106,13 +108,21 @@ public class FileDispatcher extends HttpServlet
 				
 				file = new File(reportGenerationDirectory + fileName);
 			}			
+			
+			String contentType = ORUtil.getContentType(fileName);
 
-			byte[] fileDate = FileUtils.readFileToByteArray(file);
+			response.setContentType(contentType);
+			if (contentType != ReportEngineOutput.CONTENT_TYPE_HTML)
+			{
+				response.setHeader("Content-disposition", "inline; filename=" + StringUtils.deleteWhitespace(fileName));
+			}
+						
+			byte[] content = FileUtils.readFileToByteArray(file);
 
-			response.setContentLength(fileDate.length);
+			response.setContentLength(content.length);
+			
 			ServletOutputStream ouputStream = response.getOutputStream();
-
-			ouputStream.write(fileDate, 0, fileDate.length);
+			ouputStream.write(content, 0, content.length);
 			ouputStream.flush();
 			ouputStream.close();
 		}
