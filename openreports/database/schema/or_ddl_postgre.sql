@@ -1,6 +1,6 @@
 create table OR_PROPERTIES (PROPERTY_ID int4 not null, PROPERTY_KEY varchar(255) not null unique, PROPERTY_VALUE varchar(255), primary key (PROPERTY_ID))
 
-create table OR_TAGS (TAG_ID int4 not null, TAGGED_OBJECT_ID int4 not null, TAGGED_OBJECT_CLASS varchar(255) not null, TAG_VALUE varchar(255) not null, primary key (TAG_ID))
+create table OR_TAGS (TAG_ID int4 not null, TAGGED_OBJECT_ID int4 not null, TAGGED_OBJECT_CLASS varchar(255) not null, TAG_VALUE varchar(255) not null, TAG_TYPE varchar(255) not null, primary key (TAG_ID))
 
 create table REPORT (REPORT_ID int4 not null, NAME varchar(255) not null unique, DESCRIPTION varchar(255) not null, REPORT_FILE varchar(255) not null, PDF_EXPORT bool not null, CSV_EXPORT bool not null, XLS_EXPORT bool not null, HTML_EXPORT bool not null, RTF_EXPORT bool not null, TEXT_EXPORT bool not null, EXCEL_EXPORT bool not null, IMAGE_EXPORT bool not null, FILL_VIRTUAL bool not null, HIDDEN_REPORT bool not null, REPORT_QUERY text, DATASOURCE_ID int4, CHART_ID int4, EXPORT_OPTION_ID int4, primary key (REPORT_ID))
 
