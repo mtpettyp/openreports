@@ -1,0 +1,1295 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE report-definition PUBLIC "-//JFreeReport//DTD report definition//EN//extended/version 0.8.5"
+                         "http://jfreereport.sourceforge.net/extreport-085.dtd">
+<report-definition name="Report">
+
+    <parser-config>
+        <object-factory class="org.jfree.xml.factory.objects.URLClassFactory"/>
+        <object-factory class="org.jfree.report.modules.parser.ext.factory.objects.DefaultClassFactory"/>
+        <object-factory class="org.jfree.report.modules.parser.ext.factory.objects.BandLayoutClassFactory"/>
+        <object-factory class="org.jfree.xml.factory.objects.ArrayClassFactory"/>
+        <element-factory class="org.jfree.report.modules.parser.ext.factory.elements.DefaultElementFactory"/>
+        <stylekey-factory class="org.jfree.report.modules.parser.ext.factory.stylekey.DefaultStyleKeyFactory"/>
+        <stylekey-factory class="org.jfree.report.modules.parser.ext.factory.stylekey.PageableLayoutStyleKeyFactory"/>
+        <template-factory class="org.jfree.report.modules.parser.ext.factory.templates.DefaultTemplateCollection"/>
+        <datasource-factory class="org.jfree.report.modules.parser.ext.factory.datasource.DefaultDataSourceFactory"/>
+    </parser-config>
+
+    <report-config>
+        <simple-page-definition width="1" height="1">
+            <page orientation="portrait" topmargin="20" leftmargin="20" bottommargin="20" rightmargin="20" pageformat="A4"/>
+        </simple-page-definition>
+    </report-config>
+
+    <report-description>
+        <report-header>
+            <style>
+                <basic-key name="pagebreak-before">false</basic-key>
+                <basic-key name="pagebreak-after">false</basic-key>
+                <compound-key name="layoutmanager">
+                    <basic-object name="class">org.jfree.report.layout.StaticLayoutManager</basic-object>
+                </compound-key>
+            </style>
+            <element name="Element@18733404" type="text/plain">
+                <style>
+                    <compound-key name="min-size">
+                        <basic-object name="height">40.0</basic-object>
+                        <basic-object name="width">555.0</basic-object>
+                    </compound-key>
+                    <basic-key name="paint">black</basic-key>
+                    <basic-key name="font">dialog</basic-key>
+                    <basic-key name="font-size">26</basic-key>
+                    <basic-key name="line-height">0.0</basic-key>
+                    <basic-key name="font-bold">true</basic-key>
+                    <basic-key name="font-italic">false</basic-key>
+                    <basic-key name="font-underline">false</basic-key>
+                    <basic-key name="font-strikethrough">false</basic-key>
+                    <basic-key name="font-embedded">false</basic-key>
+                    <basic-key name="alignment">left</basic-key>
+                    <basic-key name="valignment">top</basic-key>
+                    <basic-key name="dynamic_height">false</basic-key>
+                    <basic-key name="reserved-literal">..</basic-key>
+                    <basic-key name="trim-text-content">true</basic-key>
+                    <basic-key name="Excel.WrapText">false</basic-key>
+                    <compound-key name="absolute_pos">
+                        <basic-object name="x">0.0</basic-object>
+                        <basic-object name="y">0.0</basic-object>
+                    </compound-key>
+                </style>
+                <template references="label">
+                    <basic-object name="content">Regional Budget Variances</basic-object>
+                </template>
+            </element>
+            <band>
+                <style>
+                    <compound-key name="min-size">
+                        <basic-object name="height">16.0</basic-object>
+                        <basic-object name="width">63.0</basic-object>
+                    </compound-key>
+                    <compound-key name="max-size">
+                        <basic-object name="height">2.14748365E9</basic-object>
+                        <basic-object name="width">63.0</basic-object>
+                    </compound-key>
+                    <compound-key name="absolute_pos">
+                        <basic-object name="x">0.0</basic-object>
+                        <basic-object name="y">50.0</basic-object>
+                    </compound-key>
+                    <compound-key name="layoutmanager">
+                        <basic-object name="class">org.jfree.report.layout.StaticLayoutManager</basic-object>
+                    </compound-key>
+                </style>
+                <element name="Element@3152885.background" type="shape/generic">
+                    <style>
+                        <compound-key name="min-size" class="org.jfree.ui.FloatDimension">
+                            <basic-object name="height">-100.0</basic-object>
+                            <basic-object name="width">-100.0</basic-object>
+                        </compound-key>
+                        <basic-key name="paint">#bcbcff</basic-key>
+                        <compound-key name="stroke" class="java.awt.BasicStroke">
+                            <basic-object name="value">1.0</basic-object>
+                        </compound-key>
+                        <basic-key name="scale">true</basic-key>
+                        <basic-key name="keepAspectRatio">false</basic-key>
+                        <compound-key name="absolute_pos">
+                            <basic-object name="x">0.0</basic-object>
+                            <basic-object name="y">0.0</basic-object>
+                        </compound-key>
+                        <basic-key name="fill-shape">true</basic-key>
+                        <basic-key name="draw-shape">false</basic-key>
+                    </style>
+                    <datasource type="StaticDataSource">
+                        <compound-object name="value" class="java.awt.geom.Rectangle2D$Float">
+                            <basic-object name="height">100.0</basic-object>
+                            <basic-object name="width">100.0</basic-object>
+                            <basic-object name="x">0.0</basic-object>
+                            <basic-object name="y">0.0</basic-object>
+                        </compound-object>
+                    </datasource>
+                </element>
+                <element name="Element@3152885" type="text/plain">
+                    <style>
+                        <compound-key name="min-size">
+                            <basic-object name="height">16.0</basic-object>
+                            <basic-object name="width">63.0</basic-object>
+                        </compound-key>
+                        <basic-key name="paint">black</basic-key>
+                        <basic-key name="font">dialog</basic-key>
+                        <basic-key name="font-size">12</basic-key>
+                        <basic-key name="line-height">0.0</basic-key>
+                        <basic-key name="font-bold">true</basic-key>
+                        <basic-key name="font-italic">false</basic-key>
+                        <basic-key name="font-underline">false</basic-key>
+                        <basic-key name="font-strikethrough">false</basic-key>
+                        <basic-key name="font-embedded">false</basic-key>
+                        <basic-key name="alignment">left</basic-key>
+                        <basic-key name="valignment">top</basic-key>
+                        <basic-key name="dynamic_height">false</basic-key>
+                        <basic-key name="reserved-literal">..</basic-key>
+                        <basic-key name="trim-text-content">true</basic-key>
+                        <basic-key name="Excel.WrapText">false</basic-key>
+                        <compound-key name="absolute_pos">
+                            <basic-object name="x">0.0</basic-object>
+                            <basic-object name="y">0.0</basic-object>
+                        </compound-key>
+                    </style>
+                    <template references="label">
+                        <basic-object name="content">REGION</basic-object>
+                    </template>
+                </element>
+            </band>
+            <band>
+                <style>
+                    <compound-key name="min-size">
+                        <basic-object name="height">16.0</basic-object>
+                        <basic-object name="width">122.0</basic-object>
+                    </compound-key>
+                    <compound-key name="max-size">
+                        <basic-object name="height">2.14748365E9</basic-object>
+                        <basic-object name="width">122.0</basic-object>
+                    </compound-key>
+                    <compound-key name="absolute_pos">
+                        <basic-object name="x">63.0</basic-object>
+                        <basic-object name="y">50.0</basic-object>
+                    </compound-key>
+                    <compound-key name="layoutmanager">
+                        <basic-object name="class">org.jfree.report.layout.StaticLayoutManager</basic-object>
+                    </compound-key>
+                </style>
+                <element name="Element@8104009.background" type="shape/generic">
+                    <style>
+                        <compound-key name="min-size" class="org.jfree.ui.FloatDimension">
+                            <basic-object name="height">-100.0</basic-object>
+                            <basic-object name="width">-100.0</basic-object>
+                        </compound-key>
+                        <basic-key name="paint">#bcbcff</basic-key>
+                        <compound-key name="stroke" class="java.awt.BasicStroke">
+                            <basic-object name="value">1.0</basic-object>
+                        </compound-key>
+                        <basic-key name="scale">true</basic-key>
+                        <basic-key name="keepAspectRatio">false</basic-key>
+                        <compound-key name="absolute_pos">
+                            <basic-object name="x">0.0</basic-object>
+                            <basic-object name="y">0.0</basic-object>
+                        </compound-key>
+                        <basic-key name="fill-shape">true</basic-key>
+                        <basic-key name="draw-shape">false</basic-key>
+                    </style>
+                    <datasource type="StaticDataSource">
+                        <compound-object name="value" class="java.awt.geom.Rectangle2D$Float">
+                            <basic-object name="height">100.0</basic-object>
+                            <basic-object name="width">100.0</basic-object>
+                            <basic-object name="x">0.0</basic-object>
+                            <basic-object name="y">0.0</basic-object>
+                        </compound-object>
+                    </datasource>
+                </element>
+                <element name="Element@8104009" type="text/plain">
+                    <style>
+                        <compound-key name="min-size">
+                            <basic-object name="height">16.0</basic-object>
+                            <basic-object name="width">122.0</basic-object>
+                        </compound-key>
+                        <basic-key name="paint">black</basic-key>
+                        <basic-key name="font">dialog</basic-key>
+                        <basic-key name="font-size">12</basic-key>
+                        <basic-key name="line-height">0.0</basic-key>
+                        <basic-key name="font-bold">true</basic-key>
+                        <basic-key name="font-italic">false</basic-key>
+                        <basic-key name="font-underline">false</basic-key>
+                        <basic-key name="font-strikethrough">false</basic-key>
+                        <basic-key name="font-embedded">false</basic-key>
+                        <basic-key name="alignment">left</basic-key>
+                        <basic-key name="valignment">top</basic-key>
+                        <basic-key name="dynamic_height">false</basic-key>
+                        <basic-key name="reserved-literal">..</basic-key>
+                        <basic-key name="trim-text-content">true</basic-key>
+                        <basic-key name="Excel.WrapText">false</basic-key>
+                        <compound-key name="absolute_pos">
+                            <basic-object name="x">0.0</basic-object>
+                            <basic-object name="y">0.0</basic-object>
+                        </compound-key>
+                    </style>
+                    <template references="label">
+                        <basic-object name="content">DEPARTMENT</basic-object>
+                    </template>
+                </element>
+            </band>
+            <band>
+                <style>
+                    <compound-key name="min-size">
+                        <basic-object name="height">16.0</basic-object>
+                        <basic-object name="width">125.0</basic-object>
+                    </compound-key>
+                    <compound-key name="max-size">
+                        <basic-object name="height">2.14748365E9</basic-object>
+                        <basic-object name="width">125.0</basic-object>
+                    </compound-key>
+                    <compound-key name="absolute_pos">
+                        <basic-object name="x">185.0</basic-object>
+                        <basic-object name="y">50.0</basic-object>
+                    </compound-key>
+                    <compound-key name="layoutmanager">
+                        <basic-object name="class">org.jfree.report.layout.StaticLayoutManager</basic-object>
+                    </compound-key>
+                </style>
+                <element name="Element@6656120.background" type="shape/generic">
+                    <style>
+                        <compound-key name="min-size" class="org.jfree.ui.FloatDimension">
+                            <basic-object name="height">-100.0</basic-object>
+                            <basic-object name="width">-100.0</basic-object>
+                        </compound-key>
+                        <basic-key name="paint">#bcbcff</basic-key>
+                        <compound-key name="stroke" class="java.awt.BasicStroke">
+                            <basic-object name="value">1.0</basic-object>
+                        </compound-key>
+                        <basic-key name="scale">true</basic-key>
+                        <basic-key name="keepAspectRatio">false</basic-key>
+                        <compound-key name="absolute_pos">
+                            <basic-object name="x">0.0</basic-object>
+                            <basic-object name="y">0.0</basic-object>
+                        </compound-key>
+                        <basic-key name="fill-shape">true</basic-key>
+                        <basic-key name="draw-shape">false</basic-key>
+                    </style>
+                    <datasource type="StaticDataSource">
+                        <compound-object name="value" class="java.awt.geom.Rectangle2D$Float">
+                            <basic-object name="height">100.0</basic-object>
+                            <basic-object name="width">100.0</basic-object>
+                            <basic-object name="x">0.0</basic-object>
+                            <basic-object name="y">0.0</basic-object>
+                        </compound-object>
+                    </datasource>
+                </element>
+                <element name="Element@6656120" type="text/plain">
+                    <style>
+                        <compound-key name="min-size">
+                            <basic-object name="height">16.0</basic-object>
+                            <basic-object name="width">125.0</basic-object>
+                        </compound-key>
+                        <basic-key name="paint">black</basic-key>
+                        <basic-key name="font">dialog</basic-key>
+                        <basic-key name="font-size">12</basic-key>
+                        <basic-key name="line-height">0.0</basic-key>
+                        <basic-key name="font-bold">true</basic-key>
+                        <basic-key name="font-italic">false</basic-key>
+                        <basic-key name="font-underline">false</basic-key>
+                        <basic-key name="font-strikethrough">false</basic-key>
+                        <basic-key name="font-embedded">false</basic-key>
+                        <basic-key name="alignment">left</basic-key>
+                        <basic-key name="valignment">top</basic-key>
+                        <basic-key name="dynamic_height">false</basic-key>
+                        <basic-key name="reserved-literal">..</basic-key>
+                        <basic-key name="trim-text-content">true</basic-key>
+                        <basic-key name="Excel.WrapText">false</basic-key>
+                        <compound-key name="absolute_pos">
+                            <basic-object name="x">0.0</basic-object>
+                            <basic-object name="y">0.0</basic-object>
+                        </compound-key>
+                    </style>
+                    <template references="label">
+                        <basic-object name="content">POSITIONTITLE</basic-object>
+                    </template>
+                </element>
+            </band>
+            <band>
+                <style>
+                    <compound-key name="min-size">
+                        <basic-object name="height">16.0</basic-object>
+                        <basic-object name="width">77.0</basic-object>
+                    </compound-key>
+                    <compound-key name="max-size">
+                        <basic-object name="height">2.14748365E9</basic-object>
+                        <basic-object name="width">77.0</basic-object>
+                    </compound-key>
+                    <compound-key name="absolute_pos">
+                        <basic-object name="x">310.0</basic-object>
+                        <basic-object name="y">50.0</basic-object>
+                    </compound-key>
+                    <compound-key name="layoutmanager">
+                        <basic-object name="class">org.jfree.report.layout.StaticLayoutManager</basic-object>
+                    </compound-key>
+                </style>
+                <element name="Element@32490450.background" type="shape/generic">
+                    <style>
+                        <compound-key name="min-size" class="org.jfree.ui.FloatDimension">
+                            <basic-object name="height">-100.0</basic-object>
+                            <basic-object name="width">-100.0</basic-object>
+                        </compound-key>
+                        <basic-key name="paint">#bcbcff</basic-key>
+                        <compound-key name="stroke" class="java.awt.BasicStroke">
+                            <basic-object name="value">1.0</basic-object>
+                        </compound-key>
+                        <basic-key name="scale">true</basic-key>
+                        <basic-key name="keepAspectRatio">false</basic-key>
+                        <compound-key name="absolute_pos">
+                            <basic-object name="x">0.0</basic-object>
+                            <basic-object name="y">0.0</basic-object>
+                        </compound-key>
+                        <basic-key name="fill-shape">true</basic-key>
+                        <basic-key name="draw-shape">false</basic-key>
+                    </style>
+                    <datasource type="StaticDataSource">
+                        <compound-object name="value" class="java.awt.geom.Rectangle2D$Float">
+                            <basic-object name="height">100.0</basic-object>
+                            <basic-object name="width">100.0</basic-object>
+                            <basic-object name="x">0.0</basic-object>
+                            <basic-object name="y">0.0</basic-object>
+                        </compound-object>
+                    </datasource>
+                </element>
+                <element name="Element@32490450" type="text/plain">
+                    <style>
+                        <compound-key name="min-size">
+                            <basic-object name="height">16.0</basic-object>
+                            <basic-object name="width">77.0</basic-object>
+                        </compound-key>
+                        <basic-key name="paint">black</basic-key>
+                        <basic-key name="font">dialog</basic-key>
+                        <basic-key name="font-size">12</basic-key>
+                        <basic-key name="line-height">0.0</basic-key>
+                        <basic-key name="font-bold">true</basic-key>
+                        <basic-key name="font-italic">false</basic-key>
+                        <basic-key name="font-underline">false</basic-key>
+                        <basic-key name="font-strikethrough">false</basic-key>
+                        <basic-key name="font-embedded">false</basic-key>
+                        <basic-key name="alignment">right</basic-key>
+                        <basic-key name="valignment">top</basic-key>
+                        <basic-key name="dynamic_height">false</basic-key>
+                        <basic-key name="reserved-literal">..</basic-key>
+                        <basic-key name="trim-text-content">true</basic-key>
+                        <basic-key name="Excel.WrapText">false</basic-key>
+                        <compound-key name="absolute_pos">
+                            <basic-object name="x">0.0</basic-object>
+                            <basic-object name="y">0.0</basic-object>
+                        </compound-key>
+                    </style>
+                    <template references="label">
+                        <basic-object name="content">ACTUAL</basic-object>
+                    </template>
+                </element>
+            </band>
+            <band>
+                <style>
+                    <compound-key name="min-size">
+                        <basic-object name="height">16.0</basic-object>
+                        <basic-object name="width">81.0</basic-object>
+                    </compound-key>
+                    <compound-key name="max-size">
+                        <basic-object name="height">2.14748365E9</basic-object>
+                        <basic-object name="width">81.0</basic-object>
+                    </compound-key>
+                    <compound-key name="absolute_pos">
+                        <basic-object name="x">387.0</basic-object>
+                        <basic-object name="y">50.0</basic-object>
+                    </compound-key>
+                    <compound-key name="layoutmanager">
+                        <basic-object name="class">org.jfree.report.layout.StaticLayoutManager</basic-object>
+                    </compound-key>
+                </style>
+                <element name="Element@2167036.background" type="shape/generic">
+                    <style>
+                        <compound-key name="min-size" class="org.jfree.ui.FloatDimension">
+                            <basic-object name="height">-100.0</basic-object>
+                            <basic-object name="width">-100.0</basic-object>
+                        </compound-key>
+                        <basic-key name="paint">#bcbcff</basic-key>
+                        <compound-key name="stroke" class="java.awt.BasicStroke">
+                            <basic-object name="value">1.0</basic-object>
+                        </compound-key>
+                        <basic-key name="scale">true</basic-key>
+                        <basic-key name="keepAspectRatio">false</basic-key>
+                        <compound-key name="absolute_pos">
+                            <basic-object name="x">0.0</basic-object>
+                            <basic-object name="y">0.0</basic-object>
+                        </compound-key>
+                        <basic-key name="fill-shape">true</basic-key>
+                        <basic-key name="draw-shape">false</basic-key>
+                    </style>
+                    <datasource type="StaticDataSource">
+                        <compound-object name="value" class="java.awt.geom.Rectangle2D$Float">
+                            <basic-object name="height">100.0</basic-object>
+                            <basic-object name="width">100.0</basic-object>
+                            <basic-object name="x">0.0</basic-object>
+                            <basic-object name="y">0.0</basic-object>
+                        </compound-object>
+                    </datasource>
+                </element>
+                <element name="Element@2167036" type="text/plain">
+                    <style>
+                        <compound-key name="min-size">
+                            <basic-object name="height">16.0</basic-object>
+                            <basic-object name="width">81.0</basic-object>
+                        </compound-key>
+                        <basic-key name="paint">black</basic-key>
+                        <basic-key name="font">dialog</basic-key>
+                        <basic-key name="font-size">12</basic-key>
+                        <basic-key name="line-height">0.0</basic-key>
+                        <basic-key name="font-bold">true</basic-key>
+                        <basic-key name="font-italic">false</basic-key>
+                        <basic-key name="font-underline">false</basic-key>
+                        <basic-key name="font-strikethrough">false</basic-key>
+                        <basic-key name="font-embedded">false</basic-key>
+                        <basic-key name="alignment">right</basic-key>
+                        <basic-key name="valignment">top</basic-key>
+                        <basic-key name="dynamic_height">false</basic-key>
+                        <basic-key name="reserved-literal">..</basic-key>
+                        <basic-key name="trim-text-content">true</basic-key>
+                        <basic-key name="Excel.WrapText">false</basic-key>
+                        <compound-key name="absolute_pos">
+                            <basic-object name="x">0.0</basic-object>
+                            <basic-object name="y">0.0</basic-object>
+                        </compound-key>
+                    </style>
+                    <template references="label">
+                        <basic-object name="content">BUDGET</basic-object>
+                    </template>
+                </element>
+            </band>
+            <band>
+                <style>
+                    <compound-key name="min-size">
+                        <basic-object name="height">16.0</basic-object>
+                        <basic-object name="width">87.0</basic-object>
+                    </compound-key>
+                    <compound-key name="max-size">
+                        <basic-object name="height">2.14748365E9</basic-object>
+                        <basic-object name="width">87.0</basic-object>
+                    </compound-key>
+                    <compound-key name="absolute_pos">
+                        <basic-object name="x">468.0</basic-object>
+                        <basic-object name="y">50.0</basic-object>
+                    </compound-key>
+                    <compound-key name="layoutmanager">
+                        <basic-object name="class">org.jfree.report.layout.StaticLayoutManager</basic-object>
+                    </compound-key>
+                </style>
+                <element name="Element@14820075.background" type="shape/generic">
+                    <style>
+                        <compound-key name="min-size" class="org.jfree.ui.FloatDimension">
+                            <basic-object name="height">-100.0</basic-object>
+                            <basic-object name="width">-100.0</basic-object>
+                        </compound-key>
+                        <basic-key name="paint">#bcbcff</basic-key>
+                        <compound-key name="stroke" class="java.awt.BasicStroke">
+                            <basic-object name="value">1.0</basic-object>
+                        </compound-key>
+                        <basic-key name="scale">true</basic-key>
+                        <basic-key name="keepAspectRatio">false</basic-key>
+                        <compound-key name="absolute_pos">
+                            <basic-object name="x">0.0</basic-object>
+                            <basic-object name="y">0.0</basic-object>
+                        </compound-key>
+                        <basic-key name="fill-shape">true</basic-key>
+                        <basic-key name="draw-shape">false</basic-key>
+                    </style>
+                    <datasource type="StaticDataSource">
+                        <compound-object name="value" class="java.awt.geom.Rectangle2D$Float">
+                            <basic-object name="height">100.0</basic-object>
+                            <basic-object name="width">100.0</basic-object>
+                            <basic-object name="x">0.0</basic-object>
+                            <basic-object name="y">0.0</basic-object>
+                        </compound-object>
+                    </datasource>
+                </element>
+                <element name="Element@14820075" type="text/plain">
+                    <style>
+                        <compound-key name="min-size">
+                            <basic-object name="height">16.0</basic-object>
+                            <basic-object name="width">87.0</basic-object>
+                        </compound-key>
+                        <basic-key name="paint">black</basic-key>
+                        <basic-key name="font">dialog</basic-key>
+                        <basic-key name="font-size">12</basic-key>
+                        <basic-key name="line-height">0.0</basic-key>
+                        <basic-key name="font-bold">true</basic-key>
+                        <basic-key name="font-italic">false</basic-key>
+                        <basic-key name="font-underline">false</basic-key>
+                        <basic-key name="font-strikethrough">false</basic-key>
+                        <basic-key name="font-embedded">false</basic-key>
+                        <basic-key name="alignment">center</basic-key>
+                        <basic-key name="valignment">top</basic-key>
+                        <basic-key name="dynamic_height">false</basic-key>
+                        <basic-key name="reserved-literal">..</basic-key>
+                        <basic-key name="trim-text-content">true</basic-key>
+                        <basic-key name="Excel.WrapText">false</basic-key>
+                        <compound-key name="absolute_pos">
+                            <basic-object name="x">0.0</basic-object>
+                            <basic-object name="y">0.0</basic-object>
+                        </compound-key>
+                    </style>
+                    <template references="label">
+                        <basic-object name="content">VARIANCE</basic-object>
+                    </template>
+                </element>
+            </band>
+        </report-header>
+        <report-footer>
+            <style>
+                <basic-key name="pagebreak-before">false</basic-key>
+                <basic-key name="pagebreak-after">false</basic-key>
+                <compound-key name="layoutmanager">
+                    <basic-object name="class">org.jfree.report.layout.StaticLayoutManager</basic-object>
+                </compound-key>
+            </style>
+            <band>
+                <style>
+                    <compound-key name="min-size">
+                        <basic-object name="height">16.0</basic-object>
+                        <basic-object name="width">468.0</basic-object>
+                    </compound-key>
+                    <compound-key name="max-size">
+                        <basic-object name="height">2.14748365E9</basic-object>
+                        <basic-object name="width">468.0</basic-object>
+                    </compound-key>
+                    <compound-key name="absolute_pos">
+                        <basic-object name="x">0.0</basic-object>
+                        <basic-object name="y">0.0</basic-object>
+                    </compound-key>
+                    <compound-key name="layoutmanager">
+                        <basic-object name="class">org.jfree.report.layout.StaticLayoutManager</basic-object>
+                    </compound-key>
+                </style>
+                <element name="TextField@12653911.background" type="shape/generic">
+                    <style>
+                        <compound-key name="min-size" class="org.jfree.ui.FloatDimension">
+                            <basic-object name="height">-100.0</basic-object>
+                            <basic-object name="width">-100.0</basic-object>
+                        </compound-key>
+                        <basic-key name="paint">#ddddff</basic-key>
+                        <compound-key name="stroke" class="java.awt.BasicStroke">
+                            <basic-object name="value">1.0</basic-object>
+                        </compound-key>
+                        <basic-key name="scale">true</basic-key>
+                        <basic-key name="keepAspectRatio">false</basic-key>
+                        <compound-key name="absolute_pos">
+                            <basic-object name="x">0.0</basic-object>
+                            <basic-object name="y">0.0</basic-object>
+                        </compound-key>
+                        <basic-key name="fill-shape">true</basic-key>
+                        <basic-key name="draw-shape">false</basic-key>
+                    </style>
+                    <datasource type="StaticDataSource">
+                        <compound-object name="value" class="java.awt.geom.Rectangle2D$Float">
+                            <basic-object name="height">100.0</basic-object>
+                            <basic-object name="width">100.0</basic-object>
+                            <basic-object name="x">0.0</basic-object>
+                            <basic-object name="y">0.0</basic-object>
+                        </compound-object>
+                    </datasource>
+                </element>
+                <element name="TextField@12653911" type="text/plain">
+                    <style>
+                        <compound-key name="min-size">
+                            <basic-object name="height">16.0</basic-object>
+                            <basic-object name="width">468.0</basic-object>
+                        </compound-key>
+                        <basic-key name="paint">black</basic-key>
+                        <basic-key name="font">Dialog</basic-key>
+                        <basic-key name="font-size">12</basic-key>
+                        <basic-key name="line-height">0.0</basic-key>
+                        <basic-key name="font-bold">true</basic-key>
+                        <basic-key name="font-italic">false</basic-key>
+                        <basic-key name="font-underline">false</basic-key>
+                        <basic-key name="font-strikethrough">false</basic-key>
+                        <basic-key name="font-embedded">false</basic-key>
+                        <basic-key name="alignment">right</basic-key>
+                        <basic-key name="valignment">top</basic-key>
+                        <basic-key name="dynamic_height">false</basic-key>
+                        <basic-key name="reserved-literal">..</basic-key>
+                        <basic-key name="trim-text-content">true</basic-key>
+                        <basic-key name="Excel.WrapText">false</basic-key>
+                        <compound-key name="absolute_pos">
+                            <basic-object name="x">0.0</basic-object>
+                            <basic-object name="y">0.0</basic-object>
+                        </compound-key>
+                    </style>
+                    <template references="message-field">
+                        <basic-object name="format">Total Variance:</basic-object>
+                        <basic-object name="nullValue"></basic-object>
+                    </template>
+                </element>
+            </band>
+            <band>
+                <style>
+                    <compound-key name="min-size">
+                        <basic-object name="height">16.0</basic-object>
+                        <basic-object name="width">87.0</basic-object>
+                    </compound-key>
+                    <compound-key name="max-size">
+                        <basic-object name="height">2.14748365E9</basic-object>
+                        <basic-object name="width">87.0</basic-object>
+                    </compound-key>
+                    <compound-key name="absolute_pos">
+                        <basic-object name="x">468.0</basic-object>
+                        <basic-object name="y">0.0</basic-object>
+                    </compound-key>
+                    <compound-key name="layoutmanager">
+                        <basic-object name="class">org.jfree.report.layout.StaticLayoutManager</basic-object>
+                    </compound-key>
+                </style>
+                <element name="TextField@14919969.background" type="shape/generic">
+                    <style>
+                        <compound-key name="min-size" class="org.jfree.ui.FloatDimension">
+                            <basic-object name="height">-100.0</basic-object>
+                            <basic-object name="width">-100.0</basic-object>
+                        </compound-key>
+                        <basic-key name="paint">#ddddff</basic-key>
+                        <compound-key name="stroke" class="java.awt.BasicStroke">
+                            <basic-object name="value">1.0</basic-object>
+                        </compound-key>
+                        <basic-key name="scale">true</basic-key>
+                        <basic-key name="keepAspectRatio">false</basic-key>
+                        <compound-key name="absolute_pos">
+                            <basic-object name="x">0.0</basic-object>
+                            <basic-object name="y">0.0</basic-object>
+                        </compound-key>
+                        <basic-key name="fill-shape">true</basic-key>
+                        <basic-key name="draw-shape">false</basic-key>
+                    </style>
+                    <datasource type="StaticDataSource">
+                        <compound-object name="value" class="java.awt.geom.Rectangle2D$Float">
+                            <basic-object name="height">100.0</basic-object>
+                            <basic-object name="width">100.0</basic-object>
+                            <basic-object name="x">0.0</basic-object>
+                            <basic-object name="y">0.0</basic-object>
+                        </compound-object>
+                    </datasource>
+                </element>
+                <element name="TextField@14919969" type="text/plain">
+                    <style>
+                        <compound-key name="min-size">
+                            <basic-object name="height">16.0</basic-object>
+                            <basic-object name="width">87.0</basic-object>
+                        </compound-key>
+                        <basic-key name="paint">black</basic-key>
+                        <basic-key name="font">dialog</basic-key>
+                        <basic-key name="font-size">12</basic-key>
+                        <basic-key name="line-height">0.0</basic-key>
+                        <basic-key name="font-bold">false</basic-key>
+                        <basic-key name="font-italic">false</basic-key>
+                        <basic-key name="font-underline">false</basic-key>
+                        <basic-key name="font-strikethrough">false</basic-key>
+                        <basic-key name="font-embedded">false</basic-key>
+                        <basic-key name="alignment">right</basic-key>
+                        <basic-key name="valignment">top</basic-key>
+                        <basic-key name="dynamic_height">false</basic-key>
+                        <basic-key name="reserved-literal">..</basic-key>
+                        <basic-key name="trim-text-content">true</basic-key>
+                        <basic-key name="Excel.WrapText">false</basic-key>
+                        <basic-key name="Excel.CellDataFormat"></basic-key>
+                        <compound-key name="absolute_pos">
+                            <basic-object name="x">0.0</basic-object>
+                            <basic-object name="y">0.0</basic-object>
+                        </compound-key>
+                    </style>
+                    <template references="number-field">
+                        <basic-object name="field">ItemSumFunction</basic-object>
+                        <basic-object name="format">$#,##0.###</basic-object>
+                        <basic-object name="nullValue"></basic-object>
+                    </template>
+                </element>
+            </band>
+        </report-footer>
+        <page-header>
+            <style>
+                <basic-key name="display-on-firstpage">true</basic-key>
+                <basic-key name="display-on-lastpage">true</basic-key>
+                <compound-key name="layoutmanager">
+                    <basic-object name="class">org.jfree.report.layout.StaticLayoutManager</basic-object>
+                </compound-key>
+            </style>
+            <element name="DateField@1823783" type="text/plain">
+                <style>
+                    <compound-key name="min-size">
+                        <basic-object name="height">16.0</basic-object>
+                        <basic-object name="width">555.0</basic-object>
+                    </compound-key>
+                    <basic-key name="paint">black</basic-key>
+                    <basic-key name="font">dialog</basic-key>
+                    <basic-key name="font-size">12</basic-key>
+                    <basic-key name="line-height">0.0</basic-key>
+                    <basic-key name="font-bold">false</basic-key>
+                    <basic-key name="font-italic">false</basic-key>
+                    <basic-key name="font-underline">false</basic-key>
+                    <basic-key name="font-strikethrough">false</basic-key>
+                    <basic-key name="font-embedded">false</basic-key>
+                    <basic-key name="alignment">right</basic-key>
+                    <basic-key name="valignment">top</basic-key>
+                    <basic-key name="dynamic_height">false</basic-key>
+                    <basic-key name="reserved-literal">..</basic-key>
+                    <basic-key name="trim-text-content">true</basic-key>
+                    <basic-key name="Excel.WrapText">false</basic-key>
+                    <basic-key name="Excel.CellDataFormat"></basic-key>
+                    <compound-key name="absolute_pos">
+                        <basic-object name="x">0.0</basic-object>
+                        <basic-object name="y">0.0</basic-object>
+                    </compound-key>
+                </style>
+                <template references="date-field">
+                    <basic-object name="field">currentDate</basic-object>
+                    <basic-object name="format">MMM d, yyyy</basic-object>
+                    <basic-object name="nullValue"></basic-object>
+                </template>
+            </element>
+        </page-header>
+        <page-footer>
+            <style>
+                <basic-key name="display-on-firstpage">true</basic-key>
+                <basic-key name="display-on-lastpage">true</basic-key>
+                <compound-key name="layoutmanager">
+                    <basic-object name="class">org.jfree.report.layout.StaticLayoutManager</basic-object>
+                </compound-key>
+            </style>
+            <element name="Element@10464309" type="text/plain">
+                <style>
+                    <compound-key name="min-size">
+                        <basic-object name="height">16.0</basic-object>
+                        <basic-object name="width">555.0</basic-object>
+                    </compound-key>
+                    <basic-key name="paint">black</basic-key>
+                    <basic-key name="font">dialog</basic-key>
+                    <basic-key name="font-size">12</basic-key>
+                    <basic-key name="line-height">0.0</basic-key>
+                    <basic-key name="font-bold">false</basic-key>
+                    <basic-key name="font-italic">false</basic-key>
+                    <basic-key name="font-underline">false</basic-key>
+                    <basic-key name="font-strikethrough">false</basic-key>
+                    <basic-key name="font-embedded">false</basic-key>
+                    <basic-key name="alignment">center</basic-key>
+                    <basic-key name="valignment">top</basic-key>
+                    <basic-key name="dynamic_height">false</basic-key>
+                    <basic-key name="reserved-literal">..</basic-key>
+                    <basic-key name="trim-text-content">true</basic-key>
+                    <basic-key name="Excel.WrapText">false</basic-key>
+                    <compound-key name="absolute_pos">
+                        <basic-object name="x">0.0</basic-object>
+                        <basic-object name="y">0.0</basic-object>
+                    </compound-key>
+                </style>
+                <template references="message-field">
+                    <basic-object name="format">$(currentPage)/$(totalPages)</basic-object>
+                    <basic-object name="nullValue"></basic-object>
+                </template>
+            </element>
+        </page-footer>
+        <watermark>            <style>
+                <basic-key name="pagebreak-before">false</basic-key>
+                <basic-key name="pagebreak-after">false</basic-key>
+                <compound-key name="layoutmanager">
+                    <basic-object name="class">org.jfree.report.layout.StaticLayoutManager</basic-object>
+                </compound-key>
+            </style>
+</watermark>        <groups>
+        </groups>
+        <itemband>
+            <style>
+                <basic-key name="pagebreak-before">false</basic-key>
+                <basic-key name="pagebreak-after">false</basic-key>
+                <compound-key name="layoutmanager">
+                    <basic-object name="class">org.jfree.report.layout.StaticLayoutManager</basic-object>
+                </compound-key>
+            </style>
+            <band>
+                <style>
+                    <compound-key name="min-size">
+                        <basic-object name="height">16.0</basic-object>
+                        <basic-object name="width">63.0</basic-object>
+                    </compound-key>
+                    <compound-key name="max-size">
+                        <basic-object name="height">2.14748365E9</basic-object>
+                        <basic-object name="width">63.0</basic-object>
+                    </compound-key>
+                    <compound-key name="absolute_pos">
+                        <basic-object name="x">0.0</basic-object>
+                        <basic-object name="y">0.0</basic-object>
+                    </compound-key>
+                    <compound-key name="layoutmanager">
+                        <basic-object name="class">org.jfree.report.layout.StaticLayoutManager</basic-object>
+                    </compound-key>
+                </style>
+                <element name="TextField@14768745.background" type="shape/generic">
+                    <style>
+                        <compound-key name="min-size" class="org.jfree.ui.FloatDimension">
+                            <basic-object name="height">-100.0</basic-object>
+                            <basic-object name="width">-100.0</basic-object>
+                        </compound-key>
+                        <basic-key name="paint">white</basic-key>
+                        <compound-key name="stroke" class="java.awt.BasicStroke">
+                            <basic-object name="value">1.0</basic-object>
+                        </compound-key>
+                        <basic-key name="scale">true</basic-key>
+                        <basic-key name="keepAspectRatio">false</basic-key>
+                        <compound-key name="absolute_pos">
+                            <basic-object name="x">0.0</basic-object>
+                            <basic-object name="y">0.0</basic-object>
+                        </compound-key>
+                        <basic-key name="fill-shape">true</basic-key>
+                        <basic-key name="draw-shape">false</basic-key>
+                    </style>
+                    <datasource type="StaticDataSource">
+                        <compound-object name="value" class="java.awt.geom.Rectangle2D$Float">
+                            <basic-object name="height">100.0</basic-object>
+                            <basic-object name="width">100.0</basic-object>
+                            <basic-object name="x">0.0</basic-object>
+                            <basic-object name="y">0.0</basic-object>
+                        </compound-object>
+                    </datasource>
+                </element>
+                <element name="TextField@14768745" type="text/plain">
+                    <style>
+                        <compound-key name="min-size">
+                            <basic-object name="height">16.0</basic-object>
+                            <basic-object name="width">63.0</basic-object>
+                        </compound-key>
+                        <basic-key name="paint">black</basic-key>
+                        <basic-key name="font">dialog</basic-key>
+                        <basic-key name="font-size">12</basic-key>
+                        <basic-key name="line-height">0.0</basic-key>
+                        <basic-key name="font-bold">false</basic-key>
+                        <basic-key name="font-italic">false</basic-key>
+                        <basic-key name="font-underline">false</basic-key>
+                        <basic-key name="font-strikethrough">false</basic-key>
+                        <basic-key name="font-embedded">false</basic-key>
+                        <basic-key name="alignment">left</basic-key>
+                        <basic-key name="valignment">top</basic-key>
+                        <basic-key name="dynamic_height">false</basic-key>
+                        <basic-key name="reserved-literal">..</basic-key>
+                        <basic-key name="trim-text-content">true</basic-key>
+                        <basic-key name="Excel.WrapText">false</basic-key>
+                        <compound-key name="absolute_pos">
+                            <basic-object name="x">0.0</basic-object>
+                            <basic-object name="y">0.0</basic-object>
+                        </compound-key>
+                    </style>
+                    <template references="string-field">
+                        <basic-object name="field">REGION</basic-object>
+                        <basic-object name="nullValue"></basic-object>
+                    </template>
+                </element>
+            </band>
+            <band>
+                <style>
+                    <compound-key name="min-size">
+                        <basic-object name="height">16.0</basic-object>
+                        <basic-object name="width">122.0</basic-object>
+                    </compound-key>
+                    <compound-key name="max-size">
+                        <basic-object name="height">2.14748365E9</basic-object>
+                        <basic-object name="width">122.0</basic-object>
+                    </compound-key>
+                    <compound-key name="absolute_pos">
+                        <basic-object name="x">63.0</basic-object>
+                        <basic-object name="y">0.0</basic-object>
+                    </compound-key>
+                    <compound-key name="layoutmanager">
+                        <basic-object name="class">org.jfree.report.layout.StaticLayoutManager</basic-object>
+                    </compound-key>
+                </style>
+                <element name="TextField@16166715.background" type="shape/generic">
+                    <style>
+                        <compound-key name="min-size" class="org.jfree.ui.FloatDimension">
+                            <basic-object name="height">-100.0</basic-object>
+                            <basic-object name="width">-100.0</basic-object>
+                        </compound-key>
+                        <basic-key name="paint">white</basic-key>
+                        <compound-key name="stroke" class="java.awt.BasicStroke">
+                            <basic-object name="value">1.0</basic-object>
+                        </compound-key>
+                        <basic-key name="scale">true</basic-key>
+                        <basic-key name="keepAspectRatio">false</basic-key>
+                        <compound-key name="absolute_pos">
+                            <basic-object name="x">0.0</basic-object>
+                            <basic-object name="y">0.0</basic-object>
+                        </compound-key>
+                        <basic-key name="fill-shape">true</basic-key>
+                        <basic-key name="draw-shape">false</basic-key>
+                    </style>
+                    <datasource type="StaticDataSource">
+                        <compound-object name="value" class="java.awt.geom.Rectangle2D$Float">
+                            <basic-object name="height">100.0</basic-object>
+                            <basic-object name="width">100.0</basic-object>
+                            <basic-object name="x">0.0</basic-object>
+                            <basic-object name="y">0.0</basic-object>
+                        </compound-object>
+                    </datasource>
+                </element>
+                <element name="TextField@16166715" type="text/plain">
+                    <style>
+                        <compound-key name="min-size">
+                            <basic-object name="height">16.0</basic-object>
+                            <basic-object name="width">122.0</basic-object>
+                        </compound-key>
+                        <basic-key name="paint">black</basic-key>
+                        <basic-key name="font">dialog</basic-key>
+                        <basic-key name="font-size">12</basic-key>
+                        <basic-key name="line-height">0.0</basic-key>
+                        <basic-key name="font-bold">false</basic-key>
+                        <basic-key name="font-italic">false</basic-key>
+                        <basic-key name="font-underline">false</basic-key>
+                        <basic-key name="font-strikethrough">false</basic-key>
+                        <basic-key name="font-embedded">false</basic-key>
+                        <basic-key name="alignment">left</basic-key>
+                        <basic-key name="valignment">top</basic-key>
+                        <basic-key name="dynamic_height">false</basic-key>
+                        <basic-key name="reserved-literal">..</basic-key>
+                        <basic-key name="trim-text-content">true</basic-key>
+                        <basic-key name="Excel.WrapText">false</basic-key>
+                        <compound-key name="absolute_pos">
+                            <basic-object name="x">0.0</basic-object>
+                            <basic-object name="y">0.0</basic-object>
+                        </compound-key>
+                    </style>
+                    <template references="string-field">
+                        <basic-object name="field">DEPARTMENT</basic-object>
+                        <basic-object name="nullValue"></basic-object>
+                    </template>
+                </element>
+            </band>
+            <band>
+                <style>
+                    <compound-key name="min-size">
+                        <basic-object name="height">16.0</basic-object>
+                        <basic-object name="width">125.0</basic-object>
+                    </compound-key>
+                    <compound-key name="max-size">
+                        <basic-object name="height">2.14748365E9</basic-object>
+                        <basic-object name="width">125.0</basic-object>
+                    </compound-key>
+                    <compound-key name="absolute_pos">
+                        <basic-object name="x">185.0</basic-object>
+                        <basic-object name="y">0.0</basic-object>
+                    </compound-key>
+                    <compound-key name="layoutmanager">
+                        <basic-object name="class">org.jfree.report.layout.StaticLayoutManager</basic-object>
+                    </compound-key>
+                </style>
+                <element name="TextField@23747954.background" type="shape/generic">
+                    <style>
+                        <compound-key name="min-size" class="org.jfree.ui.FloatDimension">
+                            <basic-object name="height">-100.0</basic-object>
+                            <basic-object name="width">-100.0</basic-object>
+                        </compound-key>
+                        <basic-key name="paint">white</basic-key>
+                        <compound-key name="stroke" class="java.awt.BasicStroke">
+                            <basic-object name="value">1.0</basic-object>
+                        </compound-key>
+                        <basic-key name="scale">true</basic-key>
+                        <basic-key name="keepAspectRatio">false</basic-key>
+                        <compound-key name="absolute_pos">
+                            <basic-object name="x">0.0</basic-object>
+                            <basic-object name="y">0.0</basic-object>
+                        </compound-key>
+                        <basic-key name="fill-shape">true</basic-key>
+                        <basic-key name="draw-shape">false</basic-key>
+                    </style>
+                    <datasource type="StaticDataSource">
+                        <compound-object name="value" class="java.awt.geom.Rectangle2D$Float">
+                            <basic-object name="height">100.0</basic-object>
+                            <basic-object name="width">100.0</basic-object>
+                            <basic-object name="x">0.0</basic-object>
+                            <basic-object name="y">0.0</basic-object>
+                        </compound-object>
+                    </datasource>
+                </element>
+                <element name="TextField@23747954" type="text/plain">
+                    <style>
+                        <compound-key name="min-size">
+                            <basic-object name="height">16.0</basic-object>
+                            <basic-object name="width">125.0</basic-object>
+                        </compound-key>
+                        <basic-key name="paint">black</basic-key>
+                        <basic-key name="font">dialog</basic-key>
+                        <basic-key name="font-size">12</basic-key>
+                        <basic-key name="line-height">0.0</basic-key>
+                        <basic-key name="font-bold">false</basic-key>
+                        <basic-key name="font-italic">false</basic-key>
+                        <basic-key name="font-underline">false</basic-key>
+                        <basic-key name="font-strikethrough">false</basic-key>
+                        <basic-key name="font-embedded">false</basic-key>
+                        <basic-key name="alignment">left</basic-key>
+                        <basic-key name="valignment">top</basic-key>
+                        <basic-key name="dynamic_height">false</basic-key>
+                        <basic-key name="reserved-literal">..</basic-key>
+                        <basic-key name="trim-text-content">true</basic-key>
+                        <basic-key name="Excel.WrapText">false</basic-key>
+                        <compound-key name="absolute_pos">
+                            <basic-object name="x">0.0</basic-object>
+                            <basic-object name="y">0.0</basic-object>
+                        </compound-key>
+                    </style>
+                    <template references="string-field">
+                        <basic-object name="field">POSITIONTITLE</basic-object>
+                        <basic-object name="nullValue"></basic-object>
+                    </template>
+                </element>
+            </band>
+            <band>
+                <style>
+                    <compound-key name="min-size">
+                        <basic-object name="height">16.0</basic-object>
+                        <basic-object name="width">77.0</basic-object>
+                    </compound-key>
+                    <compound-key name="max-size">
+                        <basic-object name="height">2.14748365E9</basic-object>
+                        <basic-object name="width">77.0</basic-object>
+                    </compound-key>
+                    <compound-key name="absolute_pos">
+                        <basic-object name="x">310.0</basic-object>
+                        <basic-object name="y">0.0</basic-object>
+                    </compound-key>
+                    <compound-key name="layoutmanager">
+                        <basic-object name="class">org.jfree.report.layout.StaticLayoutManager</basic-object>
+                    </compound-key>
+                </style>
+                <element name="TextField@1902564.background" type="shape/generic">
+                    <style>
+                        <compound-key name="min-size" class="org.jfree.ui.FloatDimension">
+                            <basic-object name="height">-100.0</basic-object>
+                            <basic-object name="width">-100.0</basic-object>
+                        </compound-key>
+                        <basic-key name="paint">white</basic-key>
+                        <compound-key name="stroke" class="java.awt.BasicStroke">
+                            <basic-object name="value">1.0</basic-object>
+                        </compound-key>
+                        <basic-key name="scale">true</basic-key>
+                        <basic-key name="keepAspectRatio">false</basic-key>
+                        <compound-key name="absolute_pos">
+                            <basic-object name="x">0.0</basic-object>
+                            <basic-object name="y">0.0</basic-object>
+                        </compound-key>
+                        <basic-key name="fill-shape">true</basic-key>
+                        <basic-key name="draw-shape">false</basic-key>
+                    </style>
+                    <datasource type="StaticDataSource">
+                        <compound-object name="value" class="java.awt.geom.Rectangle2D$Float">
+                            <basic-object name="height">100.0</basic-object>
+                            <basic-object name="width">100.0</basic-object>
+                            <basic-object name="x">0.0</basic-object>
+                            <basic-object name="y">0.0</basic-object>
+                        </compound-object>
+                    </datasource>
+                </element>
+                <element name="TextField@1902564" type="text/plain">
+                    <style>
+                        <compound-key name="min-size">
+                            <basic-object name="height">16.0</basic-object>
+                            <basic-object name="width">77.0</basic-object>
+                        </compound-key>
+                        <basic-key name="paint">black</basic-key>
+                        <basic-key name="font">dialog</basic-key>
+                        <basic-key name="font-size">12</basic-key>
+                        <basic-key name="line-height">0.0</basic-key>
+                        <basic-key name="font-bold">false</basic-key>
+                        <basic-key name="font-italic">false</basic-key>
+                        <basic-key name="font-underline">false</basic-key>
+                        <basic-key name="font-strikethrough">false</basic-key>
+                        <basic-key name="font-embedded">false</basic-key>
+                        <basic-key name="alignment">right</basic-key>
+                        <basic-key name="valignment">top</basic-key>
+                        <basic-key name="dynamic_height">false</basic-key>
+                        <basic-key name="reserved-literal">..</basic-key>
+                        <basic-key name="trim-text-content">true</basic-key>
+                        <basic-key name="Excel.WrapText">false</basic-key>
+                        <basic-key name="Excel.CellDataFormat"></basic-key>
+                        <compound-key name="absolute_pos">
+                            <basic-object name="x">0.0</basic-object>
+                            <basic-object name="y">0.0</basic-object>
+                        </compound-key>
+                    </style>
+                    <template references="number-field">
+                        <basic-object name="field">ACTUAL</basic-object>
+                        <basic-object name="format">$#,##0.###</basic-object>
+                        <basic-object name="nullValue"></basic-object>
+                    </template>
+                </element>
+            </band>
+            <band>
+                <style>
+                    <compound-key name="min-size">
+                        <basic-object name="height">16.0</basic-object>
+                        <basic-object name="width">81.0</basic-object>
+                    </compound-key>
+                    <compound-key name="max-size">
+                        <basic-object name="height">2.14748365E9</basic-object>
+                        <basic-object name="width">81.0</basic-object>
+                    </compound-key>
+                    <compound-key name="absolute_pos">
+                        <basic-object name="x">387.0</basic-object>
+                        <basic-object name="y">0.0</basic-object>
+                    </compound-key>
+                    <compound-key name="layoutmanager">
+                        <basic-object name="class">org.jfree.report.layout.StaticLayoutManager</basic-object>
+                    </compound-key>
+                </style>
+                <element name="TextField@32586504.background" type="shape/generic">
+                    <style>
+                        <compound-key name="min-size" class="org.jfree.ui.FloatDimension">
+                            <basic-object name="height">-100.0</basic-object>
+                            <basic-object name="width">-100.0</basic-object>
+                        </compound-key>
+                        <basic-key name="paint">white</basic-key>
+                        <compound-key name="stroke" class="java.awt.BasicStroke">
+                            <basic-object name="value">1.0</basic-object>
+                        </compound-key>
+                        <basic-key name="scale">true</basic-key>
+                        <basic-key name="keepAspectRatio">false</basic-key>
+                        <compound-key name="absolute_pos">
+                            <basic-object name="x">0.0</basic-object>
+                            <basic-object name="y">0.0</basic-object>
+                        </compound-key>
+                        <basic-key name="fill-shape">true</basic-key>
+                        <basic-key name="draw-shape">false</basic-key>
+                    </style>
+                    <datasource type="StaticDataSource">
+                        <compound-object name="value" class="java.awt.geom.Rectangle2D$Float">
+                            <basic-object name="height">100.0</basic-object>
+                            <basic-object name="width">100.0</basic-object>
+                            <basic-object name="x">0.0</basic-object>
+                            <basic-object name="y">0.0</basic-object>
+                        </compound-object>
+                    </datasource>
+                </element>
+                <element name="TextField@32586504" type="text/plain">
+                    <style>
+                        <compound-key name="min-size">
+                            <basic-object name="height">16.0</basic-object>
+                            <basic-object name="width">81.0</basic-object>
+                        </compound-key>
+                        <basic-key name="paint">black</basic-key>
+                        <basic-key name="font">dialog</basic-key>
+                        <basic-key name="font-size">12</basic-key>
+                        <basic-key name="line-height">0.0</basic-key>
+                        <basic-key name="font-bold">false</basic-key>
+                        <basic-key name="font-italic">false</basic-key>
+                        <basic-key name="font-underline">false</basic-key>
+                        <basic-key name="font-strikethrough">false</basic-key>
+                        <basic-key name="font-embedded">false</basic-key>
+                        <basic-key name="alignment">right</basic-key>
+                        <basic-key name="valignment">top</basic-key>
+                        <basic-key name="dynamic_height">false</basic-key>
+                        <basic-key name="reserved-literal">..</basic-key>
+                        <basic-key name="trim-text-content">true</basic-key>
+                        <basic-key name="Excel.WrapText">false</basic-key>
+                        <basic-key name="Excel.CellDataFormat"></basic-key>
+                        <compound-key name="absolute_pos">
+                            <basic-object name="x">0.0</basic-object>
+                            <basic-object name="y">0.0</basic-object>
+                        </compound-key>
+                    </style>
+                    <template references="number-field">
+                        <basic-object name="field">BUDGET</basic-object>
+                        <basic-object name="format">$#,##0.###</basic-object>
+                        <basic-object name="nullValue"></basic-object>
+                    </template>
+                </element>
+            </band>
+            <band>
+                <style>
+                    <compound-key name="min-size">
+                        <basic-object name="height">16.0</basic-object>
+                        <basic-object name="width">87.0</basic-object>
+                    </compound-key>
+                    <compound-key name="max-size">
+                        <basic-object name="height">2.14748365E9</basic-object>
+                        <basic-object name="width">87.0</basic-object>
+                    </compound-key>
+                    <compound-key name="absolute_pos">
+                        <basic-object name="x">468.0</basic-object>
+                        <basic-object name="y">0.0</basic-object>
+                    </compound-key>
+                    <compound-key name="layoutmanager">
+                        <basic-object name="class">org.jfree.report.layout.StaticLayoutManager</basic-object>
+                    </compound-key>
+                </style>
+                <element name="TextField@5935979.background" type="shape/generic">
+                    <style>
+                        <compound-key name="min-size" class="org.jfree.ui.FloatDimension">
+                            <basic-object name="height">-100.0</basic-object>
+                            <basic-object name="width">-100.0</basic-object>
+                        </compound-key>
+                        <basic-key name="paint">white</basic-key>
+                        <compound-key name="stroke" class="java.awt.BasicStroke">
+                            <basic-object name="value">1.0</basic-object>
+                        </compound-key>
+                        <basic-key name="scale">true</basic-key>
+                        <basic-key name="keepAspectRatio">false</basic-key>
+                        <compound-key name="absolute_pos">
+                            <basic-object name="x">0.0</basic-object>
+                            <basic-object name="y">0.0</basic-object>
+                        </compound-key>
+                        <basic-key name="fill-shape">true</basic-key>
+                        <basic-key name="draw-shape">false</basic-key>
+                    </style>
+                    <datasource type="StaticDataSource">
+                        <compound-object name="value" class="java.awt.geom.Rectangle2D$Float">
+                            <basic-object name="height">100.0</basic-object>
+                            <basic-object name="width">100.0</basic-object>
+                            <basic-object name="x">0.0</basic-object>
+                            <basic-object name="y">0.0</basic-object>
+                        </compound-object>
+                    </datasource>
+                </element>
+                <element name="TextField@5935979" type="text/plain">
+                    <style>
+                        <compound-key name="min-size">
+                            <basic-object name="height">16.0</basic-object>
+                            <basic-object name="width">87.0</basic-object>
+                        </compound-key>
+                        <basic-key name="paint">black</basic-key>
+                        <basic-key name="font">dialog</basic-key>
+                        <basic-key name="font-size">12</basic-key>
+                        <basic-key name="line-height">0.0</basic-key>
+                        <basic-key name="font-bold">false</basic-key>
+                        <basic-key name="font-italic">false</basic-key>
+                        <basic-key name="font-underline">false</basic-key>
+                        <basic-key name="font-strikethrough">false</basic-key>
+                        <basic-key name="font-embedded">false</basic-key>
+                        <basic-key name="alignment">right</basic-key>
+                        <basic-key name="valignment">top</basic-key>
+                        <basic-key name="dynamic_height">false</basic-key>
+                        <basic-key name="reserved-literal">..</basic-key>
+                        <basic-key name="trim-text-content">true</basic-key>
+                        <basic-key name="Excel.WrapText">false</basic-key>
+                        <basic-key name="Excel.CellDataFormat"></basic-key>
+                        <compound-key name="absolute_pos">
+                            <basic-object name="x">0.0</basic-object>
+                            <basic-object name="y">0.0</basic-object>
+                        </compound-key>
+                    </style>
+                    <template references="number-field">
+                        <basic-object name="field">VARIANCE</basic-object>
+                        <basic-object name="format">$#,##0.###</basic-object>
+                        <basic-object name="nullValue"></basic-object>
+                    </template>
+                </element>
+            </band>
+        </itemband>
+    </report-description>
+    <functions>
+        <property-ref name="report.date"/>
+        <expression name="ItemSumFunction" class="org.pentaho.jfreereport.legacy.ItemSumFunction">
+            <properties>
+                <property name="field">VARIANCE</property>
+                <property name="group">default</property>
+            </properties>
+        </expression>
+        <expression name="currentDate" class="org.pentaho.jfreereport.legacy.GetCurrentDateFunction">
+            <properties>
+            </properties>
+        </expression>
+        <expression name="currentPage" class="org.jfree.report.function.PageFunction">
+            <properties>
+                <property name="ignorePageCancelEvents" class="java.lang.Boolean">false</property>
+                <property name="pageIncrement" class="java.lang.Integer">1</property>
+                <property name="startPage" class="java.lang.Integer">1</property>
+            </properties>
+        </expression>
+        <expression name="totalPages" class="org.jfree.report.function.PageTotalFunction">
+            <properties>
+                <property name="ignorePageCancelEvents" class="java.lang.Boolean">false</property>
+                <property name="pageIncrement" class="java.lang.Integer">1</property>
+                <property name="startPage" class="java.lang.Integer">1</property>
+            </properties>
+        </expression>
+    </functions>
+</report-definition>
