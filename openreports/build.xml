@@ -65,28 +65,14 @@
 				<include name="**/*.gif" />
 				<include name="**/*.jpg" />
 				<include name="**/*.png" />		
-				<include name="**/applicationContext.xml" />				
+				<include name="**/applicationContext*.xml" />				
 			</fileset>
 
 			<lib dir="${web-inf.lib}" />
 
 		</war>
 
-	</target>
-	
-	<target name="war-services" depends="jar">
-
-			<war destfile="${deploy}/openreports-services.war" webxml="${web-inf}/web-services.xml">
-
-				<fileset dir="${WebRoot}">					
-					<include name="**/applicationContext.xml" />
-				</fileset>
-
-				<lib dir="${web-inf.lib}" />
-
-			</war>
-
-		</target>
+	</target>	
 
 	<target name="schemaExporter" depends="jar">
 

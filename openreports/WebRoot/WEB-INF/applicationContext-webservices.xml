@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans default-autowire="byName">
+
+  <import resource="classpath:org/codehaus/xfire/spring/xfire.xml" />
+    
+  <bean id="addressingHandler"
+    class="org.codehaus.xfire.addressing.AddressingInHandler" />
+
+  <bean name="xfireReportService"
+    class="org.codehaus.xfire.spring.ServiceBean" singleton="true">
+    <property name="serviceBean" ref="reportService" />
+    <property name="serviceClass"
+      value="org.efs.openreports.services.ReportService" />
+    <property name="inHandlers">
+      <list>
+        <ref bean="addressingHandler" />
+      </list>
+    </property>
+    <property name="properties">
+      <map>
+        <entry>
+          <key>
+            <value>mtom-enabled</value>
+          </key>
+          <value>true</value>
+        </entry>
+      </map>
+    </property>
+  </bean>
+
+  <bean id="reportService"
+    class="org.efs.openreports.services.ReportServiceImpl">
+    <property name="reportProvider" ref="reportProvider" />
+    <property name="reportLogProvider" ref="reportLogProvider" />   
+    <property name="schedulerProvider" ref="schedulerProvider" />
+    <property name="userProvider" ref="userProvider" />
+    <property name="directoryProvider" ref="directoryProvider" />
+    <property name="parameterProvider" ref="parameterProvider" />   
+    <property name="dataSourceProvider" ref="dataSourceProvider" />
+    <property name="propertiesProvider" ref="propertiesProvider" />
+    <property name="userService" ref="userService" />
+  </bean>
+  
+  <bean name="xfireUserService"
+    class="org.codehaus.xfire.spring.ServiceBean" singleton="true">
+    <property name="serviceBean" ref="userService" />
+    <property name="serviceClass"
+      value="org.efs.openreports.services.UserService" />
+    <property name="inHandlers">
+      <list>
+        <ref bean="addressingHandler" />
+      </list>
+    </property>   
+  </bean>
+
+  <bean id="userService"
+    class="org.efs.openreports.services.UserServiceImpl">     
+    <property name="userProvider" ref="userProvider" />   
+  </bean>
+  
+  <bean name="xfireAlertService"
+    class="org.codehaus.xfire.spring.ServiceBean" singleton="true">
+    <property name="serviceBean" ref="alertService" />
+    <property name="serviceClass"
+      value="org.efs.openreports.services.AlertService" />
+    <property name="inHandlers">
+      <list>
+        <ref bean="addressingHandler" />
+      </list>
+    </property>   
+  </bean>
+
+  <bean id="alertService"
+    class="org.efs.openreports.services.AlertServiceImpl">
+    <property name="alertProvider" ref="alertProvider" />   
+    <property name="userProvider" ref="userProvider" />   
+    <property name="userService" ref="userService" />
+  </bean>
+  
+  <bean name="xfireParameterService"
+    class="org.codehaus.xfire.spring.ServiceBean" singleton="true">
+    <property name="serviceBean" ref="parameterService" />
+    <property name="serviceClass"
+      value="org.efs.openreports.services.ParameterService" />
+    <property name="inHandlers">
+      <list>
+        <ref bean="addressingHandler" />
+      </list>
+    </property>   
+  </bean>
+
+  <bean id="parameterService"
+    class="org.efs.openreports.services.ParameterServiceImpl">
+    <property name="parameterProvider" ref="parameterProvider" />   
+  </bean>
+  
+  <bean name="xfireSchedulerService"
+    class="org.codehaus.xfire.spring.ServiceBean" singleton="true">
+    <property name="serviceBean" ref="schedulerService" />
+    <property name="serviceClass"
+      value="org.efs.openreports.services.SchedulerService" />
+    <property name="inHandlers">
+      <list>
+        <ref bean="addressingHandler" />
+      </list>
+    </property>   
+  </bean>
+
+  <bean id="schedulerService"
+    class="org.efs.openreports.services.SchedulerServiceImpl">
+    <property name="schedulerProvider" ref="schedulerProvider" />   
+    <property name="userProvider" ref="userProvider" />
+    <property name="userService" ref="userService" />     
+  </bean>
+  
+  <bean name="xfireDeliveredReportService"
+  	class="org.codehaus.xfire.spring.ServiceBean" singleton="true">
+  	<property name="serviceBean" ref="deliveredReportService" />
+  	<property name="serviceClass"
+  		value="org.efs.openreports.services.DeliveredReportService" />
+  	<property name="inHandlers">
+  		<list>
+  			<ref bean="addressingHandler" />
+  		</list>
+  	</property>
+  </bean>
+
+  <bean id="deliveredReportService"
+  	class="org.efs.openreports.services.DeliveredReportServiceImpl">
+  	<property name="userService" ref="userService" />
+  </bean>   
+	
+</beans>

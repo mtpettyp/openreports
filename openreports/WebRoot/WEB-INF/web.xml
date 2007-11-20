@@ -3,6 +3,11 @@
 <web-app>
 
 	<display-name>OpenReports</display-name>	
+	
+	<context-param>
+    	<param-name>contextConfigLocation</param-name>
+   		<param-value>/WEB-INF/applicationContext*.xml</param-value>
+  	</context-param>
 
 	<context-param>
 		<param-name>contextFactory</param-name>
@@ -92,6 +97,14 @@
 			org.springframework.web.context.ContextLoaderListener
 		</listener-class>
 	</listener>
+	
+	<servlet>
+		<servlet-name>JspSupportServlet</servlet-name>
+		<servlet-class>
+			org.apache.struts2.views.JspSupportServlet
+		</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
 
 	<servlet>
 		<servlet-name>fileServlet</servlet-name>
@@ -107,6 +120,14 @@
 			org.efs.openreports.dispatcher.XMLADispatcher
 		</servlet-class>
 	</servlet>
+	
+	<servlet>
+		<servlet-name>XFireServlet</servlet-name>
+		<display-name>XFire Servlet</display-name>
+		<servlet-class>
+			org.codehaus.xfire.spring.XFireSpringServlet
+		</servlet-class>
+	</servlet>	
 
 	<!-- jfreechart provided servlet -->
 	<servlet>
@@ -159,7 +180,11 @@
 		<servlet-name>fileServlet</servlet-name>
 		<url-pattern>/report-files/*</url-pattern>
 	</servlet-mapping>
-
+	
+	<servlet-mapping>
+		<servlet-name>XFireServlet</servlet-name>
+		<url-pattern>/services/*</url-pattern>
+	</servlet-mapping>
 
 	<servlet-mapping>
 		<servlet-name>MondrianXmlaServlet</servlet-name>
