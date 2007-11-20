@@ -19,11 +19,14 @@ OpenReports 2.0 to 3.0 Migration
 			- DEFAULT_VALUE		- String
 		- REPORT_CHART
 			- OVERLAY_CHART_ID	- Integer
+		- OR_TAG
+			- TAG_TYPE			- String
 		
 	- Refer to the database/schema directory for database specific schema
 	  including Foreign Key constraints for new tables and fields.	
 	  
-	- OpenReports 3.0 requires JDK 1.5 and no longer supports QueryReport templates
+	- OpenReports 3.0 requires JDK 1.5.
+	- OpenReports 3.0 QueryReport templates use FreeMarker instead of Velocity.
 	  
 -----------------------------------------
 OpenReports 2.0-M2 to 2.0-FINAL Migration
