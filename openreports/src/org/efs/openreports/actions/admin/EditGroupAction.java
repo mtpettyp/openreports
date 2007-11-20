@@ -29,6 +29,7 @@ import com.opensymphony.xwork2.ActionSupport;
 
 import org.apache.struts2.interceptor.SessionAware;
 import org.efs.openreports.ORStatics;
+import org.efs.openreports.objects.ORTag;
 import org.efs.openreports.objects.Report;
 import org.efs.openreports.objects.ReportGroup;
 import org.efs.openreports.objects.ReportUser;
@@ -75,11 +76,11 @@ public class EditGroupAction extends ActionSupport  implements SessionAware
 			{
 				name = reportGroup.getName();
 				description = reportGroup.getDescription();
-                tags = tagProvider.getTagsForObject(reportGroup.getId(), ReportGroup.class);                
+                tags = tagProvider.getTagsForObject(reportGroup.getId(), ReportGroup.class, ORTag.TAG_TYPE_UI);                
                 reportIds = null;                  
 			}
 
-            tagList = tagProvider.getTagList(ReportGroup.class);
+            tagList = tagProvider.getTagList(ReportGroup.class, ORTag.TAG_TYPE_UI);
             
 			if (!submitOk && !submitDuplicate)	return INPUT;
 			
@@ -109,7 +110,7 @@ public class EditGroupAction extends ActionSupport  implements SessionAware
 			}
             
             // save tags
-            tagProvider.setTags(reportGroup.getId(), ReportGroup.class, tags);
+            tagProvider.setTags(reportGroup.getId(), ReportGroup.class, tags, ORTag.TAG_TYPE_UI);
 			
 			// refresh current user 
 			ReportUser user = (ReportUser) ActionContext.getContext().getSession().get(ORStatics.REPORT_USER);		
@@ -143,7 +144,7 @@ public class EditGroupAction extends ActionSupport  implements SessionAware
     {
         try
         {
-            return tagProvider.getTagsForObject(reportId, Report.class);           
+            return tagProvider.getTagsForObject(reportId, Report.class, ORTag.TAG_TYPE_UI);           
         }
         catch(Exception e)
         {

@@ -38,6 +38,7 @@ public interface ORStatics
 	
 	// action names
 	public static final String QUERY_REPORT_ACTION = "queryReport";
+    public static final String QUERY_REPORT_TEMPLATE_ACTION = "queryReportTemplate";
 	public static final String CHART_REPORT_ACTION = "chartReport";
 	public static final String JXLSREPORT_ACTION = "jxlsReport";
 	public static final String JFREEREPORT_RESULT = "jfreeReport";	

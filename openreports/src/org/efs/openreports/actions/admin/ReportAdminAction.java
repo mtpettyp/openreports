@@ -16,42 +16,17 @@
  * Place - Suite 330, Boston, MA 02111-1307, USA.
  *  
  */
+
 package org.efs.openreports.actions.admin;
 
 import com.opensymphony.xwork2.ActionSupport;
 
-import org.efs.openreports.providers.ProviderException;
-import org.efs.openreports.providers.TagProvider;
-
 public class ReportAdminAction extends ActionSupport  
 {
-	private static final long serialVersionUID = 1339590512207608587L;
-
-	private String tags;
-
-	private TagProvider tagProvider;	
+	private static final long serialVersionUID = 1339590512207608587L;	
 
 	public String execute()
 	{
-		try
-		{
-			tags = tagProvider.getTagList(null);
-		}
-		catch (ProviderException pe)
-		{
-			addActionError(pe.toString());			
-		}
-
 		return SUCCESS;
-	}
-    
-    public String getTags() 
-    {
-        return tags;
-    }    
-    
-    public void setTagProvider(TagProvider tagProvider) 
-    {
-        this.tagProvider = tagProvider;
-    }
+	}   
 }

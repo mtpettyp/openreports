@@ -91,7 +91,7 @@ public class EditReportAction extends ActionSupport
 			{
 				name = report.getName();
 				description = report.getDescription();
-                tags = tagProvider.getTagsForObject(report.getId(), Report.class);
+                tags = tagProvider.getTagsForObject(report.getId(), Report.class, ORTag.TAG_TYPE_UI);
 				file = report.getFile();
 				query = report.getQuery();
 				id = report.getId().intValue();
@@ -245,7 +245,7 @@ public class EditReportAction extends ActionSupport
 			}
             
             // save tags
-            tagProvider.setTags(report.getId(), Report.class, tags);            
+            tagProvider.setTags(report.getId(), Report.class, tags, ORTag.TAG_TYPE_UI);            
 			
 			return SUCCESS;
 		}

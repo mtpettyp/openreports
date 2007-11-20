@@ -21,6 +21,7 @@ package org.efs.openreports.util;
 
 import org.apache.log4j.Logger;
 import org.displaytag.decorator.TableDecorator;
+import org.efs.openreports.objects.ORTag;
 import org.efs.openreports.objects.Report;
 import org.efs.openreports.objects.ReportGroup;
 import org.efs.openreports.objects.ReportUser;
@@ -34,7 +35,6 @@ import org.efs.openreports.providers.impl.TagProviderImpl;
  * 
  * These columns are generated based on the class of the current row object. Currently only
  * <tt>Report</tt>, <tt>ReportGroup</tt>, and <tt>ReportUser</tt> classes are supported.
- *
  */
 
 public class SearchResultsTableDecorator extends TableDecorator   
@@ -93,7 +93,7 @@ public class SearchResultsTableDecorator extends TableDecorator
     	 
     	 try
     	 {
-    		 String tagString = tagProvider.getTagsForObject(id, object.getClass());
+    		 String tagString = tagProvider.getTagsForObject(id, object.getClass(), ORTag.TAG_TYPE_UI);
     		 String[] tags = tagProvider.parseTags(tagString);
     		 
     		 tagString = "";

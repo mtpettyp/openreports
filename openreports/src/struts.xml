@@ -4,7 +4,11 @@
 
     <include file="struts-default.xml"/>
     
-    <package name="default" extends="struts-default">   		
+    <package name="default" extends="struts-default"> 
+    
+		<result-types>
+            <result-type name="queryReportTemplate" class="org.efs.openreports.dispatcher.QueryReportTemplateResult"/>  		
+        </result-types>
 		
     	<interceptors>
     	    <interceptor name="security" class="org.efs.openreports.interceptors.SecurityInterceptor"/>
@@ -212,6 +216,7 @@
         	<result name="success" >
                 <param name="location">QueryReport.jsp</param>
             </result>
+            <result name="queryReportTemplate" type="queryReportTemplate"/>           
         </action>
         
 		<action name="jxlsReport" class="org.efs.openreports.actions.JXLSReportAction">   			                                                   	

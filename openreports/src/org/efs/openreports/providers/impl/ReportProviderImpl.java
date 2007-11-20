@@ -75,6 +75,7 @@ public class ReportProviderImpl	implements ReportProvider
 					|| files[i].getName().endsWith(".rptdesign")
 					|| files[i].getName().endsWith(".vm")
 					|| files[i].getName().endsWith(".xml")
+                    || files[i].getName().endsWith(".ftl")
 					|| files[i].getName().endsWith(".xls"))
 			{
 				fileNames.add(files[i].getName());

@@ -16,6 +16,8 @@
         <property name="objectClass" column="TAGGED_OBJECT_CLASS" not-null="true" unique="false"/>
         
 		<property name="tag" column="TAG_VALUE" not-null="true" unique="false"/>		
+		
+		<property name="tagType" column="TAG_TYPE" not-null="true" unique="false"/>
        
     </class>
     

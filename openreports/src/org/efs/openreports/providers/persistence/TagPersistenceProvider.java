@@ -44,7 +44,7 @@ public class TagPersistenceProvider
 		log.info("TagPersistenceProvider Created.");
 	}	
 
-	public List getTaggedObjects(String[] tags, Class objectClass) throws ProviderException
+	public List getTaggedObjects(String[] tags, Class objectClass, String tagType) throws ProviderException
 	{
         ArrayList<Object> objects = new ArrayList<Object>();     
 		Session session = null;        
@@ -55,6 +55,7 @@ public class TagPersistenceProvider
 			
 			Criteria criteria = session.createCriteria(ORTag.class);
 			criteria.add(Expression.in("tag", tags));
+            criteria.add(Expression.eq("tagType", tagType));
                         
             if (objectClass != null)
             {
@@ -88,7 +89,7 @@ public class TagPersistenceProvider
 		}
 	}
     
-    public List getTagsForObject(Integer objectId, Class objectClass) throws ProviderException
+    public List getTagsForObject(Integer objectId, Class objectClass, String tagType) throws ProviderException
     {
         Session session = null;
         
@@ -99,6 +100,7 @@ public class TagPersistenceProvider
             Criteria criteria = session.createCriteria(ORTag.class);
             criteria.add(Expression.eq("objectId", objectId));
             criteria.add(Expression.eq("objectClass", objectClass.getName()));
+            criteria.add(Expression.eq("tagType", tagType));
             
             return criteria.list();
         }
@@ -112,11 +114,12 @@ public class TagPersistenceProvider
         }
     }
     
-    public List getTagList(Class objectClass) throws ProviderException
+    public List getTagList(Class objectClass, String tagType) throws ProviderException
     {        
         StringBuffer queryString = new StringBuffer();
-        queryString.append("select distinct orTag.tag from org.efs.openreports.objects.ORTag orTag ");        
-        if (objectClass != null) queryString.append("where orTag.objectClass = ? " );
+        queryString.append("select distinct orTag.tag from org.efs.openreports.objects.ORTag orTag ");
+        queryString.append("where orTag.tagType = ? " );
+        if (objectClass != null) queryString.append("and orTag.objectClass = ? " );
         queryString.append("order by orTag.tag ");
         
         Session session = HibernateProvider.openSession();
@@ -125,8 +128,9 @@ public class TagPersistenceProvider
         {
             Query query = session.createQuery(queryString.toString());
             query.setCacheable(true);
+            query.setString(0, tagType);
             
-            if (objectClass != null) query.setString(0, objectClass.getName());
+            if (objectClass != null) query.setString(1, objectClass.getName());
             
             List list = query.list();       
 
@@ -142,7 +146,7 @@ public class TagPersistenceProvider
         }      
     }   
     
-	public void setTags(Integer objectId, String objectClass, String[] tags) throws ProviderException
+	public void setTags(Integer objectId, String objectClass, String[] tags, String tagType) throws ProviderException
 	{
 		Session session = HibernateProvider.openSession();
 		Transaction tx = null;
@@ -154,8 +158,8 @@ public class TagPersistenceProvider
 			//delete all tags for the given userId, objectId and objectType
 			session
 					.createQuery(
-							"DELETE org.efs.openreports.objects.ORTag orTag where orTag.objectId = ? and orTag.objectClass = ? ")
-					.setInteger(0, objectId.intValue()).setString(1, objectClass).executeUpdate();
+							"DELETE org.efs.openreports.objects.ORTag orTag where orTag.objectId = ? and orTag.objectClass = ? and orTag.tagType = ? ")
+					.setInteger(0, objectId.intValue()).setString(1, objectClass).setString(2, tagType).executeUpdate();
 				
 			tx.commit();
 			tx = session.beginTransaction();			
@@ -167,6 +171,7 @@ public class TagPersistenceProvider
                 tag.setObjectId(objectId);
                 tag.setObjectClass(objectClass);
                 tag.setTag(tags[i]);
+                tag.setTagType(tagType);
                 
                 HibernateProvider.save(tag);
             }			

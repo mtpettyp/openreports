@@ -32,7 +32,6 @@ import org.efs.openreports.providers.persistence.TagPersistenceProvider;
 /**
  * The <tt>TagProviderImpl</tt> class uses the Hibernate based <tt>TagPersistenceProvider</tt>
  * to persist tags to a database.  
- * 
  */
 
 public class TagProviderImpl implements TagProvider
@@ -47,25 +46,25 @@ public class TagProviderImpl implements TagProvider
         log.info("TagProviderImpl created");
 	}
 
-    public List getTaggedObjects(String[] tags, Class objectClass) throws ProviderException 
+    public List getTaggedObjects(String[] tags, Class objectClass, String tagType) throws ProviderException 
     {
-        return tagPersistenceProvider.getTaggedObjects(tags, objectClass);
+        return tagPersistenceProvider.getTaggedObjects(tags, objectClass, tagType);
     }   
 
-    public String getTagsForObject(Integer objectId, Class objectClass) throws ProviderException 
+    public String getTagsForObject(Integer objectId, Class objectClass, String tagType) throws ProviderException 
     {
-        List tags = tagPersistenceProvider.getTagsForObject(objectId, objectClass);    
+        List tags = tagPersistenceProvider.getTagsForObject(objectId, objectClass, tagType);    
         return formatTags(tags);
     }    
 
-    public void setTags(Integer objectId, Class objectClass, String tags) throws ProviderException 
+    public void setTags(Integer objectId, Class objectClass, String tags, String tagType) throws ProviderException 
     {        
-        tagPersistenceProvider.setTags(objectId, objectClass.getName(), parseTags(tags));        
+        tagPersistenceProvider.setTags(objectId, objectClass.getName(), parseTags(tags), tagType);        
     }
     
-    public String getTagList(Class objectClass) throws ProviderException
+    public String getTagList(Class objectClass, String tagType) throws ProviderException
     {
-        List tags = tagPersistenceProvider.getTagList(objectClass); 
+        List tags = tagPersistenceProvider.getTagList(objectClass, tagType); 
         return formatTags(tags);
     }   
     

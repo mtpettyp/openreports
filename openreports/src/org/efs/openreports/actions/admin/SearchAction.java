@@ -16,6 +16,7 @@
  * Place - Suite 330, Boston, MA 02111-1307, USA.
  *  
  */
+
 package org.efs.openreports.actions.admin;
 
 import java.util.List;
@@ -23,6 +24,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import org.efs.openreports.actions.DisplayTagAction;
+import org.efs.openreports.objects.ORTag;
 import org.efs.openreports.providers.ProviderException;
 import org.efs.openreports.providers.TagProvider;
 
@@ -42,8 +44,8 @@ public class SearchAction extends DisplayTagAction
 	{
 		try
 		{            
-            tags = tagProvider.getTagList(null);
-			results = tagProvider.getTaggedObjects(new String[]{search}, null);
+            tags = tagProvider.getTagList(null, ORTag.TAG_TYPE_UI);
+			results = tagProvider.getTaggedObjects(new String[]{search}, null, ORTag.TAG_TYPE_UI);
         }
 		catch (ProviderException pe)
 		{

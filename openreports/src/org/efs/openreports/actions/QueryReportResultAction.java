@@ -54,6 +54,11 @@ public class QueryReportResultAction extends DisplayTagAction
 		results = (List) ActionContext.getContext().getSession().get(ORStatics.QUERY_REPORT_RESULTS);		
 		properties = (DisplayProperty[]) ActionContext.getContext().getSession().get(ORStatics.QUERY_REPORT_PROPERTIES);	
 
+        if (report.getFile() != null && report.getFile().endsWith(".ftl"))
+        {
+            return ORStatics.QUERY_REPORT_TEMPLATE_ACTION;
+        }
+        
 		return SUCCESS;
 	}	
 

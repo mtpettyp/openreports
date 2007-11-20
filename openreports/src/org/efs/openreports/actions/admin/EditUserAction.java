@@ -31,6 +31,7 @@ import java.util.TreeSet;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.SessionAware;
 import org.efs.openreports.ORStatics;
+import org.efs.openreports.objects.ORTag;
 import org.efs.openreports.objects.ReportAlert;
 import org.efs.openreports.objects.ReportGroup;
 import org.efs.openreports.objects.ReportUser;
@@ -131,7 +132,7 @@ public class EditUserAction extends ActionSupport implements SessionAware
 				alerts = user.isAlertUser();
 				uploader = user.isUploader();
 				schedulerAdmin = user.isSchedulerAdmin();
-                tags = tagProvider.getTagsForObject(user.getId(), ReportUser.class);
+                tags = tagProvider.getTagsForObject(user.getId(), ReportUser.class, ORTag.TAG_TYPE_UI);
 				
                 if (reportGroups != null) Collections.sort(reportGroups);
                 
@@ -210,7 +211,7 @@ public class EditUserAction extends ActionSupport implements SessionAware
 				user = userProvider.insertUser(user);
 			}
             
-            tagProvider.setTags(user.getId(), ReportUser.class, tags);
+            tagProvider.setTags(user.getId(), ReportUser.class, tags, ORTag.TAG_TYPE_UI);
 
 			return SUCCESS;
 		}
@@ -232,7 +233,7 @@ public class EditUserAction extends ActionSupport implements SessionAware
     {
         try
         {
-            return tagProvider.getTagsForObject(groupId, ReportGroup.class);           
+            return tagProvider.getTagsForObject(groupId, ReportGroup.class, ORTag.TAG_TYPE_UI);           
         }
         catch(Exception e)
         {
