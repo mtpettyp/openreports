@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<DataSources>
+  <DataSource>
+    <DataSourceName>Provider=Mondrian;DataSource=SampleData</DataSourceName>
+    <DataSourceDescription>OLAP Sample Data</DataSourceDescription>
+    <URL>http://localhost:8080/openreports/xmla</URL>
+    <DataSourceInfo>Provider=mondrian;Jdbc=jdbc:hsqldb:hsql://localhost:9001/sample;JdbcDrivers=org.hsqldb.jdbcDriver;JdbcUser=sa;</DataSourceInfo>
+    <ProviderName>Mondrian</ProviderName>
+    <ProviderType>MDP</ProviderType>
+    <AuthenticationMode>Unauthenticated</AuthenticationMode>
+    <Catalogs>
+        <Catalog name="SampleData">
+			<Definition>c:\openreports-tomcat\reports\SampleData.mondrian.xml</Definition>
+		</Catalog>
+    </Catalogs>
+  </DataSource>
+</DataSources>
