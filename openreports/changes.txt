@@ -13,8 +13,10 @@ OpenReports 3.0
 - Added default values for parameters
 - Added ability to disable image export for JasperReports
 - Added support for CC and BCC email address for scheduled reports
+- Added support for Eclipse BIRT XLS emitter
 - Migrated From WebWork 2 to Struts 2 (and replaced the old WebWork IOC with Spring)
 - Migrated From Dojo to the Yahoo User Interface (YUI) library
+- Replaced DatePicker with Struts 2 DatePicker
 - Fixed - Intermittent ChartReport image caching problem
 - Fixed - [1635418] Chart image quality
 - Fixed - [1648660] ClassCastException for BIRT reports with scripted datasources
