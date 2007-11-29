@@ -55,8 +55,7 @@
 
 		<war destfile="${deploy}/openreports.war" webxml="${web-inf}/web.xml">
 
-			<fileset dir="${WebRoot}">						
-				<include name="src/**" />				
+			<fileset dir="${WebRoot}">								
 				<include name="**/*.vm" />
 				<include name="**/*.js" />
 				<include name="**/*.jsp" />
@@ -65,7 +64,10 @@
 				<include name="**/*.gif" />
 				<include name="**/*.jpg" />
 				<include name="**/*.png" />		
-				<include name="**/applicationContext*.xml" />				
+				<include name="**/*.tld" />	
+				<include name="**/applicationContext*.xml" />	
+				<include name="**/jpivot/**" />	
+				<include name="**/wcf/**" />				
 			</fileset>
 
 			<lib dir="${web-inf.lib}" />

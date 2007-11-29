@@ -11,7 +11,7 @@
     <tr>
       <td>
       <div id="footer" align="center">
-        <small><strong>OpenReports</strong>  Copyright &#169; 2002-2006 All Rights Reserved.</small>
+        <small><strong>OpenReports</strong>  Copyright &#169; 2002-2007 All Rights Reserved.</small>
         </div>
       </td>
     </tr>
