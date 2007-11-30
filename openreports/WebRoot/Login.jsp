@@ -15,7 +15,8 @@
                                 modal: false,
                                 postmethod: "form",
                                 constraintoviewport : true,
-                                close: false                              
+                                close: false   ,
+                                width: "35em"                          
                                } );          
 
   YAHOO.or.login.dialog.render();          
@@ -25,7 +26,7 @@ YAHOO.util.Event.addListener(window, "load", init);
 	
 </script>
 
-<div id="dialog">
+<div id="dialog" align="center">
 
   <div class="hd"><s:text name="login.title"/></div>
   <div class="bd">
