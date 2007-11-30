@@ -27,6 +27,10 @@ import org.efs.openreports.objects.ReportChart;
 import org.efs.openreports.providers.HibernateProvider;
 import org.efs.openreports.providers.ProviderException;
 import org.efs.openreports.util.LocalStrings;
+import org.hibernate.Criteria;
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
+import org.hibernate.criterion.Restrictions;
 
 public class ChartPersistenceProvider 
 {
@@ -45,13 +49,38 @@ public class ChartPersistenceProvider
 	{
 		return (ReportChart) HibernateProvider.load(ReportChart.class, id);
 	}
+	
+	public ReportChart getReportChart(String name)
+		throws ProviderException
+	{
+		Session session = null;
+		
+		try
+		{
+			session = HibernateProvider.openSession();
+			
+			Criteria criteria = session.createCriteria(ReportChart.class);
+			criteria.add(Restrictions.eq("name", name));
+			
+			return (ReportChart) criteria.uniqueResult();
+		}
+		catch (HibernateException he)
+		{
+			throw new ProviderException(he);
+		}
+		finally
+		{
+			HibernateProvider.closeSession(session);
+		}
+	}
 
-	public List getReportCharts() throws ProviderException
+	@SuppressWarnings("unchecked")
+	public List<ReportChart> getReportCharts() throws ProviderException
 	{
 		String fromClause =
 			"from org.efs.openreports.objects.ReportChart reportChart order by reportChart.name ";
 		
-		return HibernateProvider.query(fromClause);
+		return (List<ReportChart>) HibernateProvider.query(fromClause);
 	}
 
 	public ReportChart insertReportChart(ReportChart reportChart)

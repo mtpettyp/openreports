@@ -45,8 +45,13 @@ public class ChartProviderImpl
 	{
 		return chartPersistenceProvider.getReportChart(id);
 	}
+	
+	public ReportChart getReportChart(String name) throws ProviderException
+	{
+		return chartPersistenceProvider.getReportChart(name);
+	}
 
-	public List getReportCharts() throws ProviderException
+	public List<ReportChart> getReportCharts() throws ProviderException
 	{
 		return chartPersistenceProvider.getReportCharts();
 	}

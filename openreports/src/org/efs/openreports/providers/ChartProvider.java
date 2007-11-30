@@ -26,6 +26,8 @@ import org.efs.openreports.objects.ReportChart;
 public interface ChartProvider
 {	
 	public ReportChart getReportChart(Integer id) throws ProviderException;
+	
+	public ReportChart getReportChart(String name) throws ProviderException;
 
 	public List<ReportChart> getReportCharts() throws ProviderException;
 

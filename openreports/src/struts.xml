@@ -682,7 +682,23 @@
             <result name="success" type="redirect">
                 <param name="location">listScheduledReports.action</param>
             </result>                                 
-        </action>     
+        </action> 
+        
+        <action name="dataImport" class="org.efs.openreports.actions.admin.DataImportAction">	      
+            <result name="success" >
+                <param name="location">DataImport.jsp</param>
+            </result>  
+            <interceptor-ref name="defaultStackWithSecurity"/> 
+            <interceptor-ref name="rootAdmin"/>                  
+        </action>    
+        
+        <action name="dataExport" class="org.efs.openreports.actions.admin.DataExportAction">	      
+            <result name="success" >
+                <param name="location">DataExport.jsp</param>
+            </result>  
+            <interceptor-ref name="defaultStackWithSecurity"/> 
+            <interceptor-ref name="rootAdmin"/>                  
+        </action>    
         
     </package>  
 
