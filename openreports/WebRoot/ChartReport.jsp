@@ -3,17 +3,15 @@
 
 <s:include value="Banner.jsp" />
 
+<div align="center">
+
 <s:if test="report == null || !report.isDisplayInline()">
 
 <a class="back-link img-report-small" href="reportList.action"><s:text name="link.back.groups"/></a>
 <a class="back-link img-group-small" href="reportGroup.action"><s:text name="link.back.reports"/></a>
 <a class="back-link img-report-small"href="reportOptions.action?submitSchedule=true&exportType=4"><s:text name="link.scheduleChart"/></a>  
   
-<br/>
-
-<div align="center">
-
-<br/> 
+<br/><br/> 
  
 <div class="important img-chart" id="instructions"><s:property value="report.name"/></div>   
  

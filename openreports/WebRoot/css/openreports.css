@@ -231,20 +231,17 @@ table.displaytag th.order2 a {
 	white-space: nowrap;	
 }
 
-.adminmenu{	
-	text-align: left;
-	margin-left: 20px;
-	width: 90%;		
+table.adminMenu th
+{
+	text-align: center;	
+	font-weight: bold;
+	font-size: 18px;
+	padding: 5px;
 }
 
-.adminmenu li {	
-	padding-bottom: 10px;
+table.adminMenu td
+{
 	padding-left: 40px;
-}
-
-.adminmenu a {	
-	font-size: 22px;
-
 }
 
 .alert-form {
