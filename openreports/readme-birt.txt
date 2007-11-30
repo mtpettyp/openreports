@@ -15,7 +15,7 @@ with OpenReports:
 
 - Create a 'temp' directory under your 'reports/images' directory.
 
-- Download the or-2.1-birt-2.1.1-platform.zip file and unzip to your 
+- Download the or-3.0-birt-2.2-platform.zip file and unzip to your 
   'reports' directory.  
   
 --------------------
@@ -31,9 +31,6 @@ these files.
   **** Notes ****
 --------------------
 
-- BIRT support in OpenReports-2.1-M1 is in a pre-release state and the
-  API and capabilities are subject to change.
-  
 - OpenReports will override the datasource properties contained in your
   .rptdesign files if the datasource name matches the name of an existing
   OpenReports datasource.
