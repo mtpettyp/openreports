@@ -31,9 +31,14 @@ import javax.sql.DataSource;
 import org.apache.log4j.Logger;
 import org.efs.openreports.objects.ReportDataSource;
 import org.efs.openreports.providers.DataSourceProvider;
+import org.efs.openreports.providers.HibernateProvider;
 import org.efs.openreports.providers.ProviderException;
-import org.efs.openreports.providers.persistence.DataSourcePersistenceProvider;
+import org.efs.openreports.util.ConstraintException;
 import org.efs.openreports.util.LocalStrings;
+import org.hibernate.Criteria;
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
+import org.hibernate.criterion.Restrictions;
 
 public class DataSourceProviderImpl implements DataSourceProvider
 {
@@ -42,13 +47,12 @@ public class DataSourceProviderImpl implements DataSourceProvider
 
 	private Hashtable<Integer,ReportDataSource> dataSources = new Hashtable<Integer,ReportDataSource>();
 	
-	private DataSourcePersistenceProvider dataSourcePersistenceProvider;
+	private HibernateProvider hibernateProvider;
 	
-	public DataSourceProviderImpl() throws ProviderException
+	public DataSourceProviderImpl(HibernateProvider hibernateProvider) throws ProviderException
 	{
 
-		dataSourcePersistenceProvider = new DataSourcePersistenceProvider();
-
+		this.hibernateProvider = hibernateProvider;
 		loadDataSources();
 
 		log.info("DataSourceProviderImpl");
@@ -56,19 +60,18 @@ public class DataSourceProviderImpl implements DataSourceProvider
 
 	protected void loadDataSources() throws ProviderException
 	{
-		Iterator iterator =
-			dataSourcePersistenceProvider.getDataSources().iterator();
+		Iterator<ReportDataSource> iterator =	getDataSources().iterator();
 
 		while (iterator.hasNext())
 		{
-			ReportDataSource dataSource = (ReportDataSource) iterator.next();
+			ReportDataSource dataSource = iterator.next();
 			dataSources.put(dataSource.getId(), dataSource);
 		}
 	}
 
 	public Connection getConnection(Integer id) throws ProviderException
 	{
-		ReportDataSource dataSource = (ReportDataSource) dataSources.get(id);
+		ReportDataSource dataSource = dataSources.get(id);
 
 		try
 		{
@@ -101,19 +104,41 @@ public class DataSourceProviderImpl implements DataSourceProvider
 		return false;
 	}
 
-	public List getDataSources() throws ProviderException
-	{
-		return dataSourcePersistenceProvider.getDataSources();
-	}
-
 	public ReportDataSource getDataSource(Integer id) throws ProviderException
 	{
-		return dataSourcePersistenceProvider.getDataSource(id);
+		return (ReportDataSource) hibernateProvider.load(ReportDataSource.class, id);
 	}
 	
 	public ReportDataSource getDataSource(String name) throws ProviderException
 	{
-		return dataSourcePersistenceProvider.getDataSource(name);
+		Session session = null;
+		
+		try
+		{
+			session = hibernateProvider.openSession();
+			
+			Criteria criteria = session.createCriteria(ReportDataSource.class);
+			criteria.add(Restrictions.eq("name", name));
+			
+			return (ReportDataSource) criteria.uniqueResult();
+		}
+		catch (HibernateException he)
+		{
+			throw new ProviderException(he);
+		}
+		finally
+		{
+			hibernateProvider.closeSession(session);
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<ReportDataSource> getDataSources() throws ProviderException
+	{
+		String fromClause =
+			"from org.efs.openreports.objects.ReportDataSource reportDataSource order by reportDataSource.name ";
+		
+		return (List<ReportDataSource>) hibernateProvider.query(fromClause);
 	}
 
 	public ReportDataSource insertDataSource(ReportDataSource dataSource)
@@ -121,9 +146,9 @@ public class DataSourceProviderImpl implements DataSourceProvider
 	{
 		testDataSource(dataSource);
 
-		dataSource = dataSourcePersistenceProvider.insertDataSource(dataSource);
+		dataSource = (ReportDataSource) hibernateProvider.save(dataSource);
 		dataSources.put(dataSource.getId(), dataSource);
-
+		
 		return dataSource;
 	}
 
@@ -132,16 +157,23 @@ public class DataSourceProviderImpl implements DataSourceProvider
 	{
 		testDataSource(dataSource);
 
-		dataSourcePersistenceProvider.updateDataSource(dataSource);
-		dataSources.put(dataSource.getId(), dataSource);
+		hibernateProvider.update(dataSource);
+		dataSources.put(dataSource.getId(), dataSource);		
 	}
 
 	public void deleteDataSource(ReportDataSource dataSource)
 		throws ProviderException
 	{
-		dataSourcePersistenceProvider.deleteDataSource(dataSource);
-		dataSources.remove(dataSource.getId());
-	}
+		try
+		{
+			hibernateProvider.delete(dataSource);
+			dataSources.remove(dataSource.getId());
+		}
+		catch (ConstraintException ce)
+		{
+			throw new ProviderException(LocalStrings.ERROR_DATASOURCE_DELETION);
+		}
+	}	
 
 	public void testDataSource(ReportDataSource dataSource)
 		throws ProviderException

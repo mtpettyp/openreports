@@ -24,36 +24,40 @@ import java.io.FileFilter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.io.filefilter.WildcardFileFilter;
 import org.apache.log4j.Logger;
 import org.efs.openreports.objects.Report;
+import org.efs.openreports.objects.ReportGroup;
+import org.efs.openreports.objects.ReportLog;
 import org.efs.openreports.objects.ReportTemplate;
 import org.efs.openreports.providers.DirectoryProvider;
+import org.efs.openreports.providers.HibernateProvider;
 import org.efs.openreports.providers.ProviderException;
 import org.efs.openreports.providers.ReportProvider;
-import org.efs.openreports.providers.persistence.ReportPersistenceProvider;
+import org.efs.openreports.util.LocalStrings;
+import org.hibernate.Criteria;
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+import org.hibernate.criterion.Restrictions;
 
 public class ReportProviderImpl	implements ReportProvider
 {
 	protected static Logger log = Logger.getLogger(ReportProviderImpl.class.getName());
-	
-	private ReportPersistenceProvider reportPersistenceProvider;
-
+		
 	private DirectoryProvider directoryProvider;
+	private HibernateProvider hibernateProvider;
 	
-	public ReportProviderImpl(DirectoryProvider directoryProvider) throws ProviderException
+	public ReportProviderImpl(DirectoryProvider directoryProvider, HibernateProvider hibernateProvider) throws ProviderException
 	{
 		this.directoryProvider = directoryProvider;
-		init();
-	}
-	
-	protected void init() throws ProviderException
-	{
-		reportPersistenceProvider = new ReportPersistenceProvider();
+		this.hibernateProvider = hibernateProvider;
+		
 		log.info("ReportProviderImpl created");
-	}
+	}	
 
 	public List<String> getReportFileNames() throws ProviderException
 	{
@@ -123,38 +127,110 @@ public class ReportProviderImpl	implements ReportProvider
 
 	public Report getReport(Integer id) throws ProviderException
 	{
-		return reportPersistenceProvider.getReport(id);
+		return (Report) hibernateProvider.load(Report.class, id);
 	}
-	
-	public Report getReport(String reportName) throws ProviderException
+
+	public Report getReport(String name) throws ProviderException
 	{
-		return reportPersistenceProvider.getReport(reportName);
+		Session session = null;
+		
+		try
+		{
+			session = hibernateProvider.openSession();
+			
+			Criteria criteria = session.createCriteria(Report.class);
+			criteria.add(Restrictions.eq("name", name));
+			
+			return (Report) criteria.uniqueResult();
+		}
+		catch (HibernateException he)
+		{
+			throw new ProviderException(he);
+		}
+		finally
+		{
+			hibernateProvider.closeSession(session);
+		}
 	}
-
-
+	 
+	
+	@SuppressWarnings("unchecked")
 	public List<Report> getReports() throws ProviderException
 	{
-		return reportPersistenceProvider.getReports();
+		String fromClause =
+			"from org.efs.openreports.objects.Report report order by report.name ";
+		
+		return (List<Report>) hibernateProvider.query(fromClause);
 	}
 
 	public Report insertReport(Report report) throws ProviderException
 	{
-		return reportPersistenceProvider.insertReport(report);
+		return (Report) hibernateProvider.save(report);
 	}
 
 	public void updateReport(Report report) throws ProviderException
 	{
-		reportPersistenceProvider.updateReport(report);
+		hibernateProvider.update(report);
 	}
 
 	public void deleteReport(Report report) throws ProviderException
 	{
-		reportPersistenceProvider.deleteReport(report);
-	}
+		Session session = hibernateProvider.openSession();
+		Transaction tx = null;
 
-	public void setDirectoryProvider(DirectoryProvider directoryProvider)
-	{
-		this.directoryProvider = directoryProvider;
+		try
+		{
+			tx = session.beginTransaction();
+			
+			//delete report			
+			session.delete(report);		
+			
+			//delete report log entries for report
+			Iterator<?> iterator =  session
+				.createQuery(
+					"from  org.efs.openreports.objects.ReportLog reportLog where reportLog.report.id = ? ")
+				.setInteger(0, report.getId().intValue()).iterate();
+					
+			while(iterator.hasNext())
+			{
+				ReportLog reportLog = (ReportLog) iterator.next();		 	
+				session.delete(reportLog);
+			}		
+			
+			//remove report from groups
+			iterator =  session
+				.createQuery(
+						"from org.efs.openreports.objects.ReportGroup reportGroup").iterate();
+						
+			 while(iterator.hasNext())
+			 {
+			 	ReportGroup reportGroup = (ReportGroup) iterator.next();
+			 	
+			 	List<Report> reports = reportGroup.getReports();			 	
+			 	if (reports.contains(report))
+			 	{
+			 		reports.remove(report);
+			 	}
+			 }	
+			
+			tx.commit();
+		}
+		catch (HibernateException he)
+		{
+			hibernateProvider.rollbackTransaction(tx);
+						
+			if (he.getCause() != null && he.getCause().getMessage() != null && he.getCause().getMessage().toUpperCase().indexOf("CONSTRAINT") > 0)
+			{
+				throw new ProviderException(LocalStrings.ERROR_REPORT_DELETION);
+			}
+			
+			log.error("deleteReport", he);			
+			throw new ProviderException(LocalStrings.ERROR_SERVERSIDE);
+		}
+		finally
+		{
+			hibernateProvider.closeSession(session);
+		}
 	}
 
 }

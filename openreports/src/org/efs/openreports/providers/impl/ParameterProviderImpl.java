@@ -26,8 +26,11 @@ import java.util.*;
 import org.apache.log4j.Logger;
 import org.efs.openreports.objects.*;
 import org.efs.openreports.providers.*;
-import org.efs.openreports.providers.persistence.ParameterPersistenceProvider;
 import org.efs.openreports.util.*;
+import org.hibernate.Criteria;
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
+import org.hibernate.criterion.Restrictions;
 
 import net.sf.jasperreports.engine.design.JRDesignParameter;
 import net.sf.jasperreports.engine.design.JRDesignQuery;
@@ -37,25 +40,19 @@ public class ParameterProviderImpl implements ParameterProvider
 {
 	protected static Logger log =
 		Logger.getLogger(ParameterProviderImpl.class.getName());	
-
-	private ParameterPersistenceProvider paramPersistenceProvider;
-
+	
 	private DataSourceProvider dataSourceProvider;
 	private DateProvider dateProvider;
+	private HibernateProvider hibernateProvider;
 	
-	public ParameterProviderImpl(DataSourceProvider dataSourceProvider, DateProvider dateProvider) throws ProviderException
+	public ParameterProviderImpl(DataSourceProvider dataSourceProvider, DateProvider dateProvider, HibernateProvider hibernateProvider) throws ProviderException
 	{
 		this.dataSourceProvider = dataSourceProvider;
 		this.dateProvider = dateProvider;
+		this.hibernateProvider = hibernateProvider;
 		
-		init();
-	}	
-	
-	protected void init() throws ProviderException
-	{
-		paramPersistenceProvider = new ParameterPersistenceProvider();
 		log.info("Created");
-	}	
+	}		
 
 	public ReportParameterValue[] getParamValues(
 		ReportParameter reportParameter,
@@ -516,7 +513,7 @@ public class ParameterProviderImpl implements ParameterProvider
 	{
 		StringBuffer sb = new StringBuffer();
 		
-		if (values[0].equals("")) return "";
+		if (values == null || values.length < 1 || values[0].equals("")) return "";
 
 		for (int j = 0; j < values.length; j++)
 		{
@@ -624,36 +621,64 @@ public class ParameterProviderImpl implements ParameterProvider
 	public ReportParameter getReportParameter(Integer id)
 		throws ProviderException
 	{
-		return paramPersistenceProvider.getReportParameter(id);
+		return (ReportParameter) hibernateProvider.load(ReportParameter.class, id);
 	}
 	
-	public ReportParameter getReportParameter(String name)
-		throws ProviderException
+	public ReportParameter getReportParameter(String name) throws ProviderException
 	{
-		return paramPersistenceProvider.getReportParameter(name);
+		Session session = null;
+		
+		try
+		{
+			session = hibernateProvider.openSession();
+			
+			Criteria criteria = session.createCriteria(ReportParameter.class);
+			criteria.add(Restrictions.eq("name", name));
+			
+			return (ReportParameter) criteria.uniqueResult();
+		}
+		catch (HibernateException he)
+		{
+			throw new ProviderException(he);
+		}
+		finally
+		{
+			hibernateProvider.closeSession(session);
+		}
 	}
 
+	@SuppressWarnings("unchecked")
 	public List<ReportParameter> getReportParameters() throws ProviderException
 	{
-		return paramPersistenceProvider.getReportParameters();
+		String fromClause =
+			"from org.efs.openreports.objects.ReportParameter reportParameter order by reportParameter.name ";
+		
+		return (List<ReportParameter>) hibernateProvider.query(fromClause);
 	}
-
+	
 	public ReportParameter insertReportParameter(ReportParameter reportParameter)
 		throws ProviderException
 	{
-		return paramPersistenceProvider.insertReportParameter(reportParameter);
+		return (ReportParameter) hibernateProvider.save(reportParameter);
 	}
-
+	
 	public void updateReportParameter(ReportParameter reportParameter)
 		throws ProviderException
 	{
-		paramPersistenceProvider.updateReportParameter(reportParameter);
+		hibernateProvider.update(reportParameter);
 	}
-
+	
 	public void deleteReportParameter(ReportParameter reportParameter)
 		throws ProviderException
 	{
-		paramPersistenceProvider.deleteReportParameter(reportParameter);
+		try
+		{
+			hibernateProvider.delete(reportParameter);
+		}
+		catch (ConstraintException ce)
+		{
+			throw new ProviderException(LocalStrings.ERROR_PARAMETER_DELETION);
+		}
 	}
 
 	public void setDataSourceProvider(DataSourceProvider dataSourceProvider)

@@ -17,7 +17,7 @@
  *
  */
 
-package org.efs.openreports.providers.persistence;
+package org.efs.openreports.util;
 
 public class ConstraintException extends Exception
 {	 	

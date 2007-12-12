@@ -72,7 +72,11 @@
 
   <bean id="propertiesProvider"
     class="org.efs.openreports.providers.impl.PropertiesProviderImpl"
-    singleton="true" />
+    singleton="true">
+    <constructor-arg>
+      <ref bean="hibernateProvider" />
+    </constructor-arg>
+  </bean>
 
   <bean id="directoryProvider"
     class="org.efs.openreports.providers.DirectoryProvider"
@@ -91,11 +95,19 @@
 
   <bean id="dataSourceProvider"
     class="org.efs.openreports.providers.impl.DataSourceProviderImpl"
-    singleton="true" />
+    singleton="true">
+    <constructor-arg>
+      <ref bean="hibernateProvider" />
+    </constructor-arg>
+  </bean>
 
   <bean id="groupProvider"
     class="org.efs.openreports.providers.impl.GroupProviderImpl"
-    singleton="true" />
+    singleton="true">
+    <constructor-arg>
+      <ref bean="hibernateProvider" />
+    </constructor-arg>
+  </bean>
 
   <bean id="parameterProvider"
     class="org.efs.openreports.providers.impl.ParameterProviderImpl"
@@ -106,11 +118,18 @@
     <constructor-arg>
       <ref bean="dateProvider" />
     </constructor-arg>
+    <constructor-arg>
+      <ref bean="hibernateProvider" />
+    </constructor-arg>
   </bean>
 
   <bean id="reportLogProvider"
     class="org.efs.openreports.providers.impl.ReportLogProviderImpl"
-    singleton="true" />
+    singleton="true">
+    <constructor-arg>
+      <ref bean="hibernateProvider" />
+    </constructor-arg>
+  </bean>
 
   <bean id="reportProvider"
     class="org.efs.openreports.providers.impl.ReportProviderImpl"
@@ -118,11 +137,18 @@
     <constructor-arg>
       <ref bean="directoryProvider" />
     </constructor-arg>
+    <constructor-arg>
+      <ref bean="hibernateProvider" />
+    </constructor-arg>
   </bean>
   
   <bean id="userProvider"
     class="org.efs.openreports.providers.impl.UserProviderImpl"
-    singleton="true" />
+    singleton="true">
+    <constructor-arg>
+      <ref bean="hibernateProvider" />
+    </constructor-arg>
+  </bean>
 
   <bean id="mailProvider"
     class="org.efs.openreports.providers.MailProvider" singleton="true">
@@ -133,11 +159,18 @@
 
   <bean id="chartProvider"
     class="org.efs.openreports.providers.impl.ChartProviderImpl"
-    singleton="true">   
+    singleton="true">  
+    <constructor-arg>
+      <ref bean="hibernateProvider" />
+    </constructor-arg> 
   </bean>
   
   <bean id="tagProvider"
-    class="org.efs.openreports.providers.impl.TagProviderImpl" singleton="true" />  
+    class="org.efs.openreports.providers.impl.TagProviderImpl" singleton="true">
+    <constructor-arg>
+      <ref bean="hibernateProvider" />
+    </constructor-arg>
+  </bean>  
     
   <bean id="birtProvider"
     class="org.efs.openreports.providers.BirtProvider" singleton="true" />  
@@ -154,6 +187,9 @@
     </constructor-arg>
     <constructor-arg>
       <ref bean="reportLogProvider" />
+    </constructor-arg>
+    <constructor-arg>
+      <ref bean="hibernateProvider" />
     </constructor-arg>
   </bean>   
   

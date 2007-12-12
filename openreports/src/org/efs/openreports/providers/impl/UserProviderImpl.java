@@ -24,56 +24,147 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.efs.openreports.objects.ReportGroup;
 import org.efs.openreports.objects.ReportUser;
+import org.efs.openreports.providers.HibernateProvider;
 import org.efs.openreports.providers.ProviderException;
 import org.efs.openreports.providers.UserProvider;
-import org.efs.openreports.providers.persistence.UserPersistenceProvider;
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 public class UserProviderImpl implements UserProvider
 {
 	protected static Logger log =
 		Logger.getLogger(UserProviderImpl.class.getName());
 	
-	private UserPersistenceProvider userPersistenceProvider;
+	private HibernateProvider hibernateProvider;
 
-	public UserProviderImpl() throws ProviderException
+	public UserProviderImpl(HibernateProvider hibernateProvider) throws ProviderException
 	{
-		userPersistenceProvider = new UserPersistenceProvider();
+		this.hibernateProvider = hibernateProvider;
 
 		log.info("UserProviderImpl created");
 	}
 
+	@SuppressWarnings("unchecked")
 	public ReportUser getUser(String name) throws ProviderException
 	{
-		return userPersistenceProvider.getUser(name);
+		try
+		{
+			Session session = hibernateProvider.openSession();			
+			
+			try
+			{			
+				List<ReportUser> list = session.createQuery(
+						"from org.efs.openreports.objects.ReportUser as user "
+								+ "where user.name = ?").setString(0, name).list();					
+
+				if (list.size() == 0)
+					return null;
+
+				ReportUser user = list.get(0);				
+
+				return user;
+			}
+			catch (HibernateException he)
+			{			
+				throw he;
+			}
+			finally
+			{
+				session.close();
+			}
+		}
+		catch (HibernateException he)
+		{
+			throw new ProviderException(he);
+		}
 	}
 
 	public ReportUser getUser(Integer id) throws ProviderException
 	{
-		return userPersistenceProvider.getUser(id);
+		return (ReportUser) hibernateProvider.load(ReportUser.class, id);
 	}
 
+	@SuppressWarnings("unchecked")
 	public List<ReportUser> getUsers() throws ProviderException
 	{
-		return userPersistenceProvider.getUsers();
+		String fromClause =
+			"from org.efs.openreports.objects.ReportUser reportUser order by reportUser.name ";
+
+		return (List<ReportUser>) hibernateProvider.query(fromClause);
 	}
 
 	public ReportUser insertUser(ReportUser user) throws ProviderException
 	{
-		return userPersistenceProvider.insertUser(user);
+		return (ReportUser) hibernateProvider.save(user);
 	}
 
 	public void updateUser(ReportUser user) throws ProviderException
 	{
-		userPersistenceProvider.updateUser(user);
+		hibernateProvider.update(user);
 	}
 
 	public void deleteUser(ReportUser user) throws ProviderException
 	{
-		userPersistenceProvider.deleteUser(user);
-	}	
+		Session session = hibernateProvider.openSession();
+		Transaction tx = null;
+
+		try
+		{
+			tx = session.beginTransaction();
+			
+			//delete user			
+			session.delete(user);
+			
+			//delete report log entries for user
+			session
+					.createQuery(
+							"DELETE org.efs.openreports.objects.ReportLog reportLog where reportLog.user.id = ? ")
+					.setInteger(0, user.getId().intValue()).executeUpdate();					
+			
+			tx.commit();
+		}
+		catch (HibernateException he)
+		{
+			hibernateProvider.rollbackTransaction(tx);			
+
+			throw new ProviderException(he.getMessage());
+		}
+		finally
+		{
+			hibernateProvider.closeSession(session);
+		}
+	}
 	
+	@SuppressWarnings("unchecked")
 	public List<ReportUser> getUsersForGroup(ReportGroup reportGroup) throws ProviderException
 	{
-		return userPersistenceProvider.getUsersForGroup(reportGroup);
+		try
+		{
+			Session session = hibernateProvider.openSession();			
+			
+			try
+			{			
+				List<ReportUser> list = session.createQuery(
+						"from org.efs.openreports.objects.ReportUser as reportUser "
+								+ "where ? in elements(reportUser.groups)").setEntity(0, reportGroup).list();					
+
+				if (list.size() == 0) return null;						
+
+				return list;
+			}
+			catch (HibernateException he)
+			{			
+				throw he;
+			}
+			finally
+			{
+				session.close();
+			}
+		}
+		catch (HibernateException he)
+		{
+			throw new ProviderException(he);
+		}
 	}
 }

@@ -24,54 +24,90 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.efs.openreports.objects.ReportChart;
 import org.efs.openreports.providers.ChartProvider;
+import org.efs.openreports.providers.HibernateProvider;
 import org.efs.openreports.providers.ProviderException;
-import org.efs.openreports.providers.persistence.ChartPersistenceProvider;
+import org.efs.openreports.util.ConstraintException;
+import org.efs.openreports.util.LocalStrings;
+import org.hibernate.Criteria;
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
+import org.hibernate.criterion.Restrictions;
 
 public class ChartProviderImpl
 	implements ChartProvider
 {
 	protected static Logger log =
 		Logger.getLogger(ChartProviderImpl.class.getName());
-
-	private ChartPersistenceProvider chartPersistenceProvider;
 	
-	public ChartProviderImpl() throws ProviderException
+	private HibernateProvider hibernateProvider;
+	
+	public ChartProviderImpl(HibernateProvider hibernateProvider) throws ProviderException
 	{		
-		chartPersistenceProvider = new ChartPersistenceProvider();
+		this.hibernateProvider = hibernateProvider;
 		log.info("Created");
 	}
 
-	public ReportChart getReportChart(Integer id) throws ProviderException
+	public ReportChart getReportChart(Integer id)
+		throws ProviderException
 	{
-		return chartPersistenceProvider.getReportChart(id);
+		return (ReportChart) hibernateProvider.load(ReportChart.class, id);
 	}
 	
-	public ReportChart getReportChart(String name) throws ProviderException
+	public ReportChart getReportChart(String name)
+		throws ProviderException
 	{
-		return chartPersistenceProvider.getReportChart(name);
+		Session session = null;
+		
+		try
+		{
+			session = hibernateProvider.openSession();
+			
+			Criteria criteria = session.createCriteria(ReportChart.class);
+			criteria.add(Restrictions.eq("name", name));
+			
+			return (ReportChart) criteria.uniqueResult();
+		}
+		catch (HibernateException he)
+		{
+			throw new ProviderException(he);
+		}
+		finally
+		{
+			hibernateProvider.closeSession(session);
+		}
 	}
-
+	
+	@SuppressWarnings("unchecked")
 	public List<ReportChart> getReportCharts() throws ProviderException
 	{
-		return chartPersistenceProvider.getReportCharts();
+		String fromClause =
+			"from org.efs.openreports.objects.ReportChart reportChart order by reportChart.name ";
+		
+		return (List<ReportChart>) hibernateProvider.query(fromClause);
 	}
-
+	
 	public ReportChart insertReportChart(ReportChart reportChart)
 		throws ProviderException
 	{
-		return chartPersistenceProvider.insertReportChart(reportChart);
+		return (ReportChart) hibernateProvider.save(reportChart);
 	}
-
+	
 	public void updateReportChart(ReportChart reportChart)
 		throws ProviderException
 	{
-		chartPersistenceProvider.updateReportChart(reportChart);
+		hibernateProvider.update(reportChart);
 	}
-
+	
 	public void deleteReportChart(ReportChart reportChart)
 		throws ProviderException
 	{
-		chartPersistenceProvider.deleteReportChart(reportChart);
-	}
-
+		try
+		{
+			hibernateProvider.delete(reportChart);
+		}
+		catch (ConstraintException ce)
+		{
+			throw new ProviderException(LocalStrings.ERROR_CHART_DELETION);
+		}
+	}	
 }

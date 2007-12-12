@@ -31,7 +31,7 @@ import org.hibernate.Transaction;
 import org.hibernate.exception.ConstraintViolationException;
 
 import org.apache.log4j.Logger;
-import org.efs.openreports.providers.persistence.ConstraintException;
+import org.efs.openreports.util.ConstraintException;
 import org.efs.openreports.util.LocalStrings;
 import org.springframework.beans.factory.DisposableBean;
 
@@ -42,11 +42,11 @@ public class HibernateProvider implements DisposableBean
 	private static SessionFactory sessionFactory;
 
 	public HibernateProvider() throws ProviderException
-	{
+	{	
 		log.info("SessionFactory Created.");
 	}
 	
-	public static Session openSession() throws ProviderException
+	public Session openSession() throws ProviderException
 	{
 		try
 		{
@@ -58,7 +58,7 @@ public class HibernateProvider implements DisposableBean
 		}
 	}	
 
-	public static void closeSession(Session session) throws ProviderException
+	public void closeSession(Session session) throws ProviderException
 	{
 		try
 		{
@@ -71,7 +71,7 @@ public class HibernateProvider implements DisposableBean
 		}
 	}
 
-	public static void rollbackTransaction(Transaction tx)
+	public void rollbackTransaction(Transaction tx)
 		throws ProviderException
 	{
 		try
@@ -85,7 +85,7 @@ public class HibernateProvider implements DisposableBean
 		}
 	}
 
-	public static Object save(Object object) throws ProviderException
+	public Object save(Object object) throws ProviderException
 	{
 		Session session = openSession();
 		Transaction tx = null;
@@ -115,7 +115,7 @@ public class HibernateProvider implements DisposableBean
 		return object;
 	}
 
-	public static void update(Object object) throws ProviderException
+	public void update(Object object) throws ProviderException
 	{
 		Session session = openSession();
 		Transaction tx = null;
@@ -143,7 +143,7 @@ public class HibernateProvider implements DisposableBean
 		}
 	}
 
-	public static void delete(Object object)
+	public void delete(Object object)
 		throws ProviderException, ConstraintException
 	{
 		Session session = openSession();
@@ -172,7 +172,7 @@ public class HibernateProvider implements DisposableBean
 		}
 	}
 
-	public static Object load(Class<?> classType, Serializable id)
+	public Object load(Class<?> classType, Serializable id)
 		throws ProviderException
 	{
 		Session session = openSession();
@@ -192,7 +192,7 @@ public class HibernateProvider implements DisposableBean
 		}
 	}
 
-	public static List<?> query(String fromClause) throws ProviderException
+	public List<?> query(String fromClause) throws ProviderException
 	{
 		Session session = openSession();
 		

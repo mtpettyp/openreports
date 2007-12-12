@@ -23,6 +23,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -32,60 +33,98 @@ import org.efs.openreports.objects.ReportLog;
 import org.efs.openreports.objects.ReportUserAlert;
 import org.efs.openreports.providers.AlertProvider;
 import org.efs.openreports.providers.DataSourceProvider;
+import org.efs.openreports.providers.HibernateProvider;
 import org.efs.openreports.providers.ProviderException;
 import org.efs.openreports.providers.ReportLogProvider;
-import org.efs.openreports.providers.persistence.AlertPersistenceProvider;
 import org.efs.openreports.util.LocalStrings;
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 public class AlertProviderImpl implements AlertProvider
 {
-	protected static Logger log =
-		Logger.getLogger(AlertProviderImpl.class.getName());
-
-	private AlertPersistenceProvider alertPersistenceProvider;	
+	protected static Logger log = Logger.getLogger(AlertProviderImpl.class.getName());
+	
 	private DataSourceProvider dataSourceProvider;
 	private ReportLogProvider reportLogProvider;	
+	private HibernateProvider hibernateProvider;
 	
-	public AlertProviderImpl(DataSourceProvider dataSourceProvider, ReportLogProvider reportLogProvider) throws ProviderException
+	public AlertProviderImpl(DataSourceProvider dataSourceProvider, ReportLogProvider reportLogProvider, HibernateProvider hibernateProvider) throws ProviderException
 	{
 		this.dataSourceProvider = dataSourceProvider;
 		this.reportLogProvider = reportLogProvider;
-		init();
-	}	
-	
-	protected void init() throws ProviderException
-	{
-		alertPersistenceProvider = new AlertPersistenceProvider();
-		log.info("Created");
-	}	
+		this.hibernateProvider = hibernateProvider;
 
-	public ReportAlert getReportAlert(Integer id) throws ProviderException
+		log.info("Created");
+	}			
+
+	public ReportAlert getReportAlert(Integer id) throws ProviderException 
 	{
-		return alertPersistenceProvider.getReportAlert(id);
+		return (ReportAlert) hibernateProvider.load(ReportAlert.class, id);
 	}
 
+	@SuppressWarnings("unchecked")
 	public List<ReportAlert> getReportAlerts() throws ProviderException
 	{
-		return alertPersistenceProvider.getReportAlerts();
+		String fromClause =
+			"from org.efs.openreports.objects.ReportAlert reportAlert order by reportAlert.name ";
+	
+		return (List<ReportAlert>) hibernateProvider.query(fromClause);
 	}
 
-	public ReportAlert insertReportAlert(ReportAlert reportAlert)
-		throws ProviderException
+	public ReportAlert insertReportAlert(ReportAlert reportAlert) throws ProviderException
 	{
-		return alertPersistenceProvider.insertReportAlert(reportAlert);
+		return (ReportAlert) hibernateProvider.save(reportAlert);
 	}
 
-	public void updateReportAlert(ReportAlert reportAlert)
-		throws ProviderException
+	public void updateReportAlert(ReportAlert reportAlert) throws ProviderException
 	{
-		alertPersistenceProvider.updateReportAlert(reportAlert);
+		hibernateProvider.update(reportAlert);
 	}
 
-	public void deleteReportAlert(ReportAlert reportAlert)
-		throws ProviderException
+	public void deleteReportAlert(ReportAlert reportAlert) throws ProviderException
 	{
-		alertPersistenceProvider.deleteReportAlert(reportAlert);
-	}	
+		Session session = hibernateProvider.openSession();
+		Transaction tx = null;
+
+		try
+		{
+			tx = session.beginTransaction();
+			
+			//delete alert			
+			session.delete(reportAlert);		
+			
+			//delete report log entries for alert
+			Iterator<?> iterator =  session
+				.createQuery(
+				"from  org.efs.openreports.objects.ReportLog reportLog where reportLog.alert.id = ? ")
+				.setInteger(0, reportAlert.getId().intValue()).iterate();
+					
+			while(iterator.hasNext())
+			{
+				ReportLog reportLog = (ReportLog) iterator.next();		 	
+				session.delete(reportLog);
+			}								 
+		
+			tx.commit();
+		}
+		catch (HibernateException he)
+		{
+			hibernateProvider.rollbackTransaction(tx);
+					
+			if (he.getCause() != null && he.getCause().getMessage() != null && he.getCause().getMessage().toUpperCase().indexOf("CONSTRAINT") > 0)
+			{
+				throw new ProviderException(LocalStrings.ERROR_ALERT_DELETION);
+			}
+				
+			log.error("deleteReportAlert", he);			
+			throw new ProviderException(LocalStrings.ERROR_SERVERSIDE);
+		}
+		finally
+		{
+			hibernateProvider.closeSession(session);
+		}		
+	}
 	
 	public ReportUserAlert executeAlert(ReportUserAlert userAlert, boolean includeReportInLog) throws ProviderException
 	{

@@ -19,30 +19,30 @@
 
 package org.efs.openreports.providers.impl;
 
+import java.util.List;
+
 import org.apache.log4j.Logger;
 import org.efs.openreports.objects.ORProperty;
+import org.efs.openreports.providers.HibernateProvider;
 import org.efs.openreports.providers.PropertiesProvider;
 import org.efs.openreports.providers.ProviderException;
-import org.efs.openreports.providers.persistence.PropertiesPersistenceProvider;
+import org.efs.openreports.util.ConstraintException;
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
 
 public class PropertiesProviderImpl implements PropertiesProvider
 {
 	protected static Logger log = Logger.getLogger(PropertiesProviderImpl.class
-			.getName());
+			.getName());	
 
-	private PropertiesPersistenceProvider propertiesPersistenceProvider;	
-
-	public PropertiesProviderImpl() throws ProviderException
+	private HibernateProvider hibernateProvider;
+	
+	public PropertiesProviderImpl(HibernateProvider hibernateProvider) throws ProviderException
 	{
-		propertiesPersistenceProvider = new PropertiesPersistenceProvider();
+		this.hibernateProvider = hibernateProvider;
 
 		log.info("PropertiesProviderImpl created");
-	}
-
-	public ORProperty getProperty(String key) throws ProviderException
-	{
-		return propertiesPersistenceProvider.getProperty(key);		
-	}
+	}	
 
 	public void setProperty(String key, String value) throws ProviderException
 	{
@@ -54,13 +54,71 @@ public class PropertiesProviderImpl implements PropertiesProvider
 			property.setKey(key);
 			property.setValue(value);
 			
-			propertiesPersistenceProvider.insertProperty(property);
+			insertProperty(property);
 		}
 		else
 		{
 			property.setValue(value);
 			
-			propertiesPersistenceProvider.updateProperty(property);
+			updateProperty(property);
 		}
 	}
+	
+	@SuppressWarnings("unchecked")
+	public ORProperty getProperty(String key) throws ProviderException
+	{
+		try
+		{
+			Session session = hibernateProvider.openSession();			
+
+			try
+			{				
+				List<ORProperty> list = session.createQuery(
+						"from org.efs.openreports.objects.ORProperty as orProperty "
+								+ "where orProperty.key = ?").setCacheable(true).setString(0, key).list();
+					
+				if (list.size() == 0)
+					return null;
+
+				ORProperty property = list.get(0);			
+
+				return property;
+			}
+			catch (HibernateException he)
+			{				
+				throw he;
+			}
+			finally
+			{
+				session.close();
+			}
+		}
+		catch (HibernateException he)
+		{
+			throw new ProviderException(he);
+		}
+	}
+
+	public ORProperty insertProperty(ORProperty property)
+			throws ProviderException
+	{
+		return (ORProperty) hibernateProvider.save(property);
+	}
+
+	public void updateProperty(ORProperty property) throws ProviderException
+	{
+		hibernateProvider.update(property);
+	}
+
+	public void deleteProperty(ORProperty property) throws ProviderException
+	{
+		try
+		{
+			hibernateProvider.delete(property);
+		}
+		catch (ConstraintException ce)
+		{
+			throw new ProviderException(ce.getMessage());
+		}
+	}	
 }

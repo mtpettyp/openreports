@@ -25,55 +25,96 @@ import org.apache.log4j.Logger;
 import org.efs.openreports.objects.Report;
 import org.efs.openreports.objects.ReportGroup;
 import org.efs.openreports.providers.GroupProvider;
+import org.efs.openreports.providers.HibernateProvider;
 import org.efs.openreports.providers.ProviderException;
-import org.efs.openreports.providers.persistence.GroupPersistenceProvider;
+import org.efs.openreports.util.ConstraintException;
+import org.efs.openreports.util.LocalStrings;
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
 
 public class GroupProviderImpl implements GroupProvider
 {
 	protected static Logger log =
 		Logger.getLogger(GroupProviderImpl.class.getName());
 
-	private GroupPersistenceProvider groupPersistenceProvider;
+	private HibernateProvider hibernateProvider;
 
-	public GroupProviderImpl() throws ProviderException
+	public GroupProviderImpl(HibernateProvider hibernateProvider) throws ProviderException
 	{
-		groupPersistenceProvider = new GroupPersistenceProvider();
+		this.hibernateProvider = hibernateProvider;
 
 		log.info("GroupProviderImpl created");
 	}
 
 	public ReportGroup getReportGroup(Integer id) throws ProviderException
 	{
-		return groupPersistenceProvider.getReportGroup(id);
+		return (ReportGroup) hibernateProvider.load(ReportGroup.class, id);
+	}
 
+	@SuppressWarnings("unchecked")
+	public List<ReportGroup> getReportGroups() throws ProviderException
+	{
+		String fromClause =
+			"from org.efs.openreports.objects.ReportGroup reportGroup order by reportGroup.name ";
+		
+		return (List<ReportGroup>) hibernateProvider.query(fromClause);
 	}
 	
-	public List getReportGroups() throws ProviderException
+	@SuppressWarnings("unchecked")
+	public List<ReportGroup> getGroupsForReport(Report report) throws ProviderException
 	{
-		return groupPersistenceProvider.getReportGroups();
-	}
-	
-	public List getGroupsForReport(Report report) throws ProviderException
-	{
-		return groupPersistenceProvider.getGroupsForReport(report);
+		try
+		{
+			Session session = hibernateProvider.openSession();			
+			
+			try
+			{			
+				List<ReportGroup> list = session.createQuery(
+						"from org.efs.openreports.objects.ReportGroup as reportGroup "
+								+ "where ? in elements(reportGroup.reports)").setEntity(0, report).list();					
+
+				if (list.size() == 0) return null;						
+
+				return list;
+			}
+			catch (HibernateException he)
+			{			
+				throw he;
+			}
+			finally
+			{
+				session.close();
+			}
+		}
+		catch (HibernateException he)
+		{
+			throw new ProviderException(he);
+		}
 	}
 
 	public ReportGroup insertReportGroup(ReportGroup reportGroup)
 		throws ProviderException
 	{
-		return groupPersistenceProvider.insertReportGroup(reportGroup);
+		return (ReportGroup) hibernateProvider.save(reportGroup);
 	}
 
 	public void updateReportGroup(ReportGroup reportGroup)
 		throws ProviderException
 	{
-		groupPersistenceProvider.updateReportGroup(reportGroup);
+		hibernateProvider.update(reportGroup);
 	}
 
 	public void deleteReportGroup(ReportGroup reportGroup)
 		throws ProviderException
 	{
-		groupPersistenceProvider.deleteReportGroup(reportGroup);
+		try
+		{
+			hibernateProvider.delete(reportGroup);
+		}
+		catch (ConstraintException ce)
+		{
+			throw new ProviderException(LocalStrings.ERROR_GROUP_DELETION);
+		}
 	}
 
 }
