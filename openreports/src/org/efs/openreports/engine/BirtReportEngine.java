@@ -168,59 +168,62 @@ public class BirtReportEngine extends ReportEngine
 	 * BIRT rptdesign file must match the name of an existing OpenReports
 	 * DataSource.
 	 */
-	@SuppressWarnings("unchecked")
 	private void handleDataSourceOverrides(IReportRunnable design)
 	{		
 		ReportDesignHandle reportDH = (ReportDesignHandle) design.getDesignHandle();
 		
-		List<OdaDataSourceHandle> birtDataSources = reportDH.getAllDataSources();
+		List<?> birtDataSources = reportDH.getAllDataSources();
 		
 		if (birtDataSources == null) return;
 		
-		Iterator<OdaDataSourceHandle> iterator = birtDataSources.iterator();
+		Iterator<?> iterator = birtDataSources.iterator();
 		while (iterator.hasNext())
 		{
-			OdaDataSourceHandle dataSH = iterator.next();
-
-			try
-			{				
-				ReportDataSource reportDataSource = dataSourceProvider
-						.getDataSource(dataSH.getName());
-				
-				if (reportDataSource != null)
-				{		
-					log.info("Overriding BIRT DataSource: " + dataSH.getName());
-					
-					log.debug("Original connection properties for: " + dataSH.getName());
-					log.debug("URL:    " + dataSH.getStringProperty("odaURL"));
-					log.debug("DRIVER:    " + dataSH.getStringProperty("odaDriverClass"));
-					log.debug("USER:   " + dataSH.getStringProperty("odaUser"));							
-
-					try
-					{
-						dataSH.setStringProperty("odaURL", reportDataSource.getUrl());
-						dataSH.setStringProperty("odaDriverClass", reportDataSource.getDriverClassName());
-						dataSH.setStringProperty("odaUser", reportDataSource.getUsername());
-						dataSH.setStringProperty("odaPassword", reportDataSource.getPassword());						
-					}
-					catch (SemanticException e)
-					{
-						log.error("SemanticException", e);
-					}
-					
-					log.debug("New connection properties for: " + dataSH.getName());
-					log.debug("URL:    " + dataSH.getStringProperty("odaURL"));
-					log.debug("DRIVER:    " + dataSH.getStringProperty("odaDriverClass"));
-					log.debug("USER:   " + dataSH.getStringProperty("odaUser"));				
-				}
-				else
-				{
-					log.info("Unknown data source: " + dataSH.getName());
-				}				
-			}
-			catch (ProviderException pe)
+			Object dataSource = iterator.next();
+			if (dataSource instanceof OdaDataSourceHandle)
 			{
-				log.error("ProviderException", pe);
+				OdaDataSourceHandle dataSH = (OdaDataSourceHandle) dataSource;
+			
+				try
+				{				
+					ReportDataSource reportDataSource = dataSourceProvider
+							.getDataSource(dataSH.getName());
+					
+					if (reportDataSource != null)
+					{		
+						log.info("Overriding BIRT DataSource: " + dataSH.getName());
+						
+						log.debug("Original connection properties for: " + dataSH.getName());
+						log.debug("URL:    " + dataSH.getStringProperty("odaURL"));
+						log.debug("DRIVER:    " + dataSH.getStringProperty("odaDriverClass"));
+						log.debug("USER:   " + dataSH.getStringProperty("odaUser"));							
+	
+						try
+						{
+							dataSH.setStringProperty("odaURL", reportDataSource.getUrl());
+							dataSH.setStringProperty("odaDriverClass", reportDataSource.getDriverClassName());
+							dataSH.setStringProperty("odaUser", reportDataSource.getUsername());
+							dataSH.setStringProperty("odaPassword", reportDataSource.getPassword());						
+						}
+						catch (SemanticException e)
+						{
+							log.error("SemanticException", e);
+						}
+						
+						log.debug("New connection properties for: " + dataSH.getName());
+						log.debug("URL:    " + dataSH.getStringProperty("odaURL"));
+						log.debug("DRIVER:    " + dataSH.getStringProperty("odaDriverClass"));
+						log.debug("USER:   " + dataSH.getStringProperty("odaUser"));				
+					}
+					else
+					{
+						log.info("Unknown data source: " + dataSH.getName());
+					}				
+				}
+				catch (ProviderException pe)
+				{
+					log.error("ProviderException", pe);
+				}
 			}
 		}	
 		
