@@ -19,10 +19,13 @@
 
 package org.efs.openreports.util;
 
+import java.io.Serializable;
 import java.util.StringTokenizer;
 
-public class DisplayProperty
-{
+public class DisplayProperty implements Serializable
+{	
+	private static final long serialVersionUID = -3446381557089608497L;
+	
 	private String name;
 	private String displayName;
 	private String decorator;
