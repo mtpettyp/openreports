@@ -9,7 +9,7 @@
 	<property name="web-inf.classes" value="${web-inf}/classes" />
 	<property name="web-inf.lib" value="${web-inf}/lib" />
 	<property name="distribution" value="/openreports/distributions" />
-	<property name="version" value="3.0.0" />
+	<property name="version" value="3.0.1" />
 
 	<target name="compile">
 
