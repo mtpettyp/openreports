@@ -6,6 +6,8 @@ OpenReports Change Log
 OpenReports 3.0.1
 -----------------
 
+- Added - ANT task to create initial admin user
+- Fixed - [1856059] - QueryReport FreeMarker templates break Struts tags
 - Fixed - [1853766] - Mail Server Provider Patch 
 - Fixed - [1853685} - Date picker on Report Schedule page is not working 
 - Fixed - [1853056] - ANT schema tasks broken
