@@ -1,6 +1,14 @@
 <%@ taglib prefix="s" uri="/struts-tags" %>
 
 <s:include value="Banner.jsp" />
+<s:head/>
+
+<style type="text/css">
+   table {margin: 0px;}
+   table td {padding: 0px;}
+   table.dialog {margin: 10px;}
+   table.dialog td {padding: 3px;}   
+</style>
 
 <s:actionerror/> 
 
@@ -56,10 +64,7 @@
     <tr>
       <td class="boldText"><s:text name="label.startDate"/></td>         
       <td colspan="2">
-        <input type="text" name="startDate" value="<s:property value="startDate"/>" length="50">
-        <a href="javascript:show_calendar('scheduleDetail.startDate','','','<s:property value="dateFormat"/>');"
-           onmouseover="window.status='Date Picker';return true;"
-           onmouseout="window.status='';return true;"><img border="none" src="images/icon_calendar.gif"/></a>
+      	<s:datetimepicker name="startDate" value="%{startDate}" theme="simple" displayFormat="%{dateFormat}"  />     
       </td>
       <s:if test="#session.user.advancedScheduler">  
       <td class="boldText"><s:text name="label.cronExpression"/> <font color="red">*</font></td>         
