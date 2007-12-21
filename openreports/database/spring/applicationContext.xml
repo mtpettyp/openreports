@@ -36,6 +36,18 @@
       </props>
     </property>
   </bean>
+  
+  <bean id="hibernateProvider" class="org.efs.openreports.providers.HibernateProvider" singleton="true">
+     <property name="sessionFactory" ref="sessionFactory"/>
+  </bean>
+  
+  <bean id="userProvider"
+    class="org.efs.openreports.providers.impl.UserProviderImpl"
+    singleton="true">
+    <constructor-arg>
+      <ref bean="hibernateProvider" />
+    </constructor-arg>
+  </bean>
 
  
 </beans>

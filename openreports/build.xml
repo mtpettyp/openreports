@@ -55,7 +55,7 @@
 
 		<war destfile="${deploy}/openreports.war" webxml="${web-inf}/web.xml">
 
-			<fileset dir="${WebRoot}">								
+			<fileset dir="${WebRoot}">
 				<include name="**/*.vm" />
 				<include name="**/*.js" />
 				<include name="**/*.jsp" />
@@ -63,18 +63,18 @@
 				<include name="**/*.css" />
 				<include name="**/*.gif" />
 				<include name="**/*.jpg" />
-				<include name="**/*.png" />		
-				<include name="**/*.tld" />	
-				<include name="**/applicationContext*.xml" />	
-				<include name="**/jpivot/**" />	
-				<include name="**/wcf/**" />				
+				<include name="**/*.png" />
+				<include name="**/*.tld" />
+				<include name="**/applicationContext*.xml" />
+				<include name="**/jpivot/**" />
+				<include name="**/wcf/**" />
 			</fileset>
 
 			<lib dir="${web-inf.lib}" />
 
 		</war>
 
-	</target>	
+	</target>
 
 	<target name="schemaExporter" depends="jar">
 
@@ -106,6 +106,25 @@
 
 	</target>
 
+	<target name="createAdminUser" depends="jar">
+
+		<input message="Please enter admin username:" addproperty="admin.user" />
+
+		<input message="Please enter admin password:" addproperty="admin.password" />
+
+		<input message="Please enter admin email address:" addproperty="admin.email" />
+
+		<java classname="org.efs.openreports.util.schema.AdminUserCreator" failonerror="true" fork="true">
+			<arg value="${admin.user}"/>
+			<arg value="${admin.password}"/>
+			<arg value="${admin.email}"/>
+			<classpath>
+				<fileset dir="${web-inf.lib}" />
+			</classpath>
+		</java>
+
+	</target>	
+	
 	<target name="createDistribution">
 
 		<delete failonerror="false" includeemptydirs="true">
@@ -121,29 +140,29 @@
 		</copy>
 
 	</target>
-	
+
 	<target name="javadoc" >
-			<delete dir="${docs}/api" />
-			<mkdir dir="${docs}/api" />
-			<javadoc destdir="${docs}/api" 
+		<delete dir="${docs}/api" />
+		<mkdir dir="${docs}/api" />
+		<javadoc destdir="${docs}/api" 
 		                 windowtitle="OpenReports (version ${version})"		               
 		                 use="yes"
 		                 linksource="yes"
 		                 splitindex="yes">
-				<classpath>
-					<fileset dir="${web-inf.lib}">
-						<include name="**/*.jar" />
-					</fileset>
-					<fileset dir="${lib}">
-						<include name="**/*.jar" />
-					</fileset>
-					<pathelement location="${build}"/>
-				</classpath>
-				<packageset dir="${src}" defaultexcludes="yes">
-					<include name="org/efs/openreports/services/**"/>		
-					<include name="org/efs/openreports/engine/**"/>	
-				</packageset>
-			</javadoc>
-		</target>
+			<classpath>
+				<fileset dir="${web-inf.lib}">
+					<include name="**/*.jar" />
+				</fileset>
+				<fileset dir="${lib}">
+					<include name="**/*.jar" />
+				</fileset>
+				<pathelement location="${build}"/>
+			</classpath>
+			<packageset dir="${src}" defaultexcludes="yes">
+				<include name="org/efs/openreports/services/**"/>
+				<include name="org/efs/openreports/engine/**"/>
+			</packageset>
+		</javadoc>
+	</target>
 
 </project>
