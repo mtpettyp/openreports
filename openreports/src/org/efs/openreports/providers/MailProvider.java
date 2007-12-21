@@ -18,6 +18,7 @@
 package org.efs.openreports.providers;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Properties;
 import java.util.StringTokenizer;
 
@@ -171,6 +172,7 @@ public class MailProvider
 			msg.setFrom(new InternetAddress(mail.getSender()));			
 			msg.setSubject(mail.getSubject());
 			msg.setContent(multipart);
+			msg.setSentDate(new Date());
 			
 			ArrayList<String> recipients = mail.getRecipients();			
 			for (int i = 0; i < recipients.size(); i++)
