@@ -19,12 +19,12 @@
 package org.efs.openreports.dispatcher;
 
 import com.opensymphony.xwork2.ActionInvocation;
-import freemarker.cache.FileTemplateLoader;
 import freemarker.template.Configuration;
 import freemarker.template.TemplateException;
 import java.io.File;
 import java.io.IOException;
 import org.apache.log4j.Logger;
+import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.views.freemarker.FreemarkerResult;
 import org.efs.openreports.actions.QueryReportResultAction;
 import org.efs.openreports.objects.Report;
@@ -40,22 +40,31 @@ public class QueryReportTemplateResult extends FreemarkerResult
     private static final long serialVersionUID = -8316005191338172951L;    
     private static Logger log = Logger.getLogger(QueryReportTemplateResult.class);
     
+    private static final String CFG_SERLVET_CONTEXT_KEY = "queryReportConfiguration";
+    
     private DirectoryProvider directoryProvider;
-
-    @Override
+    
+    @Override     
     protected Configuration getConfiguration() throws TemplateException 
     {        
-        Configuration cfg = super.getConfiguration();
-        
-        try
-        {
-            FileTemplateLoader loader = new FileTemplateLoader(new File(directoryProvider.getReportDirectory()));
-            cfg.setTemplateLoader(loader);
-        }
-        catch(Exception e)
-        {
-            log.error("FileTemplateLoader Exception", e);
-        }
+    	Configuration cfg = (Configuration) ServletActionContext.getServletContext().getAttribute(CFG_SERLVET_CONTEXT_KEY);
+    	
+    	if (cfg == null)
+    	{
+    		cfg = (Configuration) super.getConfiguration().clone();
+    		
+    		try
+    		{
+    			cfg.setDirectoryForTemplateLoading(new File(directoryProvider.getReportDirectory()));
+    		}
+    		catch(Exception e)
+    		{
+    			log.error("QueryReport Template Loader Exception", e);
+    		}
+    		
+    		ServletActionContext.getServletContext().setAttribute(CFG_SERLVET_CONTEXT_KEY, cfg); 
+    		log.info("QueryReport Template FreeMarker Configuration created.");
+    	}       
         
         return cfg;
     }
