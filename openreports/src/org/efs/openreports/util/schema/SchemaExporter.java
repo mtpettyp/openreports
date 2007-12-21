@@ -19,21 +19,19 @@
 
 package org.efs.openreports.util.schema;
 
-import org.hibernate.cfg.Configuration;
-import org.hibernate.tool.hbm2ddl.SchemaExport;
+import org.apache.xbean.spring.context.FileSystemXmlApplicationContext;
+import org.springframework.orm.hibernate3.LocalSessionFactoryBean;
 
 public class SchemaExporter
 {
 	public static void main(String[] args)
 	{
-		try
-		{
-			Configuration cfg = new Configuration().configure();
-			new SchemaExport(cfg).create(false, true);
-		}
-		catch(Exception e)
-		{
-			e.printStackTrace();
-		}
+		FileSystemXmlApplicationContext appContext = new FileSystemXmlApplicationContext(
+			"database/spring/applicationContext.xml");
+
+		LocalSessionFactoryBean sessionFactory = (LocalSessionFactoryBean) appContext
+			.getBean("&sessionFactory", LocalSessionFactoryBean.class);
+
+		sessionFactory.createDatabaseSchema();
 	}	
 }

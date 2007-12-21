@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans default-autowire="byName">  
+
+  <!-- allow for property placeholders -->
+  <bean id="environment"
+    class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"
+    lazy-init="false">
+    <property name="ignoreResourceNotFound" value="true" />
+    <property name="locations">
+      <list>
+        <value>
+          classpath:openreports.properties
+        </value>        
+      </list>
+    </property>
+  </bean>  
+  
+  <bean id="hibernateDataSource" destroy-method="close" class="org.apache.commons.dbcp.BasicDataSource">
+    <property name="driverClassName" value="${hibernate.jdbc.driver}" />
+    <property name="url" value="${hibernate.jdbc.url}" />
+    <property name="username" value="${hibernate.jdbc.username}" />
+    <property name="password" value="${hibernate.jdbc.password}" />
+    <property name="maxIdle" value="${hibernate.jdbc.maxIdle}" />
+    <property name="maxActive" value="${hibernate.jdbc.maxActive}" />    
+  </bean>
+
+  <bean id="sessionFactory" class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">   
+    <property name="dataSource" ref="hibernateDataSource" /> 
+    <property name="configLocation" value="classpath:/hibernate.cfg.xml"/>
+    <property name="hibernateProperties">
+      <props>
+        <prop key="hibernate.dialect">${hibernate.dialect}</prop>      
+        <prop key="hibernate.jdbc.batch_size">0</prop>
+      </props>
+    </property>
+  </bean>
+
+ 
+</beans>
