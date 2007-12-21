@@ -3,9 +3,12 @@ OpenReports Change Log
 ----------------------
 
 -----------------
-OpenReports 3.1
+OpenReports 3.0.1
 -----------------
 
+- Fixed - [1853766] - Mail Server Provider Patch 
+- Fixed - [1853685} - Date picker on Report Schedule page is not working 
+- Fixed - [1853056] - ANT schema tasks broken
 - Fixed - [1847591] - OpenReports 3.0 will not run on JDK 1.6
 - Fixed - [1784853,1703172] - Firefox horizontal scroll bar missing
 - Fixed - [1656411] - Multiple select throws error when no options selected
