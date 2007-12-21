@@ -257,7 +257,7 @@ public class ReportServiceImpl implements ReportService
 		}
 		catch (Exception e)
 		{			
-			log.error("generateReport", e);					
+			log.error("generateReport: request : " + reportInput.getRequestId(), e);					
 			reportOutput.setContentMessage(e.getMessage());				
 		}
 		
@@ -310,8 +310,13 @@ public class ReportServiceImpl implements ReportService
 		return parsedParameters;
 	}
 	
-	private String[] convertDeliveryMethodsToNames(DeliveryMethod[] deliveryMethods)
+	private String[] convertDeliveryMethodsToNames(DeliveryMethod[] deliveryMethods) throws ServiceException
 	{
+		if (deliveryMethods == null || deliveryMethods.length < 1 || deliveryMethods[0] == null) 
+		{
+			throw new ServiceException("Delivery method not specified.");
+		}
+		
 		String[] deliveryMethodNames = new String[deliveryMethods.length];
 		for (int i=0; i < deliveryMethods.length; i++)
 		{

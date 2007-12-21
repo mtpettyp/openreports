@@ -40,7 +40,7 @@ public class ReportConstants
         
         public static DeliveryMethod findByName(String name) {
             for (DeliveryMethod value : DeliveryMethod.values()) {
-                if (value.getName().equals(name)) {
+                if (value.getName().equalsIgnoreCase(name)) {
                     return value;
                 }
             }
