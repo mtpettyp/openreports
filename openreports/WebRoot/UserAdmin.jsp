@@ -93,8 +93,8 @@
    	    </td>     	     	      	  
    	    <td>
    	      <select name="alertOperator">        	   
-           <s:iterator id="1operator" value="operators">
-           	<option value="<s:property value="1operator"/>" <s:if test="1operator.equals(#alert.operator)">selected="selected"</s:if> /><s:property value="1operator"/>
+           <s:iterator id="aOperator" value="operators">
+           	<option value="<s:property/>" <s:if test="#aOperator.equals(#alert.operator)">selected="selected"</s:if> /><s:property/>
            </s:iterator>
           </select>   	    
    	    </td>  
@@ -117,7 +117,7 @@
    	    </td> 
       </tr>   
       <input type="hidden" name="id" value="<s:property value="id"/>">
-      <input type="hidden" name="alertId" value="<s:property value="#iteratorStatus.index" />"/>
+      <input type="hidden" name="alertId" value="<s:property value="#iteratorStatus.index + 1" />"/>
     </form>
     </s:iterator>   
     <form action="userAdminAlerts.action" class="alert-form">          

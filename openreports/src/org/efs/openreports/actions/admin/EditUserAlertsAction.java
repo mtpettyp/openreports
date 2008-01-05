@@ -109,7 +109,7 @@ public class EditUserAlertsAction extends ActionSupport implements SessionAware
 
 			if (submitDelete != null)
 			{				
-				ReportUserAlert userAlert = reportUser.getAlerts().get(alertId);		
+				ReportUserAlert userAlert = reportUser.getAlerts().get(alertId -1);		
 
 				reportUser.getAlerts().remove(userAlert);
 
