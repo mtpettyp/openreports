@@ -31,6 +31,7 @@ import javax.mail.internet.*;
 
 import org.apache.log4j.Logger;
 
+import org.efs.openreports.engine.output.ReportEngineOutput;
 import org.efs.openreports.objects.MailMessage;
 import org.efs.openreports.objects.ORProperty;
 import org.efs.openreports.util.ByteArrayDataSource;
@@ -105,8 +106,9 @@ public class MailProvider
 			Multipart multipart = new MimeMultipart();
 
 			// add text part
-			if (mail.getText() != null)
-			{
+			 if (mail.getText() != null
+					&& (mail.getByteArrayDataSource() == null || !mail.getByteArrayDataSource().getContentType().equals(ReportEngineOutput.CONTENT_TYPE_TEXT)))
+			 {
 				MimeBodyPart mbpText = new MimeBodyPart();
 				mbpText.setText(mail.getText());
 				multipart.addBodyPart(mbpText);
@@ -130,7 +132,7 @@ public class MailProvider
 			if (mail.getByteArrayDataSource() != null)
 			{
 				String contentType = mail.getByteArrayDataSource().getContentType();
-				if (contentType != null && contentType.equals("text/html"))
+				if (contentType != null && (contentType.equals(ReportEngineOutput.CONTENT_TYPE_HTML) || contentType.equals(ReportEngineOutput.CONTENT_TYPE_TEXT))) 
 				{
 					Multipart htmlMP = new MimeMultipart("related");
 					MimeBodyPart htmlBP = new MimeBodyPart();

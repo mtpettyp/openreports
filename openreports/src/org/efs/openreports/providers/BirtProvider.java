@@ -49,54 +49,69 @@ public class BirtProvider implements DisposableBean
 {
 	protected static Logger log = Logger.getLogger(BirtProvider.class);
 	
-	private static IReportEngine birtEngine = null;	
-
-	@SuppressWarnings("unchecked")
+	private static IReportEngine birtEngine = null;		
+	
+	public BirtProvider()
+	{
+		//
+	}
+	
+	public BirtProvider(DirectoryProvider directoryProvider)
+	{
+		startBirtEngine(directoryProvider.getReportDirectory() + "platform");
+	}
+	
 	public static synchronized IReportEngine getBirtEngine(String birtHome)
 	{
 		if (birtEngine == null)
 		{			
-			log.info("Starting BIRT Engine and OSGI Platform");
-						
-			PlatformConfig platformConfig = new PlatformConfig();
-			platformConfig.setBIRTHome(birtHome);
-			
-			IPlatformContext context = new PlatformFileContext(platformConfig);
-			
-			HTMLServerImageHandler imageHandler = new HTMLServerImageHandler();
-			
-			HTMLRenderOption emitterConfig = new HTMLRenderOption();
-			emitterConfig.setActionHandler(new HTMLActionHandler());		
-			emitterConfig.setImageHandler(imageHandler);
-
-			EngineConfig config = new EngineConfig();
-			config.setEngineHome("");
-			config.setPlatformContext(context);								
-			config.setLogConfig(null, Level.ALL);			
-			config.getEmitterConfigs().put("html", emitterConfig);
-
-			try
-			{
-				Platform.startup(config);
-			}
-			catch (BirtException e)
-			{
-				log.error("BirtException", e);
-			}
-
-			IReportEngineFactory factory = (IReportEngineFactory) Platform
-					.createFactoryObject(IReportEngineFactory.EXTENSION_REPORT_ENGINE_FACTORY);
-			
-			birtEngine = factory.createReportEngine(config);
-			
-			log.info("BIRT Engine Started");
-		}		
-				
-		birtEngine.changeLogLevel(Level.SEVERE);
+			startBirtEngine(birtHome);
+		}			
 		
 		return birtEngine;
 	}
+	
+	@SuppressWarnings("unchecked")
+	public static synchronized void startBirtEngine(String birtHome)
+	{				
+		log.info("Starting BIRT Engine and OSGI Platform");
+					
+		PlatformConfig platformConfig = new PlatformConfig();
+		platformConfig.setBIRTHome(birtHome);
+		
+		IPlatformContext context = new PlatformFileContext(platformConfig);
+		
+		HTMLServerImageHandler imageHandler = new HTMLServerImageHandler();
+		
+		HTMLRenderOption emitterConfig = new HTMLRenderOption();
+		emitterConfig.setActionHandler(new HTMLActionHandler());		
+		emitterConfig.setImageHandler(imageHandler);
 
+		EngineConfig config = new EngineConfig();
+		config.setEngineHome("");
+		config.setPlatformContext(context);								
+		config.setLogConfig(null, Level.ALL);			
+		config.getEmitterConfigs().put("html", emitterConfig);
+
+		try
+		{
+			Platform.startup(config);
+		}
+		catch (BirtException e)
+		{
+			log.error("BirtException", e);
+		}
+
+		IReportEngineFactory factory = (IReportEngineFactory) Platform
+				.createFactoryObject(IReportEngineFactory.EXTENSION_REPORT_ENGINE_FACTORY);
+		
+		birtEngine = factory.createReportEngine(config);
+		
+		log.info("BIRT Engine Started");
+			
+		birtEngine.changeLogLevel(Level.SEVERE);	
+	}
+	
 	public void destroy()
 	{
 		if (birtEngine == null)	return;				
@@ -106,5 +121,5 @@ public class BirtProvider implements DisposableBean
 		birtEngine = null;
 		
 		log.info("BIRT Engine and OSGI Platform Shutdown");
-	}
+	}	
 }

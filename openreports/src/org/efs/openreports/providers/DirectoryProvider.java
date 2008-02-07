@@ -106,6 +106,8 @@ public class DirectoryProvider
 		if (!reportDirectory.endsWith(separator)) reportDirectory +=separator;
 		
 		reportImageDirectory = reportDirectory + "images" + separator;	
+		
+		log.info("Report Directory Changed To: " + reportDirectory); 
 	}
 	
 	public String getReportImageDirectory()
@@ -122,6 +124,8 @@ public class DirectoryProvider
 	{
 		this.tempDirectory = tempDirectory;
 		if (!tempDirectory.endsWith(separator)) tempDirectory +=separator;		
+		
+		log.info("TempDirectory Changed To: " + tempDirectory); 
 	}
 
 	public String getReportGenerationDirectory()
@@ -133,6 +137,8 @@ public class DirectoryProvider
 	{
 		this.reportGenerationDirectory = reportGenerationDirectory;
 		if (!reportGenerationDirectory.endsWith(separator)) reportGenerationDirectory +=separator;
+		
+		log.info("ReportGenerationDirectory Changed To: " + reportGenerationDirectory); 
 	}
 
 	public void setPropertiesProvider(PropertiesProvider propertiesProvider)
