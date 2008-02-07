@@ -29,7 +29,7 @@
   
   <display:table name="results" class="displayTag" sort="list" export="true" pagesize="20" requestURI="queryReportResult.action">  
     <% for (int i=0; i < displayProperties.length; i++) { %>
-      <display:column property="<%=displayProperties[i].getName()%>" title="<%=displayProperties[i].getDisplayName()%>" sortable="true" headerClass="sortable" />
+      <display:column property="<%=displayProperties[i].getName()%>" title="<%=displayProperties[i].getDisplayName()%>" decorator="<%=displayProperties[i].getDecorator()%>" sortable="true" headerClass="sortable" />
     <% } %>
     <display:setProperty name="export.pdf" value="true"/>
 	<display:setProperty name="export.xml" value="false"/>

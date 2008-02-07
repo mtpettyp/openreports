@@ -92,7 +92,7 @@
     <tr>
       <td class="boldText" width="20%"><s:text name="label.condition"/></td>
       <td colspan="6">
-        <s:select name="alertId" list="alerts" headerKey="-1" headerValue=" -- None -- " theme="simple"/>			
+        <s:select name="alertId" list="alerts" listKey="id" listValue="name" headerKey="-1" headerValue=" -- None -- " theme="simple"/>			
         <s:select name="alertOperator" list="operators" emptyOption="false" theme="simple"/>                 
         <input type="text" name="alertLimit" value="<s:property value="alertLimit"/>" size="10" maxLength="10" />      
       </td>
