@@ -24,6 +24,7 @@ import java.util.List;
 import org.efs.openreports.engine.input.ReportEngineInput;
 import org.efs.openreports.engine.output.ReportEngineOutput;
 import org.efs.openreports.objects.Report;
+import org.efs.openreports.objects.ReportParameter;
 import org.efs.openreports.providers.DataSourceProvider;
 import org.efs.openreports.providers.DirectoryProvider;
 import org.efs.openreports.providers.PropertiesProvider;
@@ -46,5 +47,5 @@ public abstract class ReportEngine
 	public abstract ReportEngineOutput generateReport(ReportEngineInput input)
 			throws ProviderException;
 
-	public abstract List buildParameterList(Report report) throws ProviderException;	
+	public abstract List<ReportParameter> buildParameterList(Report report) throws ProviderException;	
 }

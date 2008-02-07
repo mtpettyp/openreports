@@ -52,7 +52,7 @@ public class ReportConstants
 	 * Report export types. int code is used to support legacy export types persisted or serialized
 	 * as integers in ReportSchedule and ReportLog objects
 	 */
-	public enum ExportType {PDF(0), XLS(1), HTML(2), CSV(3), IMAGE(4), RTF(5), TEXT(6), EXCEL(7);
+	public enum ExportType {PDF(0), XLS(1), HTML(2), CSV(3), IMAGE(4), RTF(5), TEXT(6), EXCEL(7), HTML_EMBEDDED(8);
 
 		private final int code;
 

@@ -36,6 +36,7 @@ import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRExporterParameter;
 import net.sf.jasperreports.engine.JRField;
 import net.sf.jasperreports.engine.JRParameter;
+import net.sf.jasperreports.engine.JRReport;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -44,6 +45,7 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.design.JRDesignBand;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignField;
+import net.sf.jasperreports.engine.design.JRDesignParameter;
 import net.sf.jasperreports.engine.design.JRDesignQuery;
 import net.sf.jasperreports.engine.design.JRDesignStaticText;
 import net.sf.jasperreports.engine.design.JRDesignTextField;
@@ -56,8 +58,8 @@ import net.sf.jasperreports.engine.export.JRPdfExporter;
 import net.sf.jasperreports.engine.export.JRRtfExporter;
 import net.sf.jasperreports.engine.export.JRTextExporter;
 import net.sf.jasperreports.engine.export.JRTextExporterParameter;
+import net.sf.jasperreports.engine.export.JRXlsAbstractExporterParameter;
 import net.sf.jasperreports.engine.export.JRXlsExporter;
-import net.sf.jasperreports.engine.export.JRXlsExporterParameter;
 import net.sf.jasperreports.engine.query.JRXPathQueryExecuterFactory;
 import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.engine.util.JRQueryExecuter;
@@ -101,6 +103,7 @@ public class JasperReportEngine extends ReportEngine
 		super(dataSourceProvider,directoryProvider, propertiesProvider);
 	}
 	
+	@Override
 	public ReportEngineOutput generateReport(ReportEngineInput input)
 			throws ProviderException
 	{		
@@ -131,13 +134,13 @@ public class JasperReportEngine extends ReportEngine
 			jr = (JasperReport) JRLoader
 					.loadObject(directoryProvider.getReportDirectory() + report.getFile());
 
-			List subReports = report.getSubReportParameters();
+			List<ReportParameterMap> subReports = report.getSubReportParameters();
 			if (subReports != null && subReports.size() > 0)
 			{
-				Iterator iterator = report.getSubReportParameters().iterator();
+				Iterator<ReportParameterMap> iterator = report.getSubReportParameters().iterator();
 				while (iterator.hasNext())
 				{
-					ReportParameterMap rpMap = (ReportParameterMap) iterator.next();
+					ReportParameterMap rpMap = iterator.next();
 
 					JasperReport subReport = (JasperReport) JRLoader.loadObject(directoryProvider
 							.getReportDirectory()
@@ -195,7 +198,7 @@ public class JasperReportEngine extends ReportEngine
 	}	
 	
 	public ReportEngineOutput exportReport(JasperPrint jasperPrint, ExportType exportType,
-			ReportExportOption exportOptions, Map imagesMap, boolean inlineImages) throws ProviderException
+			ReportExportOption exportOptions, Map<?,?> imagesMap, boolean inlineImages) throws ProviderException
 	{		
 		JasperReportEngineOutput engineOutput = new JasperReportEngineOutput();
 		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();		
@@ -225,16 +228,16 @@ public class JasperReportEngine extends ReportEngine
 				}
 
 				exporter.setParameter(
-						JRXlsExporterParameter.IS_REMOVE_EMPTY_SPACE_BETWEEN_ROWS,
+						JRXlsAbstractExporterParameter.IS_REMOVE_EMPTY_SPACE_BETWEEN_ROWS,
 						new Boolean(exportOptions.isXlsRemoveEmptySpaceBetweenRows()));
 
-				exporter.setParameter(JRXlsExporterParameter.IS_ONE_PAGE_PER_SHEET,
+				exporter.setParameter(JRXlsAbstractExporterParameter.IS_ONE_PAGE_PER_SHEET,
 						new Boolean(exportOptions.isXlsOnePagePerSheet()));
 
-				exporter.setParameter(JRXlsExporterParameter.IS_DETECT_CELL_TYPE,
+				exporter.setParameter(JRXlsAbstractExporterParameter.IS_DETECT_CELL_TYPE,
 						new Boolean(exportOptions.isXlsAutoDetectCellType()));
 
-				exporter.setParameter(JRXlsExporterParameter.IS_WHITE_PAGE_BACKGROUND,
+				exporter.setParameter(JRXlsAbstractExporterParameter.IS_WHITE_PAGE_BACKGROUND,
 						new Boolean(exportOptions.isXlsWhitePageBackground()));
 			}
 			else if (exportType == ExportType.CSV)
@@ -278,7 +281,7 @@ public class JasperReportEngine extends ReportEngine
 				exporter.setParameter(JRHtmlExporterParameter.IS_WRAP_BREAK_WORD,
 						new Boolean(exportOptions.isHtmlWrapBreakWord()));
 				
-				if (imagesMap == null) imagesMap = new HashMap();
+				if (imagesMap == null) imagesMap = new HashMap<Object,Object>();
 				exporter.setParameter(JRHtmlExporterParameter.IMAGES_MAP, imagesMap);
 				
 				if (inlineImages)
@@ -290,6 +293,13 @@ public class JasperReportEngine extends ReportEngine
 					//see ImageLoaderAction for more information
 					exporter.setParameter(JRHtmlExporterParameter.IMAGES_URI,
 						"imageLoader.action?imageName=");
+				}
+				
+				//if embedded html, just include <div> tags instead of <html>,<header>, <body>, etc.
+				if (exportType == ExportType.HTML_EMBEDDED)
+				{
+					exporter.setParameter(JRHtmlExporterParameter.HTML_HEADER, "<div>");
+					exporter.setParameter(JRHtmlExporterParameter.HTML_FOOTER, "</div>");
 				}
 			}
 
@@ -322,7 +332,7 @@ public class JasperReportEngine extends ReportEngine
 		// fix serialization problems
 		Map<String,Object> parameters = new HashMap<String,Object>(map);
 		
-		List results = null;
+		List<?> results = null;
 		DynaProperty[] properties = null;
 
 		try
@@ -344,7 +354,7 @@ public class JasperReportEngine extends ReportEngine
 
 				// convert parameters to JRDesignParameters so they can be
 				// parsed
-				Map jrParameters = ORUtil.buildJRDesignParameters(parameters);
+				Map<String, JRDesignParameter> jrParameters = ORUtil.buildJRDesignParameters(parameters);
 
 				pStmt = JRQueryExecuter.getStatement(query, jrParameters, parameters, conn);
 			}
@@ -381,7 +391,7 @@ public class JasperReportEngine extends ReportEngine
 		int width = jasperDesign.getPageWidth();
 		int height = jasperDesign.getPageHeight();
 		
-		jasperDesign.setOrientation(JasperDesign.ORIENTATION_LANDSCAPE);		
+		jasperDesign.setOrientation(JRReport.ORIENTATION_LANDSCAPE);		
 		jasperDesign.setPageHeight(width);
 		jasperDesign.setPageWidth(height);
 
@@ -389,8 +399,8 @@ public class JasperReportEngine extends ReportEngine
 		{
 
 			JRDesignField field = new JRDesignField();
-			field.setName((String) properties[i].getName());
-			field.setValueClass((Class) properties[i].getType());
+			field.setName(properties[i].getName());
+			field.setValueClass(properties[i].getType());
 
 			try
 			{
@@ -527,7 +537,8 @@ public class JasperReportEngine extends ReportEngine
 		return jasperPrint;
 	}	
 	
-	public List buildParameterList(Report report) throws ProviderException
+	@Override
+	public List<ReportParameter> buildParameterList(Report report) throws ProviderException
 	{
 		try
 		{

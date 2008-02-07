@@ -113,10 +113,15 @@ public class BirtReportEngine extends ReportEngine
 				output.setContentType(ReportEngineOutput.CONTENT_TYPE_PDF);
 				renderOption.setOutputFormat(IRenderOption.OUTPUT_FORMAT_PDF);				
 			}
-			else if (input.getExportType() == ExportType.HTML)
+			else if (input.getExportType() == ExportType.HTML || input.getExportType() == ExportType.HTML_EMBEDDED)
 			{			
 				output.setContentType(ReportEngineOutput.CONTENT_TYPE_HTML);
-				renderOption.setOutputFormat(IRenderOption.OUTPUT_FORMAT_HTML);				
+				renderOption.setOutputFormat(IRenderOption.OUTPUT_FORMAT_HTML);	
+				
+				if (input.getExportType() == ExportType.HTML_EMBEDDED) 
+				{
+					renderOption.setEmbeddable(true);
+				}
 			}
 			else if (input.getExportType() == ExportType.XLS)
 			{			
@@ -232,7 +237,7 @@ public class BirtReportEngine extends ReportEngine
 	
 	@Override
 	@SuppressWarnings("unchecked")
-	public List buildParameterList(Report report) throws ProviderException	
+	public List<ReportParameter> buildParameterList(Report report) throws ProviderException	
 	{
 		IReportEngine engine = BirtProvider
 		.getBirtEngine(directoryProvider.getReportDirectory() + "platform");
