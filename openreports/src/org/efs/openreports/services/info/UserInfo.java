@@ -47,6 +47,7 @@ public class UserInfo implements Serializable
 		this.id = id;
 	}
 
+	@Override
 	public String toString()
 	{
 		return name;

@@ -58,6 +58,7 @@ public class EditReportParameterMapAction extends ActionSupport
     private DataSourceProvider dataSourceProvider;
     private PropertiesProvider propertiesProvider;
 
+	@Override
 	public String execute()
 	{
 		try
@@ -111,10 +112,10 @@ public class EditReportParameterMapAction extends ActionSupport
                 ReportEngine engine = ReportEngineHelper.getReportEngine(report,
                         dataSourceProvider, directoryProvider, propertiesProvider);     
                                 
-                List parameters = engine.buildParameterList(report);                    
+                List<ReportParameter> parameters = engine.buildParameterList(report);                    
                 for (int i=0; i < parameters.size(); i++)
                 {
-                    ReportParameter designParameter = (ReportParameter) parameters.get(i);
+                    ReportParameter designParameter = parameters.get(i);
                     
                     ReportParameter param =
                         parameterProvider.getReportParameter(designParameter.getName());
@@ -162,7 +163,7 @@ public class EditReportParameterMapAction extends ActionSupport
 		this.id = id;
 	}
 
-	public List getReportParameters()
+	public List<ReportParameter> getReportParameters()
 	{
 		try
 		{
@@ -175,7 +176,7 @@ public class EditReportParameterMapAction extends ActionSupport
 		}
 	}
 
-	public List getParametersInReport()
+	public List<ReportParameterMap> getParametersInReport()
 	{
 		List<ReportParameterMap> list = report.getParameters();
 		Collections.sort(list);
