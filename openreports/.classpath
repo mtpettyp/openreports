@@ -37,7 +37,6 @@
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/eigenbase-properties-0.6.0.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/eigenbase-resgen-0.6.0.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/eigenbase-xom-0.6.0.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/flute-1.2.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/fop-0.20.5.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/freemarker-2.3.8.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/hibernate-3.1.3.jar"/>
@@ -55,7 +54,6 @@
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jfreechart-1.0.0.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jfreereport-0.8.7-5.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jpivot-1.7.0.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/js-1.6R1.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jstl-1.1.2.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jta-1.0.1B.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/junit-3.8.1.jar"/>
@@ -93,21 +91,10 @@
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/xstream-1.2.jar"/>
 	<classpathentry kind="lib" path="lib/servlet-api-2.4.jar"/>
 	<classpathentry kind="lib" path="lib/jsp-api-2.0.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/chartengine-2.2.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/common-2.2.1.v200702131851.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/commons-fileupload-1.2.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/commons-io-1.3.1.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/concurrent-1.3.4.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/core-2.2.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/dataadapter-2.2.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/dte-2.2.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/ecore-2.2.2.v200702131851.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/ecore-xmi-2.2.2.v200702131851.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/engine-2.2.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/icu4j-3.6.1.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/model-2.2.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/quartz-all-1.6.0.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/script-2.2.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/slf4j-log4j12-1.0.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/struts2-core-2.0.9.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/xalan-2.6.0.jar"/>
@@ -119,5 +106,23 @@
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jasperreports-3.0.0-javaflow.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/poi-3.0.1-FINAL-20070705.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jxls-core-0.9.6.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/birt-2.3-chartengineapi.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/birt-2.3-com.ibm.icu_3.8.1.v20080530.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/birt-2.3-coreapi.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/birt-2.3-crosstabcoreapi.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/birt-2.3-dataadapterapi.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/birt-2.3-dataaggregationapi.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/birt-2.3-dteapi.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/birt-2.3-engineapi.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/birt-2.3-flute.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/birt-2.3-js.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/birt-2.3-modelapi.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/birt-2.3-modelodaapi.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/birt-2.3-odadesignapi.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/birt-2.3-org.eclipse.birt.report.engine.dataextraction_2.3.0.v20080611.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/birt-2.3-org.eclipse.emf.common_2.4.0.v200806091234.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/birt-2.3-org.eclipse.emf.ecore_2.4.0.v200806091234.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/birt-2.3-org.eclipse.emf.ecore.xmi_2.4.0.v200806091234.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/birt-2.3-scriptapi.jar"/>
 	<classpathentry kind="output" path="WebRoot/WEB-INF/classes"/>
 </classpath>

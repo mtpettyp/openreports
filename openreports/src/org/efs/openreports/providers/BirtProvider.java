@@ -24,12 +24,15 @@ package org.efs.openreports.providers;
 
 import java.util.logging.Level;
 
+import javax.servlet.ServletContext;
+
 import org.apache.log4j.Logger;
 import org.eclipse.birt.core.exception.BirtException;
 import org.eclipse.birt.core.framework.IPlatformContext;
 import org.eclipse.birt.core.framework.Platform;
 import org.eclipse.birt.core.framework.PlatformConfig;
 import org.eclipse.birt.core.framework.PlatformFileContext;
+import org.eclipse.birt.core.framework.PlatformServletContext;
 import org.eclipse.birt.report.engine.api.EngineConfig;
 import org.eclipse.birt.report.engine.api.HTMLActionHandler;
 import org.eclipse.birt.report.engine.api.HTMLRenderOption;
@@ -58,29 +61,39 @@ public class BirtProvider implements DisposableBean
 	
 	public BirtProvider(DirectoryProvider directoryProvider)
 	{
-		startBirtEngine(directoryProvider.getReportDirectory() + "platform");
+	    PlatformConfig platformConfig = new PlatformConfig();
+        platformConfig.setBIRTHome(directoryProvider.getReportDirectory() + "platform");
+        
+        IPlatformContext context = new PlatformFileContext(platformConfig);        
+		startBirtEngine(context);
 	}
 	
+	public BirtProvider(ServletContext servletContext)
+    {
+	    log.info(servletContext.toString());
+	    IPlatformContext context = new PlatformServletContext(servletContext);	   
+        startBirtEngine(context);
+    }
+		
 	public static synchronized IReportEngine getBirtEngine(String birtHome)
 	{
 		if (birtEngine == null)
 		{			
-			startBirtEngine(birtHome);
+		    PlatformConfig platformConfig = new PlatformConfig();
+	        platformConfig.setBIRTHome(birtHome);
+	        
+	        IPlatformContext context = new PlatformFileContext(platformConfig);	        
+			startBirtEngine(context);
 		}			
 		
 		return birtEngine;
 	}
 	
 	@SuppressWarnings("unchecked")
-	public static synchronized void startBirtEngine(String birtHome)
+	public static synchronized void startBirtEngine(IPlatformContext context)
 	{				
-		log.info("Starting BIRT Engine and OSGI Platform");
-					
-		PlatformConfig platformConfig = new PlatformConfig();
-		platformConfig.setBIRTHome(birtHome);
-		
-		IPlatformContext context = new PlatformFileContext(platformConfig);
-		
+		log.info("Starting BIRT Engine and OSGI Platform using: " + context.getClass().getName());		
+				
 		HTMLServerImageHandler imageHandler = new HTMLServerImageHandler();
 		
 		HTMLRenderOption emitterConfig = new HTMLRenderOption();
