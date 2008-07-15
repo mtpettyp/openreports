@@ -19,6 +19,7 @@
 package org.efs.openreports.services.output;
 
 import org.efs.openreports.ReportConstants;
+import org.efs.openreports.ReportConstants.Status;
 
 /**
  * Contains the data returned by request to generate a report. Content attributes
@@ -39,7 +40,10 @@ public class ReportServiceOutput
     private String contentExtension;
     
     /** message returned by the request */
-    private String contentMessage;    
+    private String contentMessage;   
+    
+    /** status of the request */
+    private Status status;
 
     public byte[] getContent() 
     {
@@ -79,6 +83,15 @@ public class ReportServiceOutput
     public void setContentExtension(String contentExtension) 
     {
         this.contentExtension = contentExtension;
-    }        
+    }  
     
+    public Status getStatus()
+    {
+		return status;
+	}
+
+	public void setStatus(Status status) 
+	{
+		this.status = status;
+	}    
 }

@@ -134,4 +134,6 @@ public class ReportConstants
 			return null;
 		}		
 	}
+	
+	public enum Status {SUCCESS, FAILURE, INVALID};	
 }
