@@ -34,9 +34,6 @@
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/commons-vfs-1.0.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/displaytag-1.1.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/dom4j-1.4.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/eigenbase-properties-0.6.0.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/eigenbase-resgen-0.6.0.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/eigenbase-xom-0.6.0.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/fop-0.20.5.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/freemarker-2.3.8.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/hibernate-3.1.3.jar"/>
@@ -53,7 +50,6 @@
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jdt-compiler-3.1.1.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jfreechart-1.0.0.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jfreereport-0.8.7-5.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jpivot-1.7.0.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jstl-1.1.2.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jta-1.0.1B.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/junit-3.8.1.jar"/>
@@ -77,11 +73,9 @@
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/standard-1.1.2.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/stax-api-1.0.1.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/struts2-spring-plugin-2.0.6.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/tbutils-wcf-1.7.0.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/velocity-1.4.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/velocity-dep-1.4.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/velocity-tools-1.1.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/wcf-1.7.0.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/wsdl4j-1.5.2.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/wstx-asl-2.9.3.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/xercesImpl-2.0.2.jar"/>
@@ -124,5 +118,11 @@
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/birt-2.3-org.eclipse.emf.ecore_2.4.0.v200806091234.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/birt-2.3-org.eclipse.emf.ecore.xmi_2.4.0.v200806091234.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/birt-2.3-scriptapi.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jpivot-1.8.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jpivot-1.8-eigenbase-properties.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jpivot-1.8-eigenbase-resgen.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jpivot-1.8-tbutils-wcf.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jpivot-1.8-wcf.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jpviot-1.8-eigenbase-xom.jar"/>
 	<classpathentry kind="output" path="WebRoot/WEB-INF/classes"/>
 </classpath>
