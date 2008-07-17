@@ -59,7 +59,6 @@
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/libloader-0.1.5.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/log4j-1.2.11.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/mail-1.4.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/mondrian-2.3.2.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/msv-20020414.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/myfaces-jsf-api-1.0.8-beta.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/odmg-3.0.jar"/>
@@ -124,5 +123,6 @@
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jpivot-1.8-tbutils-wcf.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jpivot-1.8-wcf.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jpviot-1.8-eigenbase-xom.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/mondrian-3.0.jar"/>
 	<classpathentry kind="output" path="WebRoot/WEB-INF/classes"/>
 </classpath>
