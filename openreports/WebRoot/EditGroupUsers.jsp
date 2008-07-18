@@ -4,7 +4,7 @@
 
 <s:actionerror/>
 
-<a class="back-link img-report-small" href="listGrous.action"><s:text name="link.back.groups"/></a>
+<a class="back-link img-report-small" href="listGroups.action"><s:text name="link.back.groups"/></a>
  
 <br/><br/>
 

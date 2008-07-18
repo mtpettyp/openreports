@@ -14,13 +14,13 @@
 <div align="center">  
 
 <s:if test="!report.displayInline">  
-  <a class="back-link img-report-small" href="reportList.action">Back to Reports </a>
-  <a class="back-link img-group-small" href="reportGroup.action">Back to Groups </a>  
+  <a class="back-link img-report-small" href="reportList.action"><s:text name="link.back.reports"/></a>
+  <a class="back-link img-group-small" href="reportGroup.action"><s:text name="link.back.groups"/></a>  
 
   <br/><br/>
    
   <div class="img-param important" id="instructions" style="width: 70%;">
-	  	 Parameters for: <s:property value="report.name"/>
+	<s:text name="reportDetail.title"/> <s:property value="report.name"/>
   </div> 
 
 </s:if> 
@@ -79,7 +79,7 @@
   
   </form>  
   
-  <div class="importantSmall">* Indicates required parameters</div>
+  <div class="importantSmall"><s:text name="reportDetail.requiredParameters"/></div>
   
   <br/>
   

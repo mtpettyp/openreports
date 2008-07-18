@@ -32,8 +32,8 @@ function setNoTarget()
 
 <div align="center">
 
-  <a class="back-link img-report-small" href="reportList.action"><s:text name="link.back.groups"/></a>
-  <a class="back-link img-group-small" href="reportGroup.action"><s:text name="link.back.reports"/></a>
+  <a class="back-link img-report-small" href="reportList.action"><s:text name="link.back.reports"/></a>
+  <a class="back-link img-group-small" href="reportGroup.action"><s:text name="link.back.groups"/></a>
   
   <br/><br/>
 	
