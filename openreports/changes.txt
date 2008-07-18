@@ -6,10 +6,11 @@ OpenReports Change Log
 OpenReports 3.1.0
 -----------------
 
-- Upgraded to JasperReports 3.0, BIRT 2.3, and JXLS 0.9.6
+- Upgraded to JasperReports 3.0, BIRT 2.3, JXLS 0.9.6, JPivot 1.8, and Mondrian 3.0
+- Fixed - [1883470] Back link not working
+- Fixed - [1997795] Full Internationalization
 - Fixed - Plain text emails
 - Fixed - QueryReport decorators
-- Fixed - ReportSchedule alerts
 
 -----------------
 OpenReports 3.0.1
