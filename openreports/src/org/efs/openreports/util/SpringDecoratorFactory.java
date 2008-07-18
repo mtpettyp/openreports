@@ -35,6 +35,7 @@ public class SpringDecoratorFactory extends DefaultDecoratorFactory
 {	
 	protected static Logger log = Logger.getLogger(SpringDecoratorFactory.class.getName());
 	
+	@Override
 	public DisplaytagColumnDecorator loadColumnDecorator(PageContext pageContext, String name) throws DecoratorInstantiationException 
 	{
 		if (StringUtils.isBlank(name)) return null;
@@ -53,11 +54,12 @@ public class SpringDecoratorFactory extends DefaultDecoratorFactory
 			log.debug("Decorator " + name + " not found in Spring ApplicationContext. Using DefaultDecoratorFactory.loadTableDecorator. ");
 		}
 		
-		if (decorator != null && decorator instanceof TableDecorator) return (DisplaytagColumnDecorator) decorator;
+		if (decorator != null && decorator instanceof DisplaytagColumnDecorator) return (DisplaytagColumnDecorator) decorator;
 		
 		return super.loadColumnDecorator(pageContext, name);		
 	}
 	
+	@Override
 	public TableDecorator loadTableDecorator(PageContext pageContext, String name) throws DecoratorInstantiationException 
 	{
 		if (StringUtils.isBlank(name)) return null;

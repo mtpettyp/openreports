@@ -42,9 +42,13 @@ public class DisplayProperty implements Serializable
 			displayName = displayName + element.substring(0,1).toUpperCase() + element.substring(1) + " ";
 		}
 		
-		if (type.equals("java.sql.Date") || type.equals("java.sql.Timestamp"))
+		if (type.equals("java.sql.Date"))
 		{			
-			decorator = "org.efs.openreports.util.DateColumnDecorator";
+			decorator = "dateColumnDecorator";
+		}
+		else if (type.equals("java.sql.Timestamp"))
+		{			
+			decorator = "dateTimeColumnDecorator";
 		}		
 	}
 

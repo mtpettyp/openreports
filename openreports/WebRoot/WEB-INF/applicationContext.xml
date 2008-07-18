@@ -202,7 +202,17 @@
   <bean id="searchResultsTableDecorator"
   	class="org.efs.openreports.util.SearchResultsTableDecorator">
   	<property name="tagProvider" ref="tagProvider" />  	
-  </bean>  
+  </bean>
+  
+  <bean id="dateColumnDecorator"
+  	class="org.efs.openreports.util.DateColumnDecorator">
+  	<property name="dateProvider" ref="dateProvider" />  	
+  </bean>
+  
+  <bean id="dateTimeColumnDecorator"
+  	class="org.efs.openreports.util.DateTimeColumnDecorator">
+  	<property name="dateProvider" ref="dateProvider" />  	
+  </bean>        
   
   <bean id="fileSystemDeliveryMethod"
   	class="org.efs.openreports.delivery.FileSystemDeliveryMethod">
