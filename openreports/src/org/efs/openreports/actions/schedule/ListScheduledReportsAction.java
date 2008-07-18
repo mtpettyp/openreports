@@ -25,6 +25,7 @@ import java.util.List;
 import org.efs.openreports.ORStatics;
 import org.efs.openreports.delivery.FileSystemDeliveryMethod;
 import org.efs.openreports.objects.DeliveredReport;
+import org.efs.openreports.objects.ReportSchedule;
 import org.efs.openreports.objects.ReportUser;
 import org.efs.openreports.providers.SchedulerProvider;
 
@@ -32,7 +33,7 @@ public class ListScheduledReportsAction	extends ActionSupport
 {	
 	private static final long serialVersionUID = 3842653664544858888L;
 
-	private List scheduledReports;
+	private List<ReportSchedule> scheduledReports;
 	private DeliveredReport[] deliveredReports;
     
     private int refresh;
@@ -40,6 +41,7 @@ public class ListScheduledReportsAction	extends ActionSupport
 	private SchedulerProvider schedulerProvider;    
     private FileSystemDeliveryMethod fileSystemDeliveryMethod;
     
+	@Override
 	public String execute()
 	{
 		try
@@ -50,6 +52,10 @@ public class ListScheduledReportsAction	extends ActionSupport
 
 			scheduledReports = schedulerProvider.getScheduledReports(reportUser);            
             deliveredReports = fileSystemDeliveryMethod.getDeliveredReports(reportUser);		
+		}
+		catch(NullPointerException npe)
+		{
+			addActionError(getText("error.settings.directories"));
 		}
 		catch (Exception e)
 		{
@@ -70,7 +76,7 @@ public class ListScheduledReportsAction	extends ActionSupport
         this.fileSystemDeliveryMethod = fileSystemDeliveryMethod;
     }
 
-    public List getScheduledReports()
+    public List<ReportSchedule> getScheduledReports()
 	{
 		return scheduledReports;
 	}
