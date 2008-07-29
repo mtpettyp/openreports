@@ -68,6 +68,7 @@
 				<include name="**/applicationContext*.xml" />
 				<include name="**/jpivot/**" />
 				<include name="**/wcf/**" />
+				<include name="**/platform/**" />
 			</fileset>
 
 			<lib dir="${web-inf.lib}" />
