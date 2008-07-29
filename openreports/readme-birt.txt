@@ -7,18 +7,6 @@ integrated into OpenReports. This integration allows you to run and
 schedule BIRT reports through the OpenReports interface.
 
 --------------------
-**** Important *****
---------------------
-
-There are two steps that need to be performed before using BIRT reports
-with OpenReports:
-
-- Create a 'temp' directory under your 'reports/images' directory.
-
-- Download the or-3.0-birt-2.2-platform.zip file and unzip to your 
-  'reports' directory.  
-  
---------------------
 ** Image Cleanup **
 --------------------
   
