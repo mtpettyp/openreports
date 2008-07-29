@@ -123,6 +123,6 @@
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jpivot-1.8-wcf.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jpviot-1.8-eigenbase-xom.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/mondrian-3.0.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/commons-beanutils-1.8.0-BETA.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/commons-beanutils-1.7.0.jar"/>
 	<classpathentry kind="output" path="WebRoot/WEB-INF/classes"/>
 </classpath>
