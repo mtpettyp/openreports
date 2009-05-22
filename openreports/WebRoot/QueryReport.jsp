@@ -33,9 +33,9 @@
     <% } %>
     <display:setProperty name="export.pdf" value="true"/>
 	<display:setProperty name="export.xml" value="false"/>
-	<display:setProperty name="export.pdf.filename" value="<%=report.getName() + ".pdf"%>"/>
-	<display:setProperty name="export.csv.filename" value="<%=report.getName() + ".csv"%>"/>
-	<display:setProperty name="export.excel.filename" value="<%=report.getName() + ".xls"%>"/>	  
+	<display:setProperty name="export.pdf.filename" value="<%=report.getName() + \".pdf\"%>"/>
+	<display:setProperty name="export.csv.filename" value="<%=report.getName() + \".csv\"%>"/>
+	<display:setProperty name="export.excel.filename" value="<%=report.getName() + \".xls\"%>"/>	  
   </display:table>
 
 
