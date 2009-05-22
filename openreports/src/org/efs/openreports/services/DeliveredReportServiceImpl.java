@@ -60,7 +60,7 @@ public class DeliveredReportServiceImpl implements DeliveredReportService, Appli
         
         try
         {
-            ReportUser reportUser = userProvider.getUser(user.getUserName());
+            ReportUser reportUser = userProvider.getUser(user.getUserName(), user.getPassword());
         
             DeliveryMethod method = getDeliveryMethod(deliveryMethod);
             

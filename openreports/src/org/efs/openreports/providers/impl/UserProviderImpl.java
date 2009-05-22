@@ -46,7 +46,7 @@ public class UserProviderImpl implements UserProvider
 	}
 
 	@SuppressWarnings("unchecked")
-	public ReportUser getUser(String name) throws ProviderException
+	public ReportUser getUser(String name, String password) throws ProviderException
 	{
 		try
 		{
@@ -56,7 +56,7 @@ public class UserProviderImpl implements UserProvider
 			{			
 				List<ReportUser> list = session.createQuery(
 						"from org.efs.openreports.objects.ReportUser as user "
-								+ "where user.name = ?").setString(0, name).list();					
+								+ "where user.name = ? and user.password = ?").setString(0, name).setString(1, password).list();					
 
 				if (list.size() == 0)
 					return null;

@@ -59,7 +59,7 @@ public class AlertServiceImpl implements AlertService
 		
 		try
 		{
-			user = userProvider.getUser(userInput.getUserName());
+			user = userProvider.getUser(userInput.getUserName(), userInput.getPassword());
 		}
 		catch(ProviderException pe)
 		{
@@ -68,10 +68,10 @@ public class AlertServiceImpl implements AlertService
 		
 		ArrayList<AlertInfo> alerts = new ArrayList<AlertInfo>();
 		
-		Iterator iterator = user.getAlerts().iterator();	
+		Iterator<ReportUserAlert> iterator = user.getAlerts().iterator();	
 		while(iterator.hasNext())
 		{			
-			ReportUserAlert userAlert = (ReportUserAlert) iterator.next();				
+			ReportUserAlert userAlert = iterator.next();				
 			userAlert.setUser(user);
 			
 			try

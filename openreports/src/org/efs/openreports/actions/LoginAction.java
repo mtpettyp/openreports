@@ -87,11 +87,7 @@ public class LoginAction extends ActionSupport implements SessionAware
      * @throws ProviderException
 	 */
     protected ReportUser checkCredentials() throws ProviderException {
-        ReportUser user = userProvider.getUser(userName);
-        if (user != null && !user.getPassword().equals(password)) {
-            user = null;
-        }
-        return user;
+        return userProvider.getUser(userName, password);        
     }
     
     

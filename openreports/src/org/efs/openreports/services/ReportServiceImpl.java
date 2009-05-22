@@ -123,7 +123,7 @@ public class ReportServiceImpl implements ReportService
 				return reportOutput;
 			}
 			
-			ReportUser user = userProvider.getUser(reportInput.getUser().getUserName());
+			ReportUser user = userProvider.getUser(reportInput.getUser().getUserName(), reportInput.getUser().getPassword());
 			if (user == null)
 			{
 				reportOutput.setContentMessage("Invalid ReportInput - User not found: " + reportInput.getUser().getUserName());

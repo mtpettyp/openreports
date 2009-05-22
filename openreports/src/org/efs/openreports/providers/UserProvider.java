@@ -26,7 +26,7 @@ import org.efs.openreports.objects.ReportUser;
 
 public interface UserProvider
 {
-	public ReportUser getUser(String name) throws ProviderException;
+	public ReportUser getUser(String name, String password) throws ProviderException;
 	public ReportUser getUser(Integer id) throws ProviderException;
 	public List<ReportUser> getUsers() throws ProviderException;
 	public ReportUser insertUser(ReportUser user)

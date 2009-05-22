@@ -52,8 +52,8 @@ public class UserServiceImpl implements UserService
 	{		
 		try
 		{
-			ReportUser user = userProvider.getUser(userInput.getUserName());
-			if (user == null || !user.getPassword().equals(userInput.getPassword()))
+			ReportUser user = userProvider.getUser(userInput.getUserName(), userInput.getPassword());
+			if (user == null)
             {
                 throw new ServiceException(ServiceMessages.NOT_AUTHENTICATED);
             }
@@ -70,7 +70,7 @@ public class UserServiceImpl implements UserService
         
 		try
 		{   
-			ReportUser user = userProvider.getUser(userInput.getUserName());
+			ReportUser user = userProvider.getUser(userInput.getUserName(), userInput.getPassword());
 			return Converter.convertToUserInfo(user);				
 		}
 		catch(ProviderException pe)
@@ -85,7 +85,7 @@ public class UserServiceImpl implements UserService
 		
 		try
 		{
-			ReportUser user = userProvider.getUser(userInfo.getName());
+			ReportUser user = userProvider.getUser(userInfo.getName(), userInfo.getPassword());
 			user.setPassword(userInfo.getPassword());
 			user.setEmail(userInfo.getEmailAddress());
 			
@@ -105,7 +105,7 @@ public class UserServiceImpl implements UserService
 
 		try
 		{
-			ReportUser user = userProvider.getUser(userInput.getUserName());
+			ReportUser user = userProvider.getUser(userInput.getUserName(), userInput.getPassword());
 			if (user != null && user.getReports() != null)
 			{	
 				ArrayList<Report> userReports = new ArrayList<Report>(user.getReports());

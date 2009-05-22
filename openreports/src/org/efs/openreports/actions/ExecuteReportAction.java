@@ -73,10 +73,10 @@ public class ExecuteReportAction extends ActionSupport implements SessionAware, 
 			}
 			else
 			{
-				user = userProvider.getUser(userName);
+				user = userProvider.getUser(userName, password);
 			}
 						 
-			if (user == null || !user.getPassword().equals(password))
+			if (user == null)
 			{
 				addActionError(LocalStrings.ERROR_LOGIN_INVALID);
 				return ERROR;

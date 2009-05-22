@@ -59,7 +59,7 @@ public class SchedulerServiceImpl implements SchedulerService
 		
 		try
 		{
-			user = userProvider.getUser(userInput.getUserName());
+			user = userProvider.getUser(userInput.getUserName(), userInput.getPassword());
 		}
 		catch(ProviderException pe)
 		{
@@ -70,10 +70,10 @@ public class SchedulerServiceImpl implements SchedulerService
 		
 		try
 		{
-			Iterator iterator = schedulerProvider.getScheduledReports(user).iterator();	
+			Iterator<ReportSchedule> iterator = schedulerProvider.getScheduledReports(user).iterator();	
 			while(iterator.hasNext())
 			{			
-				ReportSchedule schedule = (ReportSchedule) iterator.next();				
+				ReportSchedule schedule = iterator.next();				
 			
 				ReportScheduleInfo scheduleInfo = new ReportScheduleInfo();
 				scheduleInfo.setNextFireDate(schedule.getNextFireDate());
