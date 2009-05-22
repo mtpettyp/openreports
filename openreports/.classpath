@@ -89,24 +89,6 @@
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/xwork-2.0.4.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/ehcache-1.3.0.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/groovy-all-1.5.5.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/birt-2.3-chartengineapi.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/birt-2.3-com.ibm.icu_3.8.1.v20080530.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/birt-2.3-coreapi.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/birt-2.3-crosstabcoreapi.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/birt-2.3-dataadapterapi.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/birt-2.3-dataaggregationapi.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/birt-2.3-dteapi.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/birt-2.3-engineapi.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/birt-2.3-flute.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/birt-2.3-js.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/birt-2.3-modelapi.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/birt-2.3-modelodaapi.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/birt-2.3-odadesignapi.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/birt-2.3-org.eclipse.birt.report.engine.dataextraction_2.3.0.v20080611.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/birt-2.3-org.eclipse.emf.common_2.4.0.v200806091234.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/birt-2.3-org.eclipse.emf.ecore_2.4.0.v200806091234.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/birt-2.3-org.eclipse.emf.ecore.xmi_2.4.0.v200806091234.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/birt-2.3-scriptapi.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jpivot-1.8.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jpivot-1.8-eigenbase-properties.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jpivot-1.8-eigenbase-resgen.jar"/>
@@ -127,5 +109,23 @@
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jasperreports-3.5.1-javaflow.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jasperreports-3.5.1.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/spring-ldap-1.3.0.RELEASE-all.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/birt-2.3.2-chartengineapi.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/birt-2.3.2-com.ibm.icu_3.8.1.v20080530.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/birt-2.3.2-coreapi.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/birt-2.3.2-crosstabcoreapi.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/birt-2.3.2-dataadapterapi.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/birt-2.3.2-dataaggregationapi.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/birt-2.3.2-dataextraction.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/birt-2.3.2-dteapi.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/birt-2.3.2-engineapi.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/birt-2.3.2-flute.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/birt-2.3.2-js.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/birt-2.3.2-modelapi.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/birt-2.3.2-modelodaapi.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/birt-2.3.2-odadesignapi.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/birt-2.3.2-org.eclipse.emf.common_2.4.0.v200902171115.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/birt-2.3.2-org.eclipse.emf.ecore_2.4.2.v200902171115.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/birt-2.3.2-org.eclipse.emf.ecore.xmi_2.4.1.v200902171115.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/birt-2.3.2-scriptapi.jar"/>
 	<classpathentry kind="output" path="WebRoot/WEB-INF/classes"/>
 </classpath>
