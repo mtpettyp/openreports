@@ -29,12 +29,15 @@ import org.efs.openreports.providers.DataSourceProvider;
 import org.efs.openreports.providers.DirectoryProvider;
 import org.efs.openreports.providers.PropertiesProvider;
 import org.efs.openreports.providers.ProviderException;
+import org.springframework.context.ApplicationContext;
 
 public abstract class ReportEngine
 {	
 	protected DataSourceProvider dataSourceProvider;
 	protected DirectoryProvider directoryProvider;
 	protected PropertiesProvider propertiesProvider;	
+	
+	protected ApplicationContext applicationContext;
 	
 	public ReportEngine(DataSourceProvider dataSourceProvider,
 			DirectoryProvider directoryProvider, PropertiesProvider propertiesProvider)
@@ -47,5 +50,10 @@ public abstract class ReportEngine
 	public abstract ReportEngineOutput generateReport(ReportEngineInput input)
 			throws ProviderException;
 
-	public abstract List<ReportParameter> buildParameterList(Report report) throws ProviderException;	
+	public abstract List<ReportParameter> buildParameterList(Report report) throws ProviderException;
+
+	public void setApplicationContext(ApplicationContext applicationContext) 
+	{
+		this.applicationContext = applicationContext;
+	}	
 }

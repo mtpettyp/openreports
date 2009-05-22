@@ -33,7 +33,6 @@ import org.efs.openreports.ReportConstants.ExportType;
 import org.efs.openreports.delivery.DeliveryException;
 import org.efs.openreports.delivery.DeliveryMethod;
 import org.efs.openreports.engine.ChartReportEngine;
-import org.efs.openreports.engine.JasperReportEngine;
 import org.efs.openreports.engine.ReportEngine;
 import org.efs.openreports.engine.ReportEngineHelper;
 import org.efs.openreports.engine.input.ReportEngineInput;
@@ -165,14 +164,8 @@ public class ScheduledReportJob	implements Job
 			}
 			
 			ReportEngine reportEngine = ReportEngineHelper.getReportEngine(report,
-					dataSourceProvider, directoryProvider, propertiesProvider);
-			
-			//Use the JasperReportEngine to generate scheduled QueryReports
-			if (report.isQueryReport())
-			{
-				reportEngine = new JasperReportEngine(dataSourceProvider,
-						directoryProvider, propertiesProvider);
-			}
+					dataSourceProvider, directoryProvider, propertiesProvider);	
+			reportEngine.setApplicationContext(appContext);
 			
 			ReportEngineOutput reportOutput = reportEngine.generateReport(reportInput);            
            

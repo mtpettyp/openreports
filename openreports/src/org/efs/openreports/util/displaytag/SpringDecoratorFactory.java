@@ -17,7 +17,7 @@
  *  
  */
 
-package org.efs.openreports.util;
+package org.efs.openreports.util.displaytag;
 
 import javax.servlet.jsp.PageContext;
 
