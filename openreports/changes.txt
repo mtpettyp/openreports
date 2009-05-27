@@ -3,6 +3,13 @@ OpenReports Change Log
 ----------------------
 
 -----------------
+OpenReports 3.2.0
+-----------------
+
+- Upgraded to JasperReports 3.5.1, BIRT 2.3.2, DisplayTag 1.2, JXLS 0.9.8
+- Refactored QueryReport scheduling to use DisplayTag exporting code. 
+
+-----------------
 OpenReports 3.1.0
 -----------------
 
