@@ -74,6 +74,9 @@ public class JXLSReportEngine extends ReportEngine
 			{
 				QueryReportEngine queryEngine = new QueryReportEngine(dataSourceProvider, directoryProvider, propertiesProvider);				
 				
+				// set ExportType to null so QueryReportEngine just returns a list of results
+				input.setExportType(null);
+				
 				QueryEngineOutput output = (QueryEngineOutput) queryEngine
 						.generateReport(input);		
 				
