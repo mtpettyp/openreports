@@ -97,7 +97,6 @@
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jpviot-1.8-eigenbase-xom.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/mondrian-3.0.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/commons-beanutils-1.7.0.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/displaytag-1.2.jar" sourcepath="/displaytag"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/displaytag-export-poi-1.2.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jxls-core-0.9.8.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/iText-2.1.0.jar"/>
@@ -127,5 +126,7 @@
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/birt-2.3.2-org.eclipse.emf.ecore_2.4.2.v200902171115.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/birt-2.3.2-org.eclipse.emf.ecore.xmi_2.4.1.v200902171115.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/birt-2.3.2-scriptapi.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/displaytag-1.2-patched-for-itext-2.1.0.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/iText-rtf-2.1.0.jar"/>
 	<classpathentry kind="output" path="WebRoot/WEB-INF/classes"/>
 </classpath>
