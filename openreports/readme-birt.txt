@@ -27,6 +27,11 @@ these files.
   reports, try increasing the maximum heap size allocated by Java to 
   your application server.
   
+- You must place the JDBC drivers for all databases you are using with BIRT in 
+  the following directory:
+  
+  openreports/WebRoot/WEB-INF/platform/plugins/org.eclipse.birt.report.data.oda.jdbc_2.3.2.r232_v20090212/drivers
+  
 --------------------
  ** Contributions **
 --------------------
