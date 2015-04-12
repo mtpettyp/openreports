@@ -1,0 +1,91 @@
+-----------------------------------------
+OpenReports 2.0 to 3.0 Migration
+-----------------------------------------	
+
+	- Upgrade Quartz Database
+		- http://www.opensymphony.com/quartz/wikidocs/Quartz%201.6.0.html
+		
+	-  Create new tables
+		- OR_TAGS
+		- REPORT_DELIVERY_LOG
+		
+	- Add new columns to existing tables
+		- REPORT
+			- IMAGE_EXPORT		- Boolean				
+		- REPORT_LOG
+			- EXPORT_TYPE		- Integer
+			- REQUEST_ID		- String
+		- REPORT_PARAMETER
+			- DEFAULT_VALUE		- String
+		- REPORT_CHART
+			- OVERLAY_CHART_ID	- Integer
+		- OR_TAG
+			- TAG_TYPE			- String
+		
+	- Refer to the database/schema directory for database specific schema
+	  including Foreign Key constraints for new tables and fields.	
+	  
+	- OpenReports 3.0 requires JDK 1.5.
+	- OpenReports 3.0 QueryReport templates use FreeMarker instead of Velocity.
+	  
+-----------------------------------------
+OpenReports 2.0-M2 to 2.0-FINAL Migration
+-----------------------------------------		
+		
+	- ADD NEW COLUMNS TO EXISTING TABLES				
+		- REPORT_LOG
+			- ALERT_ID			- Integer	
+			
+	- Refer to the database/schema directory for database specific schema
+	  including Foreign Key constraints for new tables and fields.		
+			
+--------------------------------------
+OpenReports 2.0-M1 to 2.0-M2 Migration
+--------------------------------------
+
+	- CREATE NEW TABLES
+		- USER_SECURITY			
+		
+	- ADD NEW COLUMNS TO EXISTING TABLES				
+		- REPORT_CHART
+			- SHOW_VALUES 		- Boolean
+		
+	- Insert 'ROOT_ADMIN_ROLE' into USER_SECURITY for at least one user.
+	
+	- Refer to the database/schema directory for database specific schema
+	  including Foreign Key constraints for new tables and fields.
+	
+	
+-----------------------------------
+OpenReports 1.0 to 2.0-M1 Migration
+-----------------------------------
+
+	- CREATE NEW TABLES
+		- REPORT_EXPORT_OPTIONS
+		- REPORT_ALERT
+		- USER_ALERT_MAP
+		
+	- ADD NEW COLUMNS TO EXISTING TABLES
+		- REPORT
+			- RTF_EXPORT 		- Boolean 
+			- TEXT_EXPORT 		- Boolean 
+			- EXCEL_EXPORT 		- Boolean 
+			- FILL_VIRTUAL 		- Boolean 
+			- HIDDEN_REPORT     - Boolean
+			- EXPORT_OPTION_ID 	- Integer			
+		- REPORT_CHART
+			- SHOW_LEGEND 		- Boolean
+			- SHOW_TITLE 		- Boolean
+			- PLOT_ORIENTATION  - Integer
+			- REPORT_ID 		- Integer
+		- REPORT_USER
+			- DEFAULT_REPORT_ID - Integer
+	
+	- QUARTZ TABLE CHANGE
+		- QRTZ_TRIGGERS
+			- alter table QRTZ_TRIGGERS add JOB_DATA BINARY
+			
+	- Refer to the database/schema directory for database specific schema
+	  including Foreign Key constraints for new tables and fields.
+	
+	- You may also need to delete and recreate all scheduled reports.

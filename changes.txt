@@ -1,0 +1,259 @@
+----------------------
+OpenReports Change Log
+----------------------
+
+-----------------
+OpenReports 3.2.0
+-----------------
+
+- Upgraded to JasperReports 3.5.1, BIRT 2.3.2, DisplayTag 1.2, JXLS 0.9.8
+- Refactored QueryReport scheduling to use DisplayTag exporting code. 
+
+-----------------
+OpenReports 3.1.0
+-----------------
+
+- Upgraded to JasperReports 3.0, BIRT 2.3, JXLS 0.9.6, JPivot 1.8, and Mondrian 3.0
+- Fixed - [1883470] Back link not working
+- Fixed - [1997795] Full Internationalization
+- Fixed - Plain text emails
+- Fixed - QueryReport decorators
+
+-----------------
+OpenReports 3.0.1
+-----------------
+
+- Added - ANT task to create initial admin user
+- Fixed - [1856059] - QueryReport FreeMarker templates break Struts tags
+- Fixed - [1853766] - Mail Server Provider Patch 
+- Fixed - [1853685} - Date picker on Report Schedule page is not working 
+- Fixed - [1853056] - ANT schema tasks broken
+- Fixed - [1847591] - OpenReports 3.0 will not run on JDK 1.6
+- Fixed - [1784853,1703172] - Firefox horizontal scroll bar missing
+- Fixed - [1656411] - Multiple select throws error when no options selected
+- Fixed - [1736077,1648660] - Non-ODA BIRT data source throws exception
+
+-----------------
+OpenReports 3.0
+-----------------
+
+- Added OLAP support via Mondrian and JPivot
+- Added A Velocity ReportEngine for creating Text or HTML reports from Velocity templates
+- Added Drill Down ChartReport support (from OpenReports Professional)
+- Added full internationalization support
+- Added default values for parameters
+- Added ability to disable image export for JasperReports
+- Added support for CC and BCC email address for scheduled reports
+- Added support for Eclipse BIRT XLS emitter
+- Added ChartReport support for: Area, Dial, Stacked Bar, Thermometer, Time Area, XY Area, and Overlay charts
+- Migrated From WebWork 2 to Struts 2 (and replaced the old WebWork IOC with Spring)
+- Migrated From Dojo to the Yahoo User Interface (YUI) library
+- Replaced DatePicker with Struts 2 DatePicker
+- Fixed - Intermittent ChartReport image caching problem
+- Fixed - [1635418] Chart image quality
+- Fixed - [1648660] ClassCastException for BIRT reports with scripted datasources
+- Upgraded to JasperReports 2.0.2, BIRT 2.2, and JXLS 0.9.5
+
+-----------------
+OpenReports 2.2
+-----------------
+
+- Redesigned User Interface - Streamlined UI, improved CSS, reduced JavaScript 	
+- Added - Ajax ToolTips for Admin functions (from OpenReports Professional)
+- Added - Cache configuration for increased performance and scalability (from OpenReports Professional)
+- Added - Default Start Time for scheduled reports
+- Fixed - [1623860] Secure/Unsecure prompt when using SSL
+- Fixed - [1628046] NullPointer when emailing Scheduled QueryReports
+- Upgraded to JasperReports 1.3.0
+
+---------------------
+OpenReports 2.1-FINAL
+---------------------
+
+- Added - JXLS Multiple DataSource support
+- Added	- Exposed additional functionality through Service API
+- Fixed - [1463678] Query parameter validation not working with auto parameters
+- Fixed - [1592151] Change accessibility of session factory in HibernateProvider
+- Fixed - [1605303] New reports not accessible immediately
+- Fixed - [1605306] QueryReports MaxRows error message
+- Upgraded to JasperReports 1.2.8
+
+---------------------
+OpenReports 2.1-M1
+---------------------
+
+- Added - BIRT 2.1.1 support with HTML and PDF export and scheduling
+- Added - JFreeReport support for PDF, XLS, RTF export and scheduling
+- Added - JXLS report scheduling
+- Added - ReportService
+	- A Service-oriented architecture (SOA) for report generation and scheduling
+	  exposed as a SOAP web service and to HTTP GET/PUT requests.
+- Added - Hourly and Cron Expression scheduling options
+- Added - Advanced Scheduler Role
+- Added - JasperReports Drill-Down and Basic Image example reports
+- Added - Parameter Prompting option to ExecuteReport action
+- Fixed - [1567376] JasperReport Export to PDF issue 
+- Upgraded to JasperReports 1.2.7
+
+---------------------
+OpenReports 2.0-FINAL
+---------------------
+
+- Added - JXLS support - Use XLS templates to generate Excel reports.
+- Added - Default date for new scheduled reports
+- Fixed - SQL statement error in OpenReports Install Guide
+- Fixed - [1460316] MultiSelect parameters can exceed maximum URL length
+- Fixed - [1553589] Image Export - Report name incorrect after refresh
+- Upgraded to JasperReports 1.2.6
+- Upgraded to Dojo Nightly 2006-09-07
+
+-------------------
+OpenReports 2.0-M2
+-------------------
+
+- Redesigned User Interface 
+	- Web 2.0 Look and Feel with Rounded Corners, Tabs, and Transitions
+	- Improved Workflow and Screen Layouts in Administration Console	
+	- Utilizies Dojo Toolkit, Open Rico, and Prototype JavaScript libraries	
+ 
+- Added - Fine-Grained Adminstration Security implementation
+- Added - ChartReport - Show Values option to display Chart Values below Chart
+- Added - JFreeReport integration. 
+- Added - Ability to add a report to multiple groups in one step
+- Added - JasperReport Virtualization support to facilitate running large reports
+- Added - Report Schedule Description field
+- Added - Hibernate C3P0 connection pooling support
+- Fixed - [1369266] - SSL file export IE Problem
+- Fixed - [1485875] - QueryReport Format
+
+
+-------------------
+OpenReports 2.0-M1
+-------------------
+
+- Added - RTF, Text, Excel API export for JasperReports
+- Added - Support for JasperReports export parameters
+- Added - ChartReports
+	- Charts built from queries, supports parameters, JasperReport not required
+- Added - Show Legend, Show Title, Plot Orientation, and RingChart support to Charts
+- Added - Run in current window/Run in new window option for JasperReports
+- Added - Max Number of Rows property for QueryReports
+- Added - DisplayInline parameter to ExecuteReportAction
+- Added - Hidden Report property to suppress display of drill down reports
+- Added - [1183067] java.lang.Boolean as a parameter type
+- Added - [1188142] Key-Value-Pairs in List-Parameters
+- Added - [1510004] Weekday Report Scheduling
+- Fixed - [1493830] QueryReport Filename Extension
+- Fixed - [1485881] Long error messages truncate in ReportLog
+- Fixed - [1485875] QueryReport Format
+- Fixed - [1480291] Missing DerbyDialect
+- Upgraded to JasperReports 1.2.5
+- Upgraded to Hibernate 3.1.3, Quartz 1.5.2, DisplayTag 1.1
+
+---------------------
+OpenReports 1.0-FINAL
+---------------------
+
+- Upgraded to JasperReports 1.2.1
+- Added - [1466457, 1459794] - Support for JasperReports with Groovy expressions
+- Added - Schedule Hour/Minute validation
+- Fixed - [1465955] DateColumDecorator dateFormat bug / Schedule Hour AM/PM bug 
+- Fixed - [1450165] Date Format and Date Picker bugs
+- Fixed - [1459462] Error creating new users
+- Fixed - [1459469] Error scheduling QueryReport that returns java.sql.Date
+- Fixed - [1230561] Incomplete log entry when report is viewed as image
+- Updated CSS styles for SELECT boxes and Date Picker
+- Updated documenation, demos, and screenshots
+
+-------------------
+OpenReports 1.0-M2
+-------------------
+
+- Upgraded to JasperReports 1.2.0
+- Added support for scheduled QueryReports
+- Added ability to update scheduled reports
+- Added ability to Upload and compile JasperReport definition files (.jrxml, .xml) 
+- Fixed - [ 1178710 ] Schedule Page always displays error
+- Fixed - [ 1174459 ] If change own groups, have to logout to take effect
+- Fixed - [ 1403968 ] Missing filename extension (CSV, XLS)
+- Fixed - [ 1208457 ] Remove unnecessary transactions
+- Fixed - PDF export problem on Firefox.
+- Removed PDF export types. IE contype request now handled automatically
+- Renamed Scheduler link to Scheduled Reports
+- Successful scheduled report now forwards to Scheduled Reports list 
+
+-------------------
+OpenReports 1.0-M1
+-------------------
+
+- UI Redesign - new stylesheet, images, page layouts
+- Upgraded to JasperReports 1.0.1, JFreeChart 1.0.0-rc1, iText-1.3.1	
+- Replaced openreports.properties file with OR_PROPERTIES database table 
+- Added properties for Admin Role and User Role
+- Added support for scheduled html reports
+- Added support for SMTP authentication
+- Add OPENREPORTS_REPORT_DIR parameter for loading subreports from reports directory 
+- Added ability to use reportName in executeReportAction 
+- Added error message for incorrect JasperReports version
+
+
+-----------------
+OpenReports 0.9.0
+-----------------
+
+- New Feature: Query Report Templates 
+- Added ability to filter report logs on status, user, and report
+- Added 'None' option to optional select parameters
+- Added OPENREPORTS_EXPORT_TYPE auto parameter
+- Added DrillDown example report (CityOrdersReport)
+- Added support for Base64 encoded passwords
+- Added support for Monthly scheduled reports
+- Added support for standardard Web application security
+- Improved Query Report paging and sorting performance
+- Modified parameter logic to not pass empty optional parameters to reports
+- Modified ExecuteReportAction to check session for user if no username provided
+- Fixed error when scheduling a report after it had been run interactively.
+- Fixed problems with deleting Reports and Users
+- Fixed logging problems
+	- replaced commons-logging-1.0.3.jar with commons-logging-api-1.0.4.jar
+	- turned off velocity logging in velocity.properties
+- Upgraded to JasperReports 0.6.5
+- Upgraded to DisplayTag 1.0 - (QueryReports now support PDF Export)
+- Upgraded to Quartz 1.4.5 - (Included Quartz DB Schema in distribution)
+- Removed JDBC drivers (jTds, PostgreSQL, MySQL) - (See Install Guide)
+
+
+-----------------
+OpenReports 0.8.0
+-----------------
+
+- Added ability to pass subreport to reports as parameters. 
+- Added report image view option. 
+- Added executeReport.action to allow reports to be run 
+  from external applications. 
+- Added Logout action to invalidate session when Logoff is clicked
+- Added 'Next Run' column to Scheduled Reports list 
+- Added validation of queries with parameters used in reports, charts, 
+  and parameters
+
+- Fixed StackOverFlow bug with WebLogic
+- Fixed WAR deployment problems
+- Fixed Scheduler starting and stopping problems (thanks pta200)
+- Fixed nullpointer in ORUtil.buildJRDesignParameters (thanks r_aribawono)
+- Fixed problem with weekly scheduled reports (thanks maurofurbbr)
+
+- Modified to open report in a new windows (fixes cache problem with 
+  html reports)	
+- Upgraded displaytag (1.0rc1 modified) to fix export problem with   QueryReports
+- Upgraded to JasperReports 0.6.3, JFreeChart 0.9.21, and iText 1.02b
+
+- Internationalization 
+	- Moved messages to localstrings
+	- Removed Submit button value dependency
+	
+
+	
+
+
+
+	
