@@ -10,10 +10,11 @@ So far the following work has been completed:
 
 # Status
 
-* Queries - tested/working
-* Charts - not tested
+* QueryReports - tested/working
+* ChartReports - not tested
 * Eclipse BIRT (4.4.2) - tested/working
 * JasperReports - not tested
 * JFreeReport - not tested
 * JXLS - not tested
+* Scheduler - tested/working
 
