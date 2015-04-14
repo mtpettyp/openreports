@@ -198,11 +198,6 @@
             <artifactId>xfire-all</artifactId>
             <version>1.2.1</version>
         </dependency>
-        <dependency>
-            <groupId>org.postgresql</groupId>
-            <artifactId>postgresql</artifactId>
-            <version>9.3-1103-jdbc41</version>
-        </dependency>
     </dependencies>
 </project>
 
