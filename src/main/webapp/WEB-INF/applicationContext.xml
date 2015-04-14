@@ -225,4 +225,8 @@
   	<property name="mailProvider" ref="mailProvider" /> 	
   </bean>  
 
+  <bean id="fontProvider"
+    class="org.efs.openreports.providers.FontProvider" singleton="true">
+    <constructor-arg value="${openreports.font.directories}" />
+  </bean>
 </beans>
