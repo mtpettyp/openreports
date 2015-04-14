@@ -6,6 +6,14 @@ So far the following work has been completed:
 
 * Migrated to Maven
 * Upgraded BIRT to 4.4.2
+* CSV exports now include the column headers
 
-Note that none of this has been tested yet and should be considered a work in progress.
+# Status
+
+* Queries - tested/working
+* Charts - not tested
+* Eclipse BIRT (4.4.2) - tested/working
+* JasperReports - not tested
+* JFreeReport - not tested
+* JXLS - not tested
 
