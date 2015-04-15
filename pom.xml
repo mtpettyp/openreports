@@ -109,6 +109,12 @@
             <groupId>jasperreports</groupId>
             <artifactId>jasperreports</artifactId>
             <version>3.5.1</version>
+            <exclusions>
+              <exclusion>
+                <artifactId>itext</artifactId>
+                <groupId>com.lowagie</groupId>
+              </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>log4j</groupId>
@@ -138,6 +144,12 @@
             <groupId>displaytag</groupId>
             <artifactId>displaytag</artifactId>
             <version>1.2</version>
+            <exclusions>
+              <exclusion>
+                <artifactId>itext</artifactId>
+                <groupId>com.lowagie</groupId>
+              </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>displaytag</groupId>
@@ -175,6 +187,10 @@
                 <exclusion>
                     <artifactId>jcommon-xml</artifactId>
                     <groupId>jfree</groupId>
+                </exclusion>
+                <exclusion>
+                  <artifactId>itext</artifactId>
+                  <groupId>com.lowagie</groupId>
                 </exclusion>
             </exclusions>
         </dependency>
