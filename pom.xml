@@ -89,8 +89,18 @@
             <groupId>commons-dbcp</groupId>
             <artifactId>commons-dbcp</artifactId>
             <version>1.2.1</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>xercesImpl</artifactId>
+                    <groupId>xerces</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>xml-apis</artifactId>
+                    <groupId>xml-apis</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
-         <dependency>
+        <dependency>
             <groupId>commons-fileupload</groupId>
             <artifactId>commons-fileupload</artifactId>
             <version>1.2</version>
@@ -110,10 +120,14 @@
             <artifactId>jasperreports</artifactId>
             <version>3.5.1</version>
             <exclusions>
-              <exclusion>
-                <artifactId>itext</artifactId>
-                <groupId>com.lowagie</groupId>
-              </exclusion>
+                <exclusion>
+                    <artifactId>itext</artifactId>
+                    <groupId>com.lowagie</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>xml-apis</artifactId>
+                    <groupId>xml-apis</groupId>
+                </exclusion>
             </exclusions>
         </dependency>
         <dependency>
@@ -145,10 +159,10 @@
             <artifactId>displaytag</artifactId>
             <version>1.2</version>
             <exclusions>
-              <exclusion>
-                <artifactId>itext</artifactId>
-                <groupId>com.lowagie</groupId>
-              </exclusion>
+                <exclusion>
+                    <artifactId>itext</artifactId>
+                    <groupId>com.lowagie</groupId>
+                </exclusion>
             </exclusions>
         </dependency>
         <dependency>
@@ -189,8 +203,8 @@
                     <groupId>jfree</groupId>
                 </exclusion>
                 <exclusion>
-                  <artifactId>itext</artifactId>
-                  <groupId>com.lowagie</groupId>
+                    <artifactId>itext</artifactId>
+                    <groupId>com.lowagie</groupId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -198,11 +212,71 @@
             <groupId>org.eclipse.birt.runtime</groupId>
             <artifactId>org.eclipse.birt.runtime</artifactId>
             <version>4.4.2</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.eclipse.birt.runtime.3_7_1</groupId>
+                    <artifactId>org.apache.batik.pdf</artifactId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>org.apache.batik.bridge</artifactId>
+                    <groupId>org.eclipse.birt.runtime.3_7_1</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>org.apache.batik.parser</artifactId>
+                    <groupId>org.eclipse.birt.runtime.3_7_1</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>org.apache.batik.ext.awt</artifactId>
+                    <groupId>org.eclipse.birt.runtime.3_7_1</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>org.apache.batik.dom</artifactId>
+                    <groupId>org.eclipse.birt.runtime.3_7_1</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>org.apache.batik.dom.svg</artifactId>
+                    <groupId>org.eclipse.birt.runtime.3_7_1</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>org.apache.batik.css</artifactId>
+                    <groupId>org.eclipse.birt.runtime.3_7_1</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>org.apache.batik.util</artifactId>
+                    <groupId>org.eclipse.birt.runtime.3_7_1</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>org.apache.batik.xml</artifactId>
+                    <groupId>org.eclipse.birt.runtime.3_7_1</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>org.apache.batik.util.gui</artifactId>
+                    <groupId>org.eclipse.birt.runtime.3_7_1</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>org.apache.batik.transcoder</artifactId>
+                    <groupId>org.eclipse.birt.runtime.3_7_1</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>org.apache.batik.svggen</artifactId>
+                    <groupId>org.eclipse.birt.runtime.3_7_1</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>stax-api</artifactId>
+                    <groupId>stax</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>eigenbase</groupId>
             <artifactId>eigenbase-xom</artifactId>
             <version>1.3.1</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>xercesImpl</artifactId>
+                    <groupId>xerces</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>com.tonbeller</groupId>
@@ -223,6 +297,167 @@
             <groupId>org.codehaus.xfire</groupId>
             <artifactId>xfire-all</artifactId>
             <version>1.2.1</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>xercesImpl</artifactId>
+                    <groupId>xerces</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>xmlParserAPIs</artifactId>
+                    <groupId>xerces</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>xfire-aegis</artifactId>
+                    <groupId>org.codehaus.xfire</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>xfire-java5</artifactId>
+                    <groupId>org.codehaus.xfire</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>xfire-spring</artifactId>
+                    <groupId>org.codehaus.xfire</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>xfire-core</artifactId>
+                    <groupId>org.codehaus.xfire</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>xfire-annotations</artifactId>
+                    <groupId>org.codehaus.xfire</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>xfire-jsr181-api</artifactId>
+                    <groupId>xfire</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>xfire-generator</artifactId>
+                    <groupId>org.codehaus.xfire</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>xfire-jaxb2</artifactId>
+                    <groupId>org.codehaus.xfire</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>xfire-ws-security</artifactId>
+                    <groupId>org.codehaus.xfire</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>xfire-xmlbeans</artifactId>
+                    <groupId>org.codehaus.xfire</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>xfire-jaxws</artifactId>
+                    <groupId>org.codehaus.xfire</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>batik</groupId>
+            <artifactId>batik-bridge</artifactId>
+            <version>1.6-1</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>js</artifactId>
+                    <groupId>rhino</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>batik</groupId>
+            <artifactId>batik-css</artifactId>
+            <version>1.6-1</version>
+        </dependency>
+        <dependency>
+            <groupId>batik</groupId>
+            <artifactId>batik-dom</artifactId>
+            <version>1.6-1</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>xercesImpl</artifactId>
+                    <groupId>xerces</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>batik</groupId>
+            <artifactId>batik-svg-dom</artifactId>
+            <version>1.6-1</version>
+        </dependency>
+        <dependency>
+            <groupId>batik</groupId>
+            <artifactId>batik-awt-util</artifactId>
+            <version>1.6-1</version>
+        </dependency>
+        <dependency>
+            <groupId>batik</groupId>
+            <artifactId>batik-parser</artifactId>
+            <version>1.6-1</version>
+        </dependency>
+        <dependency>
+            <groupId>batik</groupId>
+            <artifactId>batik-svggen</artifactId>
+            <version>1.6-1</version>
+        </dependency>
+        <dependency>
+            <groupId>batik</groupId>
+            <artifactId>batik-transcoder</artifactId>
+            <version>1.6-1</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>fop</artifactId>
+                    <groupId>fop</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>batik</groupId>
+            <artifactId>batik-util</artifactId>
+            <version>1.6-1</version>
+        </dependency>
+        <dependency>
+            <groupId>batik</groupId>
+            <artifactId>batik-gui-util</artifactId>
+            <version>1.6-1</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>xmlParserAPIs</artifactId>
+                    <groupId>xml-apis</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>batik</groupId>
+            <artifactId>batik-xml</artifactId>
+            <version>1.6-1</version>
+        </dependency>
+        <dependency>
+            <groupId>fop</groupId>
+            <artifactId>fop</artifactId>
+            <version>0.20.5</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>xercesImpl</artifactId>
+                    <groupId>xerces</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>xml-apis</artifactId>
+                    <groupId>xml-apis</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>xalan</artifactId>
+                    <groupId>xalan</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>batik-1.5-fop</artifactId>
+                    <groupId>batik</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>jdom</groupId>
+            <artifactId>jdom</artifactId>
+            <version>1.0</version>
         </dependency>
     </dependencies>
 </project>
