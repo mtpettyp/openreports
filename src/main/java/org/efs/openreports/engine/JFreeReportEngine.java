@@ -53,27 +53,24 @@ import org.jfree.report.modules.parser.base.ReportGenerator;
 import org.jfree.report.util.CloseableTableModel;
 
 /**
- *  JFreeReport ReportEngine implementation.
+ * JFreeReport ReportEngine implementation.
  *
  * @author Erik Swenson
  *
  */
-public class JFreeReportEngine extends ReportEngine
-{
+public class JFreeReportEngine extends ReportEngine {
     protected static Logger log = Logger.getLogger(JFreeReportEngine.class);
 
-    public JFreeReportEngine(DataSourceProvider dataSourceProvider,
-            DirectoryProvider directoryProvider, PropertiesProvider propertiesProvider)
-    {
-        super(dataSourceProvider,directoryProvider, propertiesProvider);
+    public JFreeReportEngine(DataSourceProvider dataSourceProvider, DirectoryProvider directoryProvider,
+            PropertiesProvider propertiesProvider) {
+        super(dataSourceProvider, directoryProvider, propertiesProvider);
 
         JFreeReportBoot boot = JFreeReportBoot.getInstance();
         boot.getEditableConfig().setConfigProperty("org.jfree.base.LogLevel", "Info");
         boot.start();
     }
 
-    public ReportEngineOutput generateReport(ReportEngineInput input) throws ProviderException
-    {
+    public ReportEngineOutput generateReport(ReportEngineInput input) throws ProviderException {
         Connection conn = null;
         PreparedStatement pStmt = null;
         ResultSet rs = null;
@@ -81,20 +78,16 @@ public class JFreeReportEngine extends ReportEngine
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         CloseableTableModel model = null;
 
-        try
-        {
+        try {
             Report report = input.getReport();
             Map parameters = input.getParameters();
 
             ReportDataSource dataSource = report.getDataSource();
             conn = dataSourceProvider.getConnection(dataSource.getId());
 
-            if (parameters == null || parameters.isEmpty())
-            {
+            if (parameters == null || parameters.isEmpty()) {
                 pStmt = conn.prepareStatement(report.getQuery());
-            }
-            else
-            {
+            } else {
                 // Use JasperReports Query logic to parse parameters in chart
                 // queries
 
@@ -109,8 +102,7 @@ public class JFreeReportEngine extends ReportEngine
             }
 
             ORProperty maxRows = propertiesProvider.getProperty(ORProperty.QUERYREPORT_MAXROWS);
-            if (maxRows != null && maxRows.getValue() != null)
-            {
+            if (maxRows != null && maxRows.getValue() != null) {
                 pStmt.setMaxRows(Integer.parseInt(maxRows.getValue()));
             }
 
@@ -120,21 +112,16 @@ public class JFreeReportEngine extends ReportEngine
 
             ReportGenerator generator = ReportGenerator.getInstance();
 
-            JFreeReport jfreeReport = generator.parseReport(directoryProvider
-                    .getReportDirectory()
-                    + report.getFile());
+            JFreeReport jfreeReport = generator.parseReport(directoryProvider.getReportDirectory() + report.getFile());
             jfreeReport.setData(model);
 
             ReportEngineOutput output = new ReportEngineOutput();
 
-            if (input.getExportType() == ExportType.PDF)
-            {
+            if (input.getExportType() == ExportType.PDF) {
                 output.setContentType(ReportEngineOutput.CONTENT_TYPE_PDF);
 
                 PDFReportUtil.createPDF(jfreeReport, out);
-            }
-            else if (input.getExportType() == ExportType.XLS)
-            {
+            } else if (input.getExportType() == ExportType.XLS) {
                 output.setContentType(ReportEngineOutput.CONTENT_TYPE_XLS);
 
                 ExcelProcessor pr = new ExcelProcessor(jfreeReport);
@@ -142,17 +129,14 @@ public class JFreeReportEngine extends ReportEngine
                 pr.setDefineDataFormats(true);
                 pr.setOutputStream(out);
                 pr.processReport();
-            }
-            else if (input.getExportType() == ExportType.RTF)
-            {
+            } else if (input.getExportType() == ExportType.RTF) {
                 output.setContentType(ReportEngineOutput.CONTENT_TYPE_RTF);
 
                 RTFProcessor pr = new RTFProcessor(jfreeReport);
                 pr.setStrictLayout(false);
                 pr.setOutputStream(out);
                 pr.processReport();
-            }
-            else //default to HTML
+            } else // default to HTML
             {
                 output.setContentType(ReportEngineOutput.CONTENT_TYPE_HTML);
 
@@ -166,38 +150,32 @@ public class JFreeReportEngine extends ReportEngine
             output.setContent(out.toByteArray());
 
             return output;
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             throw new ProviderException(e);
-        }
-        finally
-        {
-            try
-            {
-                if (model != null) model.close();
-                if (out != null) out.close();
-            }
-            catch (Exception e)
-            {
+        } finally {
+            try {
+                if (model != null)
+                    model.close();
+                if (out != null)
+                    out.close();
+            } catch (Exception e) {
                 log.warn(e.toString());
             }
 
-            try
-            {
-                if (rs != null) rs.close();
-                if (pStmt != null) pStmt.close();
-                if (conn != null) conn.close();
-            }
-            catch (Exception e)
-            {
+            try {
+                if (rs != null)
+                    rs.close();
+                if (pStmt != null)
+                    pStmt.close();
+                if (conn != null)
+                    conn.close();
+            } catch (Exception e) {
                 log.warn(e.toString());
             }
         }
     }
 
-    public List buildParameterList(Report report) throws ProviderException
-    {
+    public List buildParameterList(Report report) throws ProviderException {
         throw new ProviderException("JFreeReportEngine: buildParameterList not implemented.");
     }
 }

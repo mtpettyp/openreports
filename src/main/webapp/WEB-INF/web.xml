@@ -2,8 +2,8 @@
 <!DOCTYPE web-app PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN" "http://java.sun.com/dtd/web-app_2_3.dtd">
 <web-app>
 
-	<display-name>OpenReports</display-name>	
-	
+	<display-name>OpenReports</display-name>
+
 	<context-param>
     	<param-name>contextConfigLocation</param-name>
    		<param-value>/WEB-INF/applicationContext*.xml</param-value>
@@ -19,7 +19,7 @@
 	<filter>
 		<filter-name>struts</filter-name>
 		<filter-class>
-			org.apache.struts2.dispatcher.FilterDispatcher
+			org.apache.struts2.dispatcher.ng.filter.StrutsPrepareAndExecuteFilter
 		</filter-class>
 	</filter>
 
@@ -56,7 +56,7 @@
 				before the previous query has finished
 			</description>
 		</init-param>
-		
+
 			<init-param>
 			<param-name>forceExtension</param-name>
 			<param-value>.faces</param-value>
@@ -69,12 +69,12 @@
 		<filter-name>JPivotController</filter-name>
 		<url-pattern>/jpivot.action</url-pattern>
 	</filter-mapping>
-	
+
 	<filter-mapping>
 		<filter-name>JPivotController</filter-name>
 		<url-pattern>/JPivot.jsp</url-pattern>
 	</filter-mapping>
-	
+
 	<filter-mapping>
 		<filter-name>ResponseOverrideFilter</filter-name>
 		<url-pattern>*.action</url-pattern>
@@ -97,7 +97,7 @@
 			org.springframework.web.context.ContextLoaderListener
 		</listener-class>
 	</listener>
-	
+
 	<servlet>
 		<servlet-name>JspSupportServlet</servlet-name>
 		<servlet-class>
@@ -120,14 +120,14 @@
 			org.efs.openreports.dispatcher.XMLADispatcher
 		</servlet-class>
 	</servlet>
-	
+
 	<servlet>
 		<servlet-name>XFireServlet</servlet-name>
 		<display-name>XFire Servlet</display-name>
 		<servlet-class>
 			org.codehaus.xfire.spring.XFireSpringServlet
 		</servlet-class>
-	</servlet>	
+	</servlet>
 
 	<!-- jfreechart provided servlet -->
 	<servlet>
@@ -180,7 +180,7 @@
 		<servlet-name>fileServlet</servlet-name>
 		<url-pattern>/report-files/*</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet-mapping>
 		<servlet-name>XFireServlet</servlet-name>
 		<url-pattern>/services/*</url-pattern>
