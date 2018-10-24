@@ -7,6 +7,7 @@ So far the following work has been completed:
 * Migrated to Maven
 * Upgraded BIRT to 4.4.2
 * CSV exports now include the column headers
+* Fixed SMTP Auth issues
 
 # Status
 
