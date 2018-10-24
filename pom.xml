@@ -37,8 +37,13 @@
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
-            <artifactId>spring</artifactId>
-            <version>2.0.1</version>
+            <artifactId>spring-orm</artifactId>
+            <version>3.0.5.RELEASE</version>
+        </dependency>
+         <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context-support</artifactId>
+            <version>3.0.5.RELEASE</version>
         </dependency>
         <dependency>
             <groupId>pentaho</groupId>
@@ -160,6 +165,14 @@
                     <artifactId>xml-apis</artifactId>
                     <groupId>xml-apis</groupId>
                 </exclusion>
+                <exclusion>
+                    <artifactId>jcommon</artifactId>
+                    <groupId>jfree</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>jfreechart</artifactId>
+                    <groupId>jfree</groupId>
+                </exclusion>
             </exclusions>
         </dependency>
         <dependency>
@@ -185,6 +198,12 @@
             <groupId>net.sf.jxls</groupId>
             <artifactId>jxls-core</artifactId>
             <version>0.9.8</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>junit</artifactId>
+                    <groupId>junit</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>displaytag</groupId>
@@ -208,14 +227,20 @@
             <version>1.4</version>
         </dependency>
         <dependency>
-            <groupId>jfree</groupId>
+            <groupId>org.jfree</groupId>
             <artifactId>jfreechart</artifactId>
-            <version>1.0.12</version>
+            <version>1.0.17</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>jcommon</artifactId>
+                    <groupId>org.jfree</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
-            <groupId>org.jfree</groupId>
+            <groupId>jfree</groupId>
             <artifactId>jcommon</artifactId>
-            <version>1.0.17</version>
+            <version>1.0.16</version>
         </dependency>
         <dependency>
             <groupId>jfree</groupId>
@@ -232,6 +257,10 @@
                 </exclusion>
                 <exclusion>
                     <artifactId>jcommon-xml</artifactId>
+                    <groupId>jfree</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>jcommon</artifactId>
                     <groupId>jfree</groupId>
                 </exclusion>
                 <exclusion>
@@ -307,6 +336,10 @@
                 <exclusion>
                     <artifactId>xercesImpl</artifactId>
                     <groupId>xerces</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>ant</artifactId>
+                    <groupId>org.apache.ant</groupId>
                 </exclusion>
             </exclusions>
         </dependency>
